@@ -2,10 +2,16 @@
 # June 15 2020
 # Simulation test WHAM
 
-# devtools::install_github("timjmiller/wham", dependencies=TRUE, ref = "om_mode")
+# source(here::here("code","1_fit_NAA.R"))
+
+# devtools::install_github("timjmiller/wham", dependencies=TRUE)
 library(wham)
 library(here)
 library(tidyverse)
+
+res_dir <- here("results","SNEMAYT","NAA")
+dir.create(res_dir, showWarnings=FALSE)
+ins_dir <- here("data","simdata","SNEMAYT","NAA")
 
 # Fit SNEMA yellowtail data
 asap3 <- read_asap3_dat(here("data","SNEMAYT_2019_rmlarval.dat"))
@@ -25,7 +31,7 @@ df.mods
 # Fit models
 for(m in 1:n.mods){
   # blocks 1, 3, 9 have issues, try age-specific
-  input <- prepare_wham_input(asap3, recruit_model = 3, # Bev Holt recruitment
+  input <- prepare_wham_input(asap3, recruit_model = 2, # Bev Holt recruitment
                               model_name = df.mods$Model[m],                         
                               NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
                               selectivity=list(model=c("age-specific","logistic","age-specific","logistic","logistic","logistic","logistic","logistic","age-specific"),
@@ -42,21 +48,25 @@ for(m in 1:n.mods){
   input$par$catch_paa_pars = rep(0, sum(n_catch_acomp_pars))
   input$par$index_paa_pars = rep(0, sum(n_index_acomp_pars))
 
-  # 5/29/20, bias correct CAA and IAA
+  # analytical bias correction, both obs and process error
   input$data$bias_correct_oe = 1
+  input$data$bias_correct_pe = 1
 
-  # Fit model with projections:
-  #  - 3 years
-  #  - F = 0
-  #  - WAA, MAA, maturity fixed at terminal year (2011)
-  mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F)  
-  # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=T, proj.opts=list(n.yrs=3, use.last.F=FALSE, use.avg.F=FALSE, use.FXSPR=FALSE,
-  #                                             proj.F=rep(0,3), proj.catch=NULL, avg.yrs=NULL,
-  #                                             cont.ecov=TRUE, use.last.ecov=FALSE, avg.ecov.yrs=NULL, proj.ecov=NULL, cont.Mre=NULL))
+  # Fit model
+  # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F) # no TMB bias correction
+  mod <- fit_wham(input, do.sdrep=F, do.retro=F, do.osa=F, do.proj=F)  
+  if(exists("err")) rm("err") # need to clean this up
+  mod$sdrep = TMB::sdreport(mod, bias.correct=TRUE) # also do bias correction
 
   # Save model
   if(exists("err")) rm("err") # need to clean this up
-  saveRDS(mod, file=here("results","NAA",paste0(df.mods$Model[m],".rds")))
-  saveRDS(input, file=here("results","NAA",paste0(df.mods$Model[m],"_input.rds")))
+  saveRDS(mod, file=file.path(res_dir, paste0(df.mods$Model[m],".rds")))
+  saveRDS(input, file=file.path(ins_dir, paste0(df.mods$Model[m],"_input.rds")))
 }
+
+# check that all models converged, pdHess, and bias correction succeeded
+mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
+mods <- lapply(mod.list, readRDS)
+conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
+conv
 

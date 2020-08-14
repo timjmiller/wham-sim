@@ -3,13 +3,16 @@
 # Simulation test WHAM
 
 # Assumes you open R in project directory
-# library(here); source(here("code","2_sim_data_NAA.R"))
+# source(here::here("code","2_sim_data_NAA.R"))
 
-# devtools::install_github("timjmiller/wham", dependencies=TRUE, ref = "om_mode")
+# devtools::install_github("timjmiller/wham", dependencies=TRUE)
 library(wham)
 library(here)
 library(tidyverse)
-# library(doParallel)
+
+res_dir <- here("results","OE_PE","NAA")
+out_dir <- here("data","simdata","SNEMAYT","NAA")
+dir.create(out_dir, showWarnings=FALSE)
 
 # Step 1: Fit 4 NAA models to 2019 SNE-MA yellowtail flounder data
 
@@ -31,7 +34,7 @@ n.mods <- 4
 n.sim <- 100
 
 # Load all models in list first
-mod.list <- here("results","NAA",paste0("m",1:n.mods,".rds"))
+mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
 mods2 <- lapply(mod.list, readRDS)
 mods1 <- lapply(mod.list, readRDS)
 for(m in 1:n.mods) mods1[[m]]$env$data$simulate_state <- rep(0,4) # simulate_state = 0 (fixed NAA, obs error only)
@@ -48,6 +51,6 @@ for(m in 1:n.mods){
 		simdata[[i]][[1]] <- mods1[[m]]$simulate(par=mods2[[m]]$env$last.par.best, complete=TRUE)
 		simdata[[i]][[2]] <- mods2[[m]]$simulate(par=mods2[[m]]$env$last.par.best, complete=TRUE)		
 	}
-	saveRDS(simdata, file=here("data","simdata","SNEMAYT","NAA",paste0("simdata_om",m,".rds")))
+	saveRDS(simdata, file=file.path(out_dir,paste0("simdata_om",m,".rds")))
 }
 
