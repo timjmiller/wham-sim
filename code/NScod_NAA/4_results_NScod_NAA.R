@@ -9,7 +9,7 @@
 #     reps_omXX_emYY.rds
 #   assume they are copied to /home/bstock/Documents/ms/wham-sim/results/SNEMAYT/NAA
 
-# source("/home/bstock/Documents/ms/wham-sim/code/SNEMAYT_NAA/4_results_NAA_server.R")
+# source("/home/bstock/Documents/ms/wham-sim/code/NScod_NAA/4_results_NScod_NAA.R")
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -20,39 +20,62 @@ library(ggplotFL)
 library(ggsci)
 
 # get results into data frame
-res_dir <- here("results","SNEMAYT_NAA")
-plots_dir <- here("plots","SNEMAYT_NAA")
+res_dir <- here("results","NScod_NAA")
+plots_dir <- here("plots","NScod_NAA")
 res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
 res.list <- lapply(res.files, readRDS)
+# for(i in 1:length(res.list)){
+# 	for(j in 1:length(res.list[[i]])){
+# 		for(k in 1:length(res.list[[i]][[j]])){
+# 			if(class(res.list[[i]][[j]][[k]])=="character"){
+# 				res.list[[i]][[j]][[k]] <- res.list[[1]][[1]][[1]][FALSE,]
+# 			}
+# 		}
+# 	}
+# }
+# flatten <- function(x) {
+#   if (!inherits(x, "list")) return(list(x))
+#   else return(unlist(c(lapply(x, flatten)), recursive = FALSE))
+# }
+# results <- do.call(rbind, flatten(res.list))
+
 flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
 results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
 results <- sapply(results, as.numeric)
-types <- c("OE","OEPE")
 results <- as.data.frame(results)
 
+types <- c("OE","OEPE")
+results$om <- factor(results$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
+results$em <- factor(results$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
+results$type <- factor(results$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
+results$em.x <- fct_recode(results$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
+
+# calculate relative error
+results$SSB.rel = results$SSB_fit / results$SSB_sim
+results$SSB.rel.bc = results$SSB_fit_bc / results$SSB_sim
+results$F.rel = results$F_fit / results$F_sim
+results$F.rel.bc = results$F_fit_bc / results$F_sim
+results$relB.rel = results$relB_fit / results$relB_sim
+results$relB.rel.bc = results$relB_fit_bc / results$relB_sim
+results$relF.rel = results$relF_fit / results$relF_sim
+results$relF.rel.bc = results$relF_fit_bc / results$relF_sim
+results$catch.rel = results$catch_fit / results$catch_sim
+results$catch.rel.bc = results$catch_fit_bc / results$catch_sim
+
 # Fig 1. SSB (sim fit) / SSB (sim data)
-res.ssb <- results %>% group_by(om, em, type, sim) %>%
-	mutate(SSB.rel = SSB_fit / SSB_sim, SSB.rel.bc = SSB_fit_bc / SSB_sim)
-	# mutate(SSB.fit = mods[[unique(om)]]$rep$SSB,
-	# 	   SSB.rel = SSB / SSB.fit)
-res.ssb$om <- factor(res.ssb$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.ssb$em <- factor(res.ssb$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.ssb$type <- factor(res.ssb$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
 for(ty in 1:length(types)){
-	df.plot <- filter(res.ssb, type==levels(res.ssb$type)[ty])
+	df.plot <- filter(results, type==levels(results$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=SSB.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
-		# geom_line(aes(group=sim),color='grey', alpha=.2) +
 		stat_summary(fun = "median", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Year") +
 		ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
-
 	png(file.path(plots_dir,paste0("1_ssb_",types[ty],".png")), width=7, height=7, units='in',res=100)
 	print(p)
 	grid::grid.text(unit(0.98,"npc"),0.5, label = 'Estimation model', rot = 270) # right
@@ -60,13 +83,10 @@ for(ty in 1:length(types)){
 	dev.off()
 
 	# boxplots (collapse time series)
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
 	png(file.path(plots_dir,paste0("1_ssb_boxplots",types[ty],".png")), width=8, height=3, units='in',res=100)
 	print(ggplot(df.plot, aes(x=em.x, y=SSB.rel)) +
 		geom_boxplot(aes(fill=em), outlier.shape = NA) +
 		scale_fill_jco(name="Estimation model") +
-		# scale_fill_discrete(name="Estimation model") +
-		# stat_summary(fun = "mean", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Estimation model") +
 		ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
@@ -81,13 +101,12 @@ for(ty in 1:length(types)){
 	p <- ggplot(df.plot, aes(x=year, y=SSB.rel.bc)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
-		# geom_line(aes(group=sim),color='grey', alpha=.2) +
 		stat_summary(fun = "median", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Year") +
 		ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 
@@ -101,8 +120,6 @@ for(ty in 1:length(types)){
 	print(ggplot(df.plot, aes(x=em.x, y=SSB.rel.bc)) +
 		geom_boxplot(aes(fill=em), outlier.shape = NA) +
 		scale_fill_jco(name="Estimation model") +
-		# scale_fill_discrete(name="Estimation model") +
-		# stat_summary(fun = "mean", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Estimation model") +
 		ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
@@ -115,26 +132,17 @@ for(ty in 1:length(types)){
 }
 
 # Fig 2. F (sim fit) / F (sim data)
-res.F <- results %>% group_by(om, em, type, sim) %>%
-	mutate(F.rel = F_fit / F_sim, F.rel.bc = F_fit_bc/F_sim)
-	# mutate(F.fit = mods[[unique(om)]]$rep$F[,1],
-	# 	   F.rel = F / F.fit)
-res.F$om <- factor(res.F$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.F$em <- factor(res.F$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.F$type <- factor(res.F$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
 for(ty in 1:length(types)){
-	df.plot <- filter(res.F, type==levels(res.F$type)[ty])
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
+	df.plot <- filter(results, type==levels(results$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=F.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
-		# geom_line(aes(group=sim),color='grey', alpha=.2) +
 		stat_summary(fun = "median", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Year") +
 		ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 
@@ -149,8 +157,6 @@ for(ty in 1:length(types)){
 	print(ggplot(df.plot, aes(x=em.x, y=F.rel)) +
 		geom_boxplot(aes(fill=em), outlier.shape = NA) +
 		scale_fill_jco(name="Estimation model") +
-		# scale_fill_discrete(name="Estimation model") +
-		# stat_summary(fun = "mean", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Estimation model") +
 		ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
@@ -165,13 +171,12 @@ for(ty in 1:length(types)){
 	p <- ggplot(df.plot, aes(x=year, y=F.rel.bc)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
-		# geom_line(aes(group=sim),color='grey', alpha=.2) +
 		stat_summary(fun = "median", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Year") +
 		ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 
@@ -185,8 +190,6 @@ for(ty in 1:length(types)){
 	print(ggplot(df.plot, aes(x=em.x, y=F.rel.bc)) +
 		geom_boxplot(aes(fill=em), outlier.shape = NA) +
 		scale_fill_jco(name="Estimation model") +
-		# scale_fill_discrete(name="Estimation model") +
-		# stat_summary(fun = "mean", geom = "line", color = "red") +
 		coord_cartesian(ylim=c(0,2)) +
 		xlab("Estimation model") +
 		ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
@@ -199,16 +202,35 @@ for(ty in 1:length(types)){
 }
 
 # Fig 3. relSSB (sim data) / relSSB (true data)
-res.relB <- results %>% group_by(om, em, type, sim) %>%
-	mutate(relB.rel = relB_fit / relB_sim, relB.rel.bc = relB_fit_bc/relB_sim)
-	# mutate(relB.fit = calc_relB(mods[[unique(om)]]),
-	# 	   relB.rel = relB / relB.fit)
-res.relB$om <- factor(res.relB$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.relB$em <- factor(res.relB$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.relB$type <- factor(res.relB$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
+# mistake in relB calculations... need to exp(log_SSB)
+# fix_relB <- function(s1, bias.cor=TRUE){ # sdrep is summary(sdreport)
+# 	ind.SSB.FXSPR <- which(rownames(s1) == "log_SSB_FXSPR")
+# 	if(bias.cor) SSB.t <- exp(s1[ind.SSB.FXSPR,3]) else SSB.t <- exp(s1[ind.SSB.FXSPR,1])
+# 	ind.ssb <- which(rownames(s1) == "log_SSB")
+# 	if(bias.cor) ssb <- exp(s1[ind.ssb,3]) else ssb <- exp(s1[ind.ssb,1])
+# 	rel.ssb <- ssb / SSB.t	
+# 	return(rel.ssb)
+# }
+# for(om in 1:4){
+# 	for(em in 1:4){
+# 		res <- readRDS(file=file.path(res_dir,paste0("results_om",om,"_em",em,".rds")))			
+# 		sdrep <- readRDS(file=file.path(res_dir,paste0("sdreps_om",om,"_em",em,".rds")))	
+# 		for(ty in 1:2){
+# 			for(i in 1:100){
+# 				s1 <- sdrep[[ty]][[i]]
+# 				if(class(s1) != "character"){
+# 					tmp <- as.data.frame(sapply(as.data.frame(res[[ty]][[i]]), as.numeric))
+# 					tmp$relB_fit = fix_relB(s1, bias.cor=F)
+# 					tmp$relB_fit_bc = fix_relB(s1, bias.cor=T)
+# 					res[[ty]][[i]] <- tmp					
+# 				}
+# 			}
+# 		}
+# 		saveRDS(res, file=file.path(res_dir,paste0("results_om",om,"_em",em,".rds")))	
+# 	}
+# }
 for(ty in 1:length(types)){
-	df.plot <- filter(res.relB, type==levels(res.relB$type)[ty])
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
+	df.plot <- filter(results, type==levels(results$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=relB.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
@@ -218,7 +240,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(frac(B,B[40]["%"])~"(sim fit)"~"/"~frac(B,B[40]["%"])~"(sim data)")) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 
@@ -255,7 +277,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(frac(B,B[40]["%"])~"(sim fit)"~"/"~frac(B,B[40]["%"])~"(sim data)")) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 
@@ -283,16 +305,8 @@ for(ty in 1:length(types)){
 }
 
 # Fig 4. relF (sim data) / relF (true data)
-res.relF <- results %>% group_by(om, em, type, sim) %>%
-	mutate(relF.rel = relF_fit / relF_sim, relF.rel.bc = relF_fit_bc / relF_sim)
-	# mutate(relF.fit = calc_relF(mods[[unique(om)]]),
-	# 	   relF.rel = relF / relF.fit)
-res.relF$om <- factor(res.relF$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.relF$em <- factor(res.relF$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.relF$type <- factor(res.relF$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
 for(ty in 1:length(types)){
-	df.plot <- filter(res.relF, type==levels(res.relF$type)[ty])
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
+	df.plot <- filter(results, type==levels(results$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=relF.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
@@ -301,7 +315,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(frac(F,F[40]["%"])~"(sim fit)"~"/"~frac(F,F[40]["%"])~"(sim data)")) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("4_relF_",types[ty],".png")), width=7, height=7, units='in',res=100)
@@ -334,7 +348,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(frac(F,F[40]["%"])~"(sim fit)"~"/"~frac(F,F[40]["%"])~"(sim data)")) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("4_relF_",types[ty],"_bc.png")), width=7, height=7, units='in',res=100)
@@ -359,16 +373,8 @@ for(ty in 1:length(types)){
 }
 
 # Fig 5. pred_catch (sim data) / pred_catch (true data)
-res.catch <- results %>% group_by(om, em, type, sim) %>%
-	mutate(catch.rel = catch_fit / catch_sim, catch.rel.bc = catch_fit_bc / catch_sim)
-	# mutate(catch.fit = mods[[unique(om)]]$rep$pred_catch[,1],
-	# 	   catch.rel = pred_catch / catch.fit)
-res.catch$om <- factor(res.catch$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.catch$em <- factor(res.catch$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.catch$type <- factor(res.catch$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
 for(ty in 1:length(types)){
-	df.plot <- filter(res.catch, type==levels(res.catch$type)[ty])
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")	
+	df.plot <- filter(results, type==levels(results$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=catch.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
@@ -377,7 +383,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(Catch["sim fit"]~"/"~Catch["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("5_catch_",types[ty],".png")), width=7, height=7, units='in',res=100)
@@ -410,7 +416,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(Catch["sim fit"]~"/"~Catch["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("5_catch_",types[ty],"_bc.png")), width=7, height=7, units='in',res=100)
@@ -435,18 +441,14 @@ for(ty in 1:length(types)){
 }
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
-simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","SNEMAYT_NAA",paste0("simdata_om",x,".rds"))))
+simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","NScod_NAA",paste0("simdata_om",x,".rds"))))
 results <- results[complete.cases(results),]
 res.R <- results %>% group_by(om, em, type, sim) %>%
 	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
 		   R.rel = NAA1 / R.sim,
 		   R.rel.bc = NAA1_bc / R.sim)
-res.R$om <- factor(res.R$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.R$em <- factor(res.R$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
-res.R$type <- factor(res.R$type, levels=1:2, labels=c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)"))
 for(ty in 1:length(types)){
 	df.plot <- filter(res.R, type==levels(res.R$type)[ty])
-	df.plot$em.x <- fct_recode(df.plot$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")	
 	p <- ggplot(df.plot, aes(x=year, y=R.rel)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
@@ -455,7 +457,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(Recruitment["sim fit"]~"/"~Recruitment["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("6_R_",types[ty],".png")), width=7, height=7, units='in',res=100)
@@ -488,7 +490,7 @@ for(ty in 1:length(types)){
 		xlab("Year") +
 		ylab(expression(Recruitment["sim fit"]~"/"~Recruitment["sim data"])) +
 		geom_hline(yintercept = 1, linetype=2, color='black') +
-		facet_grid(rows=vars(om), cols=vars(em)) +
+		facet_grid(rows=vars(em), cols=vars(om)) +
 		theme_bw() +
 		theme(axis.text.x = element_text(size=8), plot.margin = unit(c(0.3,0.3,0.1,0.1), "in"))
 	png(file.path(plots_dir,paste0("6_R_",types[ty],"_bc.png")), width=7, height=7, units='in',res=100)

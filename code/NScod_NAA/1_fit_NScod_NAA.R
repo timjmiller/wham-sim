@@ -2,7 +2,7 @@
 # June 15 2020
 # Simulation test WHAM
 
-# source(here::here("code","1_fit_NAA.R"))
+# source(here::here("code","NScod_NAA","1_fit_NScod_NAA.R"))
 
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
 library(wham)
@@ -38,13 +38,12 @@ df.mods
 
 # Fit models
 for(m in 1:n.mods){
-  # blocks 1, 3, 9 have issues, try age-specific
-  input <- prepare_wham_input(asap3, recruit_model = 2, # Bev Holt recruitment
+  input <- prepare_wham_input(asap3, recruit_model = 2,
                               model_name = df.mods$Model[m],                         
                               NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
-                              selectivity=list(model=c("age-specific","logistic","age-specific","logistic","logistic","logistic","logistic","logistic","age-specific"),
-                                 initial_pars=list(c(.01,1,1,1,1,1), c(3,3), c(.01,1,1,1,1,1), c(3,3), c(3,3), c(3,3), c(3,3), c(3,3), c(.01,.25,1,1,1,1)),
-                                 fix_pars=list(2:6, NULL, 2:6, NULL, NULL, NULL, NULL, NULL, 3:6))) 
+                              selectivity=list(model=c("logistic","age-specific","age-specific"),
+                                 initial_pars=list(c(3,3), c(.5,.5,.5,.5,1,0), c(.5,.5,1,1,0,0)),
+                                 fix_pars=list(NULL, 5:6, 3:6)))
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)
@@ -58,6 +57,8 @@ for(m in 1:n.mods){
   # analytical bias correction, both obs and process error
   input$data$bias_correct_oe = 1
   input$data$bias_correct_pe = 1
+
+  input$data$Fbar_ages = 2:4
 
   # Fit model
   # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F) # no TMB bias correction

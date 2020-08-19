@@ -3,15 +3,15 @@
 # Simulation test WHAM
 
 # Assumes you open R in project directory
-# source(here::here("code","2_sim_data_NAA.R"))
+# source(here::here("code","NScod_NAA","2_sim_data_NScod_NAA.R"))
 
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
 library(wham)
 library(here)
 library(tidyverse)
 
-res_dir <- here("results","OE_PE","NAA")
-out_dir <- here("data","simdata","SNEMAYT","NAA")
+res_dir <- here("results","NScod_NAA")
+out_dir <- here("data","simdata","NScod_NAA")
 dir.create(out_dir, showWarnings=FALSE)
 
 # Step 1: Fit 4 NAA models to 2019 SNE-MA yellowtail flounder data
