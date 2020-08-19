@@ -52,9 +52,9 @@ calc_relF <- function(mod, sdrep, type="fit", bias.cor=TRUE){ # sdrep is summary
 calc_relB <- function(mod, sdrep, type="fit", bias.cor=TRUE){ # sdrep is summary(sdreport)
 	if(type == "fit"){
 		ind.SSB.FXSPR <- which(rownames(sdrep) == "log_SSB_FXSPR")
-		if(bias.cor) SSB.t <- sdrep[ind.SSB.FXSPR,3] else SSB.t <- sdrep[ind.SSB.FXSPR,1]
+		if(bias.cor) SSB.t <- exp(sdrep[ind.SSB.FXSPR,3]) else SSB.t <- exp(sdrep[ind.SSB.FXSPR,1])
 		ind.ssb <- which(rownames(sdrep) == "log_SSB")
-  		if(bias.cor) ssb <- sdrep[ind.ssb,3] else ssb <- sdrep[ind.ssb,1]
+  		if(bias.cor) ssb <- exp(sdrep[ind.ssb,3]) else ssb <- exp(sdrep[ind.ssb,1])
 		# SSB.t <- exp(mod$rep$log_SSB_FXSPR)
 		# ssb <- mod$rep$SSB
 	}

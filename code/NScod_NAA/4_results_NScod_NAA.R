@@ -24,25 +24,11 @@ res_dir <- here("results","SNEMAYT_NAA")
 plots_dir <- here("plots","SNEMAYT_NAA")
 res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
 res.list <- lapply(res.files, readRDS)
-for(i in 1:length(res.list)){
-	for(j in 1:length(res.list[[i]])){
-		for(k in 1:length(res.list[[i]][[j]])){
-			if(class(res.list[[i]][[j]][[k]])=="character"){
-				res.list[[i]][[j]][[k]] <- res.list[[1]][[1]][[1]][FALSE,]
-			}
-		}
-	}
-}
-# flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
-# results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
-# results <- sapply(results, as.numeric)
-# results <- as.data.frame(results)
-flatten <- function(x) {
-  if (!inherits(x, "list")) return(list(x))
-  else return(unlist(c(lapply(x, flatten)), recursive = FALSE))
-}
-results <- do.call(rbind, flatten(res.list))
+flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
+results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
+results <- sapply(results, as.numeric)
 types <- c("OE","OEPE")
+results <- as.data.frame(results)
 
 # Fig 1. SSB (sim fit) / SSB (sim data)
 res.ssb <- results %>% group_by(om, em, type, sim) %>%
@@ -213,33 +199,6 @@ for(ty in 1:length(types)){
 }
 
 # Fig 3. relSSB (sim data) / relSSB (true data)
-# mistake in relB calculations... need to exp(log_SSB)
-# fix_relB <- function(s1, bias.cor=TRUE){ # sdrep is summary(sdreport)
-# 	ind.SSB.FXSPR <- which(rownames(s1) == "log_SSB_FXSPR")
-# 	if(bias.cor) SSB.t <- exp(s1[ind.SSB.FXSPR,3]) else SSB.t <- exp(s1[ind.SSB.FXSPR,1])
-# 	ind.ssb <- which(rownames(s1) == "log_SSB")
-# 	if(bias.cor) ssb <- exp(s1[ind.ssb,3]) else ssb <- exp(s1[ind.ssb,1])
-# 	rel.ssb <- ssb / SSB.t	
-# 	return(rel.ssb)
-# }
-# for(om in 1:4){
-# 	for(em in 1:4){
-# 		res <- readRDS(file=file.path(res_dir,paste0("results_om",om,"_em",em,".rds")))			
-# 		sdrep <- readRDS(file=file.path(res_dir,paste0("sdreps_om",om,"_em",em,".rds")))	
-# 		for(ty in 1:2){
-# 			for(i in 1:100){
-# 				s1 <- sdrep[[ty]][[i]]
-# 				if(class(s1) != "character"){
-# 					tmp <- as.data.frame(sapply(as.data.frame(res[[ty]][[i]]), as.numeric))
-# 					tmp$relB_fit = fix_relB(s1, bias.cor=F)
-# 					tmp$relB_fit_bc = fix_relB(s1, bias.cor=T)
-# 					res[[ty]][[i]] <- tmp					
-# 				}
-# 			}
-# 		}
-# 		saveRDS(res, file=file.path(res_dir,paste0("results_om",om,"_em",em,".rds")))	
-# 	}
-# }
 res.relB <- results %>% group_by(om, em, type, sim) %>%
 	mutate(relB.rel = relB_fit / relB_sim, relB.rel.bc = relB_fit_bc/relB_sim)
 	# mutate(relB.fit = calc_relB(mods[[unique(om)]]),

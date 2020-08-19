@@ -2,7 +2,7 @@
 # June 15 2020
 # Simulation test WHAM
 # Step 3: Fit OMs to simulated datasets
-#   NEFSC server version
+#   NEFSC server version 2 (error catching)
 
 # the following files should be copied to working directory:
 #   simdata_omXX.rds (XX from 1-4)
@@ -52,9 +52,9 @@ calc_relF <- function(mod, sdrep, type="fit", bias.cor=TRUE){ # sdrep is summary
 calc_relB <- function(mod, sdrep, type="fit", bias.cor=TRUE){ # sdrep is summary(sdreport)
 	if(type == "fit"){
 		ind.SSB.FXSPR <- which(rownames(sdrep) == "log_SSB_FXSPR")
-		if(bias.cor) SSB.t <- exp(sdrep[ind.SSB.FXSPR,3]) else SSB.t <- exp(sdrep[ind.SSB.FXSPR,1])
+		if(bias.cor) SSB.t <- sdrep[ind.SSB.FXSPR,3] else SSB.t <- sdrep[ind.SSB.FXSPR,1]
 		ind.ssb <- which(rownames(sdrep) == "log_SSB")
-  		if(bias.cor) ssb <- exp(sdrep[ind.ssb,3]) else ssb <- exp(sdrep[ind.ssb,1])
+  		if(bias.cor) ssb <- sdrep[ind.ssb,3] else ssb <- sdrep[ind.ssb,1]
 		# SSB.t <- exp(mod$rep$log_SSB_FXSPR)
 		# ssb <- mod$rep$SSB
 	}
@@ -76,6 +76,20 @@ sdrep_out <- function(mod, sdrep, var, bias.cor=TRUE){
 		if(bias.cor) x <- sdrep[ind,3] else x <- sdrep[ind,1]
 	}
 	return(exp(x)) # assumed on log scale
+}
+calc_results <- function(om, em, type, sim, fit1, s1){
+	df <- as.matrix(data.frame(om=om, em=em, type=type, year=fit1$years, sim=sim, 
+					F_fit=sdrep_out(fit1, s1, "log_F", bias.cor=F), F_fit_bc=sdrep_out(fit1, s1, "log_F", bias.cor=T), F_sim=fit1$env$data$F[,1], 
+					relF_fit=calc_relF(fit1, s1, type="fit", bias.cor=F), relF_fit_bc=calc_relF(fit1, s1, type="fit", bias.cor=T), relF_sim=calc_relF(fit1, s1, type="sim"), 
+					SSB_fit=sdrep_out(fit1, s1, "log_SSB", bias.cor=F), SSB_fit_bc=sdrep_out(fit1, s1, "log_SSB", bias.cor=T), SSB_sim=fit1$env$data$SSB, 
+					relB_fit=calc_relB(fit1, s1, type="fit", bias.cor=F), relB_fit_bc=calc_relB(fit1, s1, type="fit", bias.cor=T), relB_sim=calc_relB(fit1, s1, type="sim"),  
+					catch_fit=sdrep_out(fit1, s1, "log_pred_catch", bias.cor=F), catch_fit_bc=sdrep_out(fit1, s1, "log_pred_catch", bias.cor=T), catch_sim=fit1$env$data$pred_catch[,1]))
+	dfnaa <- sdrep_out(fit1, s1, "log_NAA_rep", bias.cor=F)
+	colnames(dfnaa) <- paste0("NAA",1:6)
+	dfnaa.bc <- sdrep_out(fit1, s1, "log_NAA_rep", bias.cor=T)
+	colnames(dfnaa.bc) <- paste0("NAA",1:6,"_bc")
+	res <- cbind(df, dfnaa, dfnaa.bc)
+	return(res)
 }
 
 # Assumes you open R in project directory
@@ -106,7 +120,7 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 	simdata <- readRDS(file.path(simdata_dir,paste0("simdata_om",om,".rds")))
 	for(i in 1:n.sim){
 		# print(paste0("Model: ",m," Sim: ", i))
-		print(paste0("Sim: ", i))
+		print(paste0("OM: ",om," EM: ",em," Sim: ", i))
 		set.seed(sim.seeds[i])
 
 		# a) obs error, keep all parameters (incl NAA) as in fit model, simulate catch + index data
@@ -119,8 +133,24 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		input1$data <- input1$data[ind.save]
 		fit1 <- fit_wham(input1, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE)
 		if(exists("err")) rm("err") # need to clean this up
-		fit1$sdrep = TMB::sdreport(fit1, bias.correct=TRUE) # also do bias correction
-		s1 <- summary(fit1$sdrep)
+		if(!exists("fit1$err")){
+			reps[[1]][[i]] <- fit1$rep
+			fit1$sdrep <- tryCatch(TMB::sdreport(fit1, bias.correct=TRUE), # also do bias correction
+							error = function(e) conditionMessage(e))
+			if(class(fit1$sdrep) == "sdreport"){
+				s1 <- summary(fit1$sdrep)
+				sdreps[[1]][[i]] <- s1
+				results[[1]][[i]] <- tryCatch(calc_results(om=om, em=em, type=1, sim=i, fit1, s1),
+					error = function(e) conditionMessage(e))
+			} else {
+				results[[1]][[i]] <- "Error: sdreport failed, no results to calculate"
+				sdreps[[1]][[i]] <- fit1$sdrep # error message
+			}
+		} else {
+			results[[1]][[i]] <- "Error: model did not converge, no results to calculate"
+			reps[[1]][[i]] <- fit1$err # error message
+			sdreps[[1]][[i]] <- "Error: model did not converge, sdreport not attempted"
+		}
 
 		# # turn off analytical bias correction and refit
 		# input1$data$bias_correct_oe = 0
@@ -128,18 +158,6 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		# fit1 <- fit_wham(input1, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE)
 		# if(exists("err")) rm("err") # need to clean this up
 		# fit1$sdrep = TMB::sdreport(fit1, bias.correct = TRUE)
-
-		df <- as.matrix(data.frame(om=om, em=em, type=1, year=fit1$years, sim=i, 
-			F_fit=sdrep_out(fit1, s1, "log_F", bias.cor=F), F_fit_bc=sdrep_out(fit1, s1, "log_F", bias.cor=T), F_sim=fit1$env$data$F[,1], 
-			relF_fit=calc_relF(fit1, s1, type="fit", bias.cor=F), relF_fit_bc=calc_relF(fit1, s1, type="fit", bias.cor=T), relF_sim=calc_relF(fit1, s1, type="sim"), 
-			SSB_fit=sdrep_out(fit1, s1, "log_SSB", bias.cor=F), SSB_fit_bc=sdrep_out(fit1, s1, "log_SSB", bias.cor=T), SSB_sim=fit1$env$data$SSB, 
-			relB_fit=calc_relB(fit1, s1, type="fit", bias.cor=F), relB_fit_bc=calc_relB(fit1, s1, type="fit", bias.cor=T), relB_sim=calc_relB(fit1, s1, type="sim"),  
-			catch_fit=sdrep_out(fit1, s1, "log_pred_catch", bias.cor=F), catch_fit_bc=sdrep_out(fit1, s1, "log_pred_catch", bias.cor=T), catch_sim=fit1$env$data$pred_catch[,1]))
-		dfnaa <- sdrep_out(fit1, s1, "log_NAA_rep", bias.cor=F); colnames(dfnaa) <- paste0("NAA",1:6)
-		dfnaa.bc <- sdrep_out(fit1, s1, "log_NAA_rep", bias.cor=T); colnames(dfnaa.bc) <- paste0("NAA",1:6,"_bc")
-		results[[1]][[i]] <- cbind(df, dfnaa, dfnaa.bc)
-		sdreps[[1]][[i]] <- s1
-		reps[[1]][[i]] <- fit1$rep
 
 		# b) process + obs error, keep parameters except NAA as in fit model, simulate NAA (process error) and catch + index data (obs error)
 		input2 <- readRDS(file.path(res_dir,paste0("m",em,"_input.rds")))
@@ -150,20 +168,24 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		input2$data <- input2$data[ind.save]
 		fit2 <- fit_wham(input2, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE)		
 		if(exists("err")) rm("err") # need to clean this up
-		fit2$sdrep = TMB::sdreport(fit2, bias.correct=TRUE) # also do bias correction
-		s2 <- summary(fit2$sdrep)
-
-		df <- as.matrix(data.frame(om=om, em=em, type=2, year=fit2$years, sim=i, 
-			F_fit=sdrep_out(fit2, s2, "log_F", bias.cor=F), F_fit_bc=sdrep_out(fit2, s2, "log_F", bias.cor=T), F_sim=fit2$env$data$F[,1], 
-			relF_fit=calc_relF(fit2, s2, type="fit", bias.cor=F), relF_fit_bc=calc_relF(fit2, s2, type="fit", bias.cor=T), relF_sim=calc_relF(fit2, s2, type="sim"), 
-			SSB_fit=sdrep_out(fit2, s2, "log_SSB", bias.cor=F), SSB_fit_bc=sdrep_out(fit2, s2, "log_SSB", bias.cor=T), SSB_sim=fit2$env$data$SSB, 
-			relB_fit=calc_relB(fit2, s2, type="fit", bias.cor=F), relB_fit_bc=calc_relB(fit2, s2, type="fit", bias.cor=T), relB_sim=calc_relB(fit2, s2, type="sim"),  
-			catch_fit=sdrep_out(fit2, s2, "log_pred_catch", bias.cor=F), catch_fit_bc=sdrep_out(fit2, s2, "log_pred_catch", bias.cor=T), catch_sim=fit2$env$data$pred_catch[,1]))
-		dfnaa <- sdrep_out(fit2, s2, "log_NAA_rep", bias.cor=F); colnames(dfnaa) <- paste0("NAA",1:6)
-		dfnaa.bc <- sdrep_out(fit2, s2, "log_NAA_rep", bias.cor=T); colnames(dfnaa.bc) <- paste0("NAA",1:6,"_bc")
-		results[[2]][[i]] <- cbind(df, dfnaa, dfnaa.bc)
-		sdreps[[2]][[i]] <- s2
-		reps[[2]][[i]] <- fit2$rep
+		if(!exists("fit2$err")){
+			reps[[2]][[i]] <- fit2$rep
+			fit2$sdrep <- tryCatch(TMB::sdreport(fit2, bias.correct=TRUE), # also do bias correction
+							error = function(e) conditionMessage(e))
+			if(class(fit2$sdrep) == "sdreport"){
+				s2 <- summary(fit2$sdrep)
+				sdreps[[2]][[i]] <- s2
+				results[[2]][[i]] <- tryCatch(calc_results(om=om, em=em, type=2, sim=i, fit2, s2),
+					error = function(e) conditionMessage(e))
+			} else {
+				results[[2]][[i]] <- "Error: sdreport failed, no results to calculate"
+				sdreps[[2]][[i]] <- fit2$sdrep # error message
+			}
+		} else {
+			results[[2]][[i]] <- "Error: model did not converge, no results to calculate"
+			reps[[2]][[i]] <- fit2$err # error message
+			sdreps[[2]][[i]] <- "Error: model did not converge, sdreport not attempted"
+		}
 
 		# saveRDS(results, file=here("results","NAA",paste0("res_om",m,"_sim_",i,".rds")))
 		rm(list=c("input1","input2","fit1","fit2","df","dfnaa","dfnaa.bc"))
