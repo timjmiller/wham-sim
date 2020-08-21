@@ -65,6 +65,7 @@ for(m in 1:n.mods){
   mod <- fit_wham(input, do.sdrep=F, do.retro=F, do.osa=F, do.proj=F)  
   if(exists("err")) rm("err") # need to clean this up
   mod$sdrep = TMB::sdreport(mod, bias.correct=TRUE) # also do bias correction
+  # simdata <- mod$simulate(par=mod$env$last.par.best, complete=TRUE) # test simulation
 
   # Save model
   if(exists("err")) rm("err") # need to clean this up

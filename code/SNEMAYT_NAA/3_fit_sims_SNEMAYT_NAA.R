@@ -15,8 +15,8 @@
 #   reps_omXX_emYY.rds
 
 args = commandArgs(trailingOnly=TRUE)
-om = args[1] # operating model
-em = args[2] # estimating model
+om = as.integer(args[1]) # operating model
+em = as.integer(args[2]) # estimating model
 
 # -----------------------------------------------------------------------
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -131,9 +131,10 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		if(em > 2) input1$data$NAA_sigma_pointers = c(1,rep(2,input1$data$n_ages-1)) else input1$data$NAA_sigma_pointers = rep(1,input1$data$n_ages)
 		ind.save <- c(1:n.data, match(c("F","SSB","pred_catch","log_FXSPR","FAA_tot","log_SSB_FXSPR"), names(input1$data)))
 		input1$data <- input1$data[ind.save]
-		fit1 <- fit_wham(input1, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE)
+		fit1 <- tryCatch(fit_wham(input1, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE),
+					error = function(e) conditionMessage(e))
 		if(exists("err")) rm("err") # need to clean this up
-		if(!exists("fit1$err")){
+		if(!'err' %in% names(fit1)){
 			reps[[1]][[i]] <- fit1$rep
 			fit1$sdrep <- tryCatch(TMB::sdreport(fit1, bias.correct=TRUE), # also do bias correction
 							error = function(e) conditionMessage(e))
@@ -151,7 +152,7 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 			reps[[1]][[i]] <- fit1$err # error message
 			sdreps[[1]][[i]] <- "Error: model did not converge, sdreport not attempted"
 		}
-
+		
 		# # turn off analytical bias correction and refit
 		# input1$data$bias_correct_oe = 0
 		# input1$data$bias_correct_pe = 0
@@ -166,9 +167,10 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		if(em > 2) input2$data$NAA_sigma_pointers = c(1,rep(2,input2$data$n_ages-1)) else input2$data$NAA_sigma_pointers = rep(1,input2$data$n_ages)
 		ind.save <- c(1:n.data, match(c("F","SSB","pred_catch","log_FXSPR","FAA_tot","log_SSB_FXSPR"), names(input2$data)))	
 		input2$data <- input2$data[ind.save]
-		fit2 <- fit_wham(input2, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE)		
+		fit2 <- tryCatch(fit_wham(input2, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE),
+					error = function(e) conditionMessage(e))
 		if(exists("err")) rm("err") # need to clean this up
-		if(!exists("fit2$err")){
+		if(!'err' %in% names(fit2)){
 			reps[[2]][[i]] <- fit2$rep
 			fit2$sdrep <- tryCatch(TMB::sdreport(fit2, bias.correct=TRUE), # also do bias correction
 							error = function(e) conditionMessage(e))
