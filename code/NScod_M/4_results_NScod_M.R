@@ -535,7 +535,7 @@ for(ty in 1:length(types)){
 }
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
-simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","NScod_M",paste0("simdata_om",x,".rds"))))
+simdata <- lapply(1:2, function(x) readRDS(here("data","simdata","NScod_M",paste0("simdata_om",x,".rds"))))
 results <- results[complete.cases(results),]
 res.R <- results %>% group_by(om, em, type, sim) %>%
 	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
