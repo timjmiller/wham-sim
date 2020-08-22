@@ -19,7 +19,8 @@ ins_dir <- here("data","simdata","butterfish_NAA")
 # 28 years
 # 5 ages
 # 4 selectivity blocks
-asap3 <- read_asap3_dat(here("data","butterfish.dat")) # more recent assessment uses asap4... use 2017 asap3 file for now
+# asap3 <- read_asap3_dat(here("data","butterfish.dat")) # more recent assessment uses asap4... use 2017 asap3 file for now
+asap3 <- read_asap3_dat(here("data","butterfish_2020_asap3.dat")) # asap3 format of 2020 data
 
 # Fit 4 NAA operating models:
 #  1. rec 	iid
@@ -51,8 +52,8 @@ for(m in 1:n.mods){
                               model_name = df.mods$Model[m],                         
                               NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
                               selectivity=list(model=rep("age-specific",4),
-                                 initial_pars=list(c(1,1,1,1,1), c(1,1,1,0.632,0.632), c(1,1,0.657,0.349,0.349), c(1,1,1,0.298,0.298)),
-                                 fix_pars=list(3:5, 1:3, c(1,2,5), c(1,2,3))))
+                                 initial_pars=list(c(1,1,1,1,1), c(1,1,1,0.632,0.632), c(1,1,1,0.349,0.349), c(1,1,1,0.298,0.298)),
+                                 fix_pars=list(3:5, 1:3, c(1,2,3,5), c(1,2,4,5))))
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)
@@ -69,7 +70,24 @@ for(m in 1:n.mods){
 
   input$data$Fbar_ages = seq(asap3$dat$Frep_ages[1], asap3$dat$Frep_ages[2])
   input$par$log_N1_pars = log(asap3$dat$N1_ini)
-  input$par$log_F1 = log(asap3$dat$F1_ini)
+  input$par$log_NAA = matrix(input$par$log_N1_pars, ncol=asap3$dat$n_ages, nrow=asap3$dat$n_years-1, byrow=TRUE)
+  input$par$log_F1 = log(asap3$dat$F1_ini)  
+  input$par$M0 <- log(1.28762) # value estimated in 2020 assessment (see data/butterfish2020/asap4_rev_grad.rep)
+
+  inv.logit <- function(x, low, upp) return(low + (upp - low)/(1 + exp(-x)))
+  logit <- function(x, low, upp){
+     p <- (x - low) / (upp - low)
+     return(log(p / (1 - p)))
+  }
+  q_ini <- c(0.123764, 0.0158975, 0.17078) # from data/butterfish2020/asap4_rev_grad.rep
+  input$par$logit_q <- logit(q_ini, input$data$q_lower, input$data$q_upper)
+  input$map$logit_q <- factor(c(NA, 1, 2)) # 2020 assessment fixed q for index 1
+
+  # m4 doesn't converge bc sigma_R -> 0. fix at value from m3
+  if(m == 4){
+    input$par$log_NAA_sigma[1] <- mod$parList$log_NAA_sigma[1]
+    input$map$log_NAA_sigma <- factor(c(NA,1))
+  }
 
   # Fit model
   # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F) # no TMB bias correction

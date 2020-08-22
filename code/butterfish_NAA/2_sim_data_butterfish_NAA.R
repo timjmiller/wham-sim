@@ -3,32 +3,17 @@
 # Simulation test WHAM
 
 # Assumes you open R in project directory
-# source(here::here("code","ICEherring_NAA","2_sim_data_ICEherring_NAA.R"))
+# source(here::here("code","butterfish_NAA","2_sim_data_butterfish_NAA.R"))
 
-devtools::load_all("/home/bstock/Documents/wham")
+# devtools::load_all("/home/bstock/Documents/wham")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-# library(wham)
+library(wham)
 library(here)
 library(tidyverse)
 
-res_dir <- here("results","ICEherring_NAA")
-out_dir <- here("data","simdata","ICEherring_NAA")
+res_dir <- here("results","butterfish_NAA")
+out_dir <- here("data","simdata","butterfish_NAA")
 dir.create(out_dir, showWarnings=FALSE)
-
-# Step 1: Fit 4 NAA models to 2019 SNE-MA yellowtail flounder data
-
-# Step 2: Simulate 4 NAA operating models:
-#  1. rec 	iid
-#  2. rec 	ar1_y
-#  3. rec+1 iid
-#  4. rec+1 2dar1
-# For each OM, simulate using
-#  a. obs error only (fix NAA at estimated values)
-#  b. obs + process error (new NAA)
-
-# Step 3: Fit OMs to simulated datasets
-# Step 4: Collect + plot results
-# -----------------------------------------------------------------------
 
 # Simulate data
 n.mods <- 4

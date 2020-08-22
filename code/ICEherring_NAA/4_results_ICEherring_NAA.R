@@ -9,7 +9,7 @@
 #     reps_omXX_emYY.rds
 #   assume they are copied to /home/bstock/Documents/ms/wham-sim/results/SNEMAYT/NAA
 
-# source("/home/bstock/Documents/ms/wham-sim/code/NScod_NAA/4_results_NScod_NAA.R")
+# source("/home/bstock/Documents/ms/wham-sim/code/ICEherring_NAA/4_results_ICEherring_NAA.R")
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -20,8 +20,8 @@ library(ggplotFL)
 library(ggsci)
 
 # get results into data frame
-res_dir <- here("results","NScod_NAA")
-plots_dir <- here("plots","NScod_NAA")
+res_dir <- here("results","ICEherring_NAA")
+plots_dir <- here("plots","ICEherring_NAA")
 res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
 res.list <- lapply(res.files, readRDS)
 # for(i in 1:length(res.list)){
@@ -441,7 +441,7 @@ for(ty in 1:length(types)){
 }
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
-simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","NScod_NAA",paste0("simdata_om",x,".rds"))))
+simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","ICEherring_NAA",paste0("simdata_om",x,".rds"))))
 results <- results[complete.cases(results),]
 res.R <- results %>% group_by(om, em, type, sim) %>%
 	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],

@@ -35,9 +35,16 @@ df.mods
 
 # Fit models
 for(m in 1:n.mods){
+  # input <- prepare_wham_input(asap3, recruit_model = 2,
+  #                             model_name = df.mods$Model[m],                         
+  #                             NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]))
+
+  # logistic selectivity
   input <- prepare_wham_input(asap3, recruit_model = 2,
                               model_name = df.mods$Model[m],                         
-                              NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]))
+                              NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
+                              selectivity = list(model=rep("logistic",3)))
+  # input$data$selpars_est and input$data$n_selpars_est are not accurate, but not used if no RE on selectivity
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)
@@ -54,6 +61,8 @@ for(m in 1:n.mods){
 
   input$data$Fbar_ages = seq(asap3$dat$Frep_ages[1], asap3$dat$Frep_ages[2])
   input$par$log_N1_pars = log(asap3$dat$N1_ini)
+  input$par$log_NAA = matrix(input$par$log_N1_pars, ncol=asap3$dat$n_ages, nrow=asap3$dat$n_years-1, byrow=TRUE)
+  input$par$mean_rec_pars = log(asap3$dat$N1_ini)[1]
   input$par$log_F1 = log(asap3$dat$F1_ini)
 
   # Fit model
