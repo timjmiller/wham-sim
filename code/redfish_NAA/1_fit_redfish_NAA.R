@@ -45,6 +45,11 @@ for(m in 1:n.mods){
                               NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
                               selectivity = list(model=rep("logistic",3)))
   # input$data$selpars_est and input$data$n_selpars_est are not accurate, but not used if no RE on selectivity
+  input$par$logit_selpars[,c(1:26,29:32)] = NA
+  ind.est <- which(!is.na(input$par$logit_selpars))
+  tmp <- rep(NA, length(input$par$logit_selpars))
+  tmp[ind.est] <- 1:length(ind.est)
+  input$map$logit_selpars <- factor(tmp)
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)

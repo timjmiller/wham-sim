@@ -9,7 +9,7 @@
 #     reps_omXX_emYY.rds
 #   assume they are copied to /home/bstock/Documents/ms/wham-sim/results/SNEMAYT/NAA
 
-# source("/home/bstock/Documents/ms/wham-sim/code/SNEMAYT_NAA/4_results_NAA_server.R")
+# source("/home/bstock/Documents/ms/wham-sim/code/SNEMAYT_NAA/4_results_SNEMAYT_NAA.R")
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -24,24 +24,26 @@ res_dir <- here("results","SNEMAYT_NAA")
 plots_dir <- here("plots","SNEMAYT_NAA")
 res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
 res.list <- lapply(res.files, readRDS)
-for(i in 1:length(res.list)){
-	for(j in 1:length(res.list[[i]])){
-		for(k in 1:length(res.list[[i]][[j]])){
-			if(class(res.list[[i]][[j]][[k]])=="character"){
-				res.list[[i]][[j]][[k]] <- res.list[[1]][[1]][[1]][FALSE,]
-			}
-		}
-	}
-}
-# flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
-# results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
-# results <- sapply(results, as.numeric)
-# results <- as.data.frame(results)
-flatten <- function(x) {
-  if (!inherits(x, "list")) return(list(x))
-  else return(unlist(c(lapply(x, flatten)), recursive = FALSE))
-}
-results <- do.call(rbind, flatten(res.list))
+# for(i in 1:length(res.list)){
+# 	for(j in 1:length(res.list[[i]])){
+# 		for(k in 1:length(res.list[[i]][[j]])){
+# 			if(class(res.list[[i]][[j]][[k]])=="character"){
+# 				res.list[[i]][[j]][[k]] <- res.list[[1]][[1]][[1]][FALSE,]
+# 			}
+# 		}
+# 	}
+# }
+# flatten <- function(x) {
+#   if (!inherits(x, "list")) return(list(x))
+#   else return(unlist(c(lapply(x, flatten)), recursive = FALSE))
+# }
+# results <- do.call(rbind, flatten(res.list))
+
+flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
+results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
+results <- sapply(results, as.numeric)
+results <- as.data.frame(results)
+
 types <- c("OE","OEPE")
 results$om <- factor(results$om, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
 results$em <- factor(results$em, levels=1:4, labels=c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)"))
