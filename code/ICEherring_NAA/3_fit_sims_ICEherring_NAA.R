@@ -126,7 +126,7 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		fit1 <- tryCatch(fit_wham(input1, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE),
 					error = function(e) conditionMessage(e))
 		if(exists("err")) rm("err") # need to clean this up
-		if(!'err' %in% names(fit1)){
+		if(!'err' %in% names(fit1) & class(fit1) != "character"){
 			reps[[1]][[i]] <- fit1$rep
 			fit1$sdrep <- tryCatch(TMB::sdreport(fit1, bias.correct=TRUE), # also do bias correction
 							error = function(e) conditionMessage(e))
@@ -141,7 +141,8 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 			}
 		} else {
 			results[[1]][[i]] <- "Error: model did not converge, no results to calculate"
-			reps[[1]][[i]] <- fit1$err # error message
+			if(class(fit1) != "character") reps[[1]][[i]] <- fit1$err # error message
+			if(class(fit1) == "character") reps[[1]][[i]] <- fit1
 			sdreps[[1]][[i]] <- "Error: model did not converge, sdreport not attempted"
 		}
 
@@ -162,7 +163,7 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 		fit2 <- tryCatch(fit_wham(input2, do.sdrep=F, do.osa=F, do.retro=F, do.proj=F, MakeADFun.silent=TRUE),
 					error = function(e) conditionMessage(e))
 		if(exists("err")) rm("err") # need to clean this up
-		if(!'err' %in% names(fit2)){
+		if(!'err' %in% names(fit2) & class(fit2) != "character"){
 			reps[[2]][[i]] <- fit2$rep
 			fit2$sdrep <- tryCatch(TMB::sdreport(fit2, bias.correct=TRUE), # also do bias correction
 							error = function(e) conditionMessage(e))
@@ -177,7 +178,8 @@ results <- rep(list(rep(list(matrix(NA, ncol = length(res.colnames), nrow = n.ye
 			}
 		} else {
 			results[[2]][[i]] <- "Error: model did not converge, no results to calculate"
-			reps[[2]][[i]] <- fit2$err # error message
+			if(class(fit1) != "character") reps[[2]][[i]] <- fit2$err # error message
+			if(class(fit1) == "character") reps[[2]][[i]] <- fit2
 			sdreps[[2]][[i]] <- "Error: model did not converge, sdreport not attempted"
 		}
 
