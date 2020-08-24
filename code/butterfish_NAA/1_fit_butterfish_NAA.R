@@ -48,12 +48,19 @@ for(m in 1:n.mods){
   #                                initial_pars=list(c(1,1,1,1,1), c(1,0.58,0.632,0.632,0.632), c(1,0.461,0.657,0.349,0.349), c(1,1,0.298,0.298,0.298)),
   #                                fix_pars=list(3:5, c(1,4,5), c(1,5), c(1,4,5))))
 
+  # input <- prepare_wham_input(asap3, recruit_model = 2,
+  #                             model_name = df.mods$Model[m],                         
+  #                             NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
+  #                             selectivity=list(model=rep("age-specific",4),
+  #                                initial_pars=list(c(1,1,1,1,1), c(1,1,1,0.632,0.632), c(1,1,1,0.349,0.349), c(1,1,1,0.298,0.298)),
+  #                                fix_pars=list(3:5, 1:3, c(1,2,3,5), c(1,2,4,5))))
+
   input <- prepare_wham_input(asap3, recruit_model = 2,
                               model_name = df.mods$Model[m],                         
                               NAA_re = list(cor=df.mods[m,"NAA_cor"], sigma=df.mods[m,"NAA_sigma"]),
                               selectivity=list(model=rep("age-specific",4),
-                                 initial_pars=list(c(1,1,1,1,1), c(1,1,1,0.632,0.632), c(1,1,1,0.349,0.349), c(1,1,1,0.298,0.298)),
-                                 fix_pars=list(3:5, 1:3, c(1,2,3,5), c(1,2,4,5))))
+                                 initial_pars=list(c(0.5,0.5,1,1,1), c(1,1,1,0.632,0.632), c(1,1,1,0.349,0.349), c(1,1,0.5,0.298,0.298)),
+                                 fix_pars=list(3:5, 1:3, c(1,2,3,5), c(1,2,4,5))))  
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)
@@ -105,6 +112,7 @@ for(m in 1:n.mods){
 # check that all models converged, pdHess, and bias correction succeeded
 mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
 mods <- lapply(mod.list, readRDS)
-conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
+pdHess = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
+conv = sapply(mods, function(x) if(x$opt$convergence == 0) TRUE else FALSE)
 conv
-
+pdHess
