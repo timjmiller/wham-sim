@@ -442,11 +442,29 @@ for(ty in 1:length(types)){
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
 simdata <- lapply(1:4, function(x) readRDS(here("data","simdata","butterfish_NAA",paste0("simdata_om",x,".rds"))))
-results <- results[complete.cases(results),]
-res.R <- results %>% group_by(om, em, type, sim) %>%
-	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
-		   R.rel = NAA1 / R.sim,
-		   R.rel.bc = NAA1_bc / R.sim)
+# results <- results[complete.cases(results),]
+
+mlabs = c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)")
+tylabs = c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)")
+results$R.sim = NA
+for(om in 1:4){
+	for(em in 1:4){
+		for(i in 1:100){
+			for(ty in 1:2){
+				res.ind <- which(results$om == mlabs[om] & results$em == mlabs[em] & results$sim == i & results$ty == tylabs[ty])
+				results$R.sim[res.ind] <- simdata[[om]][[i]][[ty]]$NAA[,1]
+			}
+		}
+	}
+}
+results$R.rel <- results$NAA1 / results$R.sim
+results$R.rel.bc <- results$NAA1_bc / results$R.sim
+res.R <- results %>% group_by(om, em, type, sim) 
+
+# res.R <- results %>% group_by(om, em, type, sim) %>%
+# 	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
+# 		   R.rel = NAA1 / R.sim,
+# 		   R.rel.bc = NAA1_bc / R.sim)
 for(ty in 1:length(types)){
 	df.plot <- filter(res.R, type==levels(res.R$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=R.rel)) +
