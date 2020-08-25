@@ -41,15 +41,17 @@ for(m in 2:n.mods){
                               NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
                               M = list(re=df.mods$M_re[m]),
                               selectivity=list(model=c("logistic","age-specific"),
-                                 initial_pars=list(c(3,3), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
+                                 initial_pars=list(c(6,6), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
                                  fix_pars=list(NULL, 5:11)))
+
+  # # 1st logistic par (a50) estimated at 19. Fix at Inf by initializing at max age.
   # input <- prepare_wham_input(asap3, recruit_model = 2,
   #                             model_name = df.mods$Model[m],                         
   #                             NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
   #                             M = list(re=df.mods$M_re[m]),
-  #                             selectivity=list(model=c("age-specific","age-specific"),
-  #                                initial_pars=list(c(.5,.5,.5,.5,.5,.5,1,1,1,1,1), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
-  #                                fix_pars=list(7:11, 5:11)))  
+  #                             selectivity=list(model=c("logistic","age-specific"),
+  #                                initial_pars=list(c(11,3), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
+  #                                fix_pars=list(1, 5:11)))
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)
@@ -66,20 +68,9 @@ for(m in 2:n.mods){
 
   input$data$Fbar_ages = 5:10 - 2
 
-  # m2, m3 don't converge. Try fixing logit_selpars at values from m1
-  if(m > 1){
-    m1 <- readRDS(file.path(res_dir, "m1.rds"))
-    input$par$logit_selpars <- m1$parList$logit_selpars
-    input$map$logit_selpars <- factor(rep(NA, length(input$par$logit_selpars)))
-
-    # # also try fixing survey catchability
-    # input$par$logit_q <- m1$parList$logit_q
-    # input$map$logit_q <- factor(rep(NA, length(input$par$logit_q)))
-  }
-
   # Fit model
   # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F) # no TMB bias correction
-  mod <- fit_wham(input, do.sdrep=F, do.retro=F, do.osa=F, do.proj=F)  
+  mod <- fit_wham(input, do.sdrep=F, do.retro=F, do.osa=F, do.proj=F, do.check=TRUE)  
   if(exists("err")) rm("err") # need to clean this up
   mod$sdrep = TMB::sdreport(mod, bias.correct=TRUE) # also do bias correction
   # simdata <- mod$simulate(par=mod$env$last.par.best, complete=TRUE)
@@ -97,27 +88,28 @@ conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
 conv
 
 # # check bad pars
-# is.re = length(mods[[2]]$env$random)>0
-# fe = mods[[2]]$env$last.par.best
-# if(is.re) fe = fe[-c(mods[[2]]$env$random)]
-# Gr = mods[[2]]$gr(fe)
+# m = 3
+# is.re = length(mods[[m]]$env$random)>0
+# fe = mods[[m]]$env$last.par.best
+# if(is.re) fe = fe[-c(mods[[m]]$env$random)]
+# Gr = mods[[m]]$gr(fe)
 # if(any(Gr > 0.01)){
 #   df <- data.frame(param = names(fe),
 #                    MLE = fe,
 #                    gr.at.MLE = Gr)
 #   ind.hi <- which(Gr > 0.01)
-#   mods[[2]]$badpar <- df[ind.hi,]
+#   mods[[m]]$badpar <- df[ind.hi,]
 #   warning(paste("","Some parameter(s) have high gradients at the MLE:","",
-#     paste(capture.output(print(mods[[2]]$badpar)), collapse = "\n"), sep="\n"))
+#     paste(capture.output(print(mods[[m]]$badpar)), collapse = "\n"), sep="\n"))
 # } else {
-#   test <- TMBhelper::Check_Identifiable(mods[[2]])
+#   test <- TMBhelper::Check_Identifiable(mods[[m]])
 #   if(length(test$WhichBad) > 0){
 #     bad.par <- as.character(test$BadParams$Param[test$BadParams$Param_check=='Bad'])
 #     bad.par.grep <- grep(bad.par, test$BadParams$Param)
-#     mods[[2]]$badpar <- test$BadParams[bad.par.grep,]
+#     mods[[m]]$badpar <- test$BadParams[bad.par.grep,]
 #     warning(paste("","Some fixed effect parameter(s) are not identifiable.",
-#       "Consider 1) removing them from the mods[[2]] by fixing input$par and input$map = NA, or",
-#       "2) changing your mods[[2]] configuration.","",
+#       "Consider 1) removing them from the mods[[m]] by fixing input$par and input$map = NA, or",
+#       "2) changing your mods[[m]] configuration.","",
 #       paste(capture.output(print(test$BadParams[bad.par.grep,])), collapse = "\n"), sep="\n"))    
 #   }
 # }

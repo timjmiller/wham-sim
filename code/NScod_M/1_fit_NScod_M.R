@@ -41,8 +41,15 @@ for(m in 1:n.mods){
                               NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
                               M = list(re=df.mods$M_re[m]),
                               selectivity=list(model=c("logistic","age-specific","age-specific"),
-                                 initial_pars=list(c(3,3), c(.5,.5,.5,.5,1,0), c(.5,.5,1,1,0,0)),
+                                 initial_pars=list(c(2,2), c(.5,.5,.5,.5,1,0), c(.8,.8,1,1,0,0)),
                                  fix_pars=list(NULL, 5:6, 3:6)))
+  # input <- prepare_wham_input(asap3, recruit_model = 2,
+  #                             model_name = df.mods$Model[m],                         
+  #                             NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
+  #                             M = list(re=df.mods$M_re[m]),
+  #                             selectivity=list(model=c("logistic","logistic","age-specific"),
+  #                                initial_pars=list(c(2,2), c(3,3), c(.8,.8,1,1,0,0)),
+  #                                fix_pars=list(NULL, NULL, 3:6)))  
 
   # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
   input$data$age_comp_model_indices = rep(7, input$data$n_indices)

@@ -84,8 +84,11 @@ for(m in 1:n.mods){
 }
 
 # check that all models converged, pdHess, and bias correction succeeded
-mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
+# mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
+mod.list <- file.path(res_dir,paste0("m",1:3,".rds"))
 mods <- lapply(mod.list, readRDS)
 conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
 conv
+
+sapply(mods, function(x) x$runtime)/60
 
