@@ -18,11 +18,15 @@ knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), 
 knitr::opts_knit$set(root.dir = '../' )
 library(knitr)
 library(tidyverse)
+library(cowplot)
 library(ggsidekick)
 library(pander)
 library(kableExtra)
 library(png)
 library(forcats)
+library(wham)
+library(ggplotFL)
+library(ggsci)
 ```
 
 $^1$brian.stock@noaa.gov, timothy.j.miller@noaa.gov, Northeast Fisheries Science Center, National Marine Fisheries Service, 166 Water Street, Woods Hole, MA 02543, USA\
@@ -221,4 +225,135 @@ dat %>% dplyr::rename("$\\sigma_R$"="sig_R", "\\# Ages"='n.ages', "\\# Years"='n
   add_header_above(c(" "=1, "Modules tested"=3, "Model dim"=2, "Biol. par."=2, "Stock status"=2))
 ```
 
-\pagebreak
+<!-- \pagebreak -->
+\clearpage
+
+```{r snemayt-naa, echo=FALSE, message=FALSE, warnings=FALSE, out.width='7in',fig.height=10, fig.width=7}
+id = "SNEMAYT_NAA"
+res_dir <- file.path(getwd(),"results",id)
+res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
+res.list <- lapply(res.files, readRDS)
+flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
+results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
+results <- sapply(results, as.numeric)
+results <- as.data.frame(results)
+types <- c("OE","OEPE")
+mlabs = c("m1: SCAA (iid)","m2: SCAA (AR1_y)","m3: NAA (iid)","m4: NAA (2D AR1)")
+tylabs = c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)")
+results$om <- factor(results$om, levels=1:4, labels=mlabs)
+results$em <- factor(results$em, levels=1:4, labels=mlabs)
+results$type <- factor(results$type, levels=1:2, labels=tylabs)
+results$em.x <- fct_recode(results$em, m1="m1: SCAA (iid)", m2="m2: SCAA (AR1_y)", m3="m3: NAA (iid)", m4="m4: NAA (2D AR1)")
+
+# calculate relative error
+results$SSB.rel = results$SSB_fit / results$SSB_sim
+results$SSB.rel.bc = results$SSB_fit_bc / results$SSB_sim
+results$F.rel = results$F_fit / results$F_sim
+results$F.rel.bc = results$F_fit_bc / results$F_sim
+results$relB.rel = results$relB_fit / results$relB_sim
+results$relB.rel.bc = results$relB_fit_bc / results$relB_sim
+results$relF.rel = results$relF_fit / results$relF_sim
+results$relF.rel.bc = results$relF_fit_bc / results$relF_sim
+results$catch.rel = results$catch_fit / results$catch_sim
+results$catch.rel.bc = results$catch_fit_bc / results$catch_sim
+
+simdata <- lapply(1:4, function(x) readRDS(file.path(getwd(),"data","simdata",id,paste0("simdata_om",x,".rds"))))
+results$R.sim = NA
+for(om in 1:4){
+  for(em in 1:4){
+    for(i in 1:100){
+      for(ty in 1:2){
+        res.ind <- which(results$om == mlabs[om] & results$em == mlabs[em] & results$sim == i & results$ty == tylabs[ty])
+        results$R.sim[res.ind] <- simdata[[om]][[i]][[ty]]$NAA[,1]
+      }
+    }
+  }
+}
+results$R.rel <- results$NAA1 / results$R.sim
+results$R.rel.bc <- results$NAA1_bc / results$R.sim
+
+ty=2
+# 	df.plot <- filter(results, type==levels(results$type)[ty]) %>% 
+#               select(om, em, SSB.rel, F.rel, relB.rel, relF.rel, catch.rel, R.rel) %>%
+#               pivot_longer(-om, names_to = "variable", values_to = "val")
+	df.plot <- filter(results, type==levels(results$type)[ty])
+	p1 <- ggplot(df.plot, aes(x=em.x, y=SSB.rel)) +
+            	  geom_boxplot(aes(fill=em), outlier.shape = NA) +
+            	  scale_fill_jco(name="Estimation model") +
+            	  coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                xlab(NULL) +
+            	  # ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
+	              ylab("SSB") +
+            	  # labs(title="Operating model") +
+            	  geom_hline(yintercept = 1, linetype=2, color='black') +
+            	  facet_wrap(vars(om), nrow=1) +
+            	  theme_bw()
+  p2 <- ggplot(df.plot, aes(x=em.x, y=F.rel)) +
+                geom_boxplot(aes(fill=em), outlier.shape = NA) +
+                scale_fill_jco(name="Estimation model") +
+                coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                 xlab(NULL) +
+                # ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
+                ylab("F") +
+                # labs(title="Operating model") +
+                geom_hline(yintercept = 1, linetype=2, color='black') +
+                facet_wrap(vars(om), nrow=1) +
+                theme_bw()
+  p3 <- ggplot(df.plot, aes(x=em.x, y=relB.rel)) +
+                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+                 scale_fill_jco(name="Estimation model") +
+                 coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                 xlab(NULL) +
+                 # ylab(expression(frac(B,B[40]["%"])~"(sim fit)"~"/"~frac(B,B[40]["%"])~"(sim data)")) +
+                # ylab(expression(frac(B,B[40]["%"]))) +
+                ylab(expression(B/B[40]["%"])) +
+                 # labs(title="Operating model") +
+                 geom_hline(yintercept = 1, linetype=2, color='black') +
+                 facet_wrap(vars(om), nrow=1) +
+                 theme_bw()
+  p4 <- ggplot(df.plot, aes(x=em.x, y=relF.rel)) +
+                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+                 scale_fill_jco(name="Estimation model") +
+                 coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                 xlab(NULL) +
+                 # ylab(expression(frac(F,F[40]["%"])~"(sim fit)"~"/"~frac(F,F[40]["%"])~"(sim data)")) +
+                # ylab(expression(frac(F,F[40]["%"]))) +
+                ylab(expression(F/F[40]["%"])) +
+                 # labs(title="Operating model") +
+                 geom_hline(yintercept = 1, linetype=2, color='black') +
+                 facet_wrap(vars(om), nrow=1) +
+                 theme_bw()
+  p5 <- ggplot(df.plot, aes(x=em.x, y=catch.rel)) +
+                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+                 scale_fill_jco(name="Estimation model") +
+                 coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                 xlab(NULL) +
+                 # ylab(expression(Catch["sim fit"]~"/"~Catch["sim data"])) +
+                 ylab("Catch") +
+                 # labs(title="Operating model") +
+                 geom_hline(yintercept = 1, linetype=2, color='black') +
+                 facet_wrap(vars(om), nrow=1) +
+                 theme_bw()
+  p6 <- ggplot(df.plot, aes(x=em.x, y=R.rel)) +
+                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+                 scale_fill_jco(name="Estimation model") +
+                 coord_cartesian(ylim=c(0,2)) +
+                 # xlab("Estimation model") +
+                 xlab(NULL) +
+                 # ylab(expression(Recruitment["sim fit"]~"/"~Recruitment["sim data"])) +
+                 ylab("Recruitment") +
+                 # labs(title="Operating model") +
+                 geom_hline(yintercept = 1, linetype=2, color='black') +
+                 facet_wrap(vars(om), nrow=1) +
+                 theme_bw()
+	plot_grid(p1, p2, p3, p4, p5, p6, ncol=1)
+  
+	# grid::grid.text(unit(0.98,"npc"),0.5, label = 'Estimation model', rot = 270) # right
+	# grid::grid.text(unit(0.5,"npc"),unit(.98,'npc'), label = 'Operating model', rot = 0)   # top)
+
+```
