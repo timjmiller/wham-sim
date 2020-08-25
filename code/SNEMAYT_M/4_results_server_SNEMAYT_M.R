@@ -18,12 +18,17 @@ library(ggsci)
 res_dir <- here("results","SNEMAYT_M")
 plots_dir <- here("plots","SNEMAYT_M")
 res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
+om2em2 <- res.files[4]
+res.files <- res.files[-4] # om2/em2 in diff format
 res.list <- lapply(res.files, readRDS)
 flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
 results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
 results <- sapply(results, as.numeric)
 types <- c("OE","OEPE")
 results <- as.data.frame(results)
+results <- rbind(results, readRDS(om2em2))
+# results %>% group_by(om, em) %>% tally()
+
 results$om <- factor(results$om, levels=1:3, labels=c("m1: none","m2: IID","m3: 2D AR1"))
 results$em <- factor(results$em, levels=1:3, labels=c("m1: none","m2: IID","m3: 2D AR1"))
 results$em.x <- fct_recode(results$em, m1="m1: none", m2="m2: IID", m3="m3: 2D AR1")
@@ -404,12 +409,33 @@ for(ty in 1:length(types)){
 }
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
-simdata <- lapply(1:3, function(x) readRDS(here("data","simdata","SNEMAYT_M",paste0("simdata_SNEMAYT_M_om",x,".rds"))))
-results <- results[complete.cases(results),]
-res.R <- results %>% group_by(om, em, type, sim) %>%
-	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
-		   R.rel = NAA1 / R.sim,
-		   R.rel.bc = NAA1_bc / R.sim)
+# simdata <- lapply(1:3, function(x) readRDS(here("data","simdata","SNEMAYT_M",paste0("simdata_SNEMAYT_M_om",x,".rds"))))
+# results <- results[complete.cases(results),]
+# res.R <- results %>% group_by(om, em, type, sim) %>%
+# 	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
+# 		   R.rel = NAA1 / R.sim,
+# 		   R.rel.bc = NAA1_bc / R.sim)
+
+mlabs = c("m1: none","m2: IID","m3: 2D AR1")
+tylabs = c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)")
+n.mods <- length(mlabs)
+simdata <- lapply(1:n.mods, function(x) readRDS(here("data","simdata","SNEMAYT_M",paste0("simdata_SNEMAYT_M_om",x,".rds"))))
+results$R.sim = NA
+for(om in 1:n.mods){
+	for(em in 1:n.mods){
+		for(i in 1:100){
+			for(ty in 1:2){
+				res.ind <- which(results$om == mlabs[om] & results$em == mlabs[em] & results$sim == i & results$ty == tylabs[ty])
+				results$R.sim[res.ind] <- simdata[[om]][[i]][[ty]]$NAA[,1]
+			}
+		}
+	}
+}
+results$R.rel <- results$NAA1 / results$R.sim
+results$R.rel.bc <- results$NAA1_bc / results$R.sim
+res.R <- results %>% group_by(om, em, type, sim) 
+plot.bc = FALSE
+
 for(ty in 1:length(types)){
 	df.plot <- filter(res.R, type==levels(res.R$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=R.rel)) +
@@ -445,6 +471,7 @@ for(ty in 1:length(types)){
 	dev.off()
 
 	# with TMB bias correction
+	if(plot.bc){
 	p <- ggplot(df.plot, aes(x=year, y=R.rel.bc)) +
 	    stat_flquantiles(probs=c(0.25, 0.75), alpha=0.5, fill="grey", geom="ribbon") + # middle 50%
 	    stat_flquantiles(probs=c(0.10, 0.90), alpha=0.35, fill="grey", geom="ribbon") + # middle 80%
@@ -474,6 +501,7 @@ for(ty in 1:length(types)){
 		facet_wrap(vars(om), nrow=1) +
 		theme_bw() +
 		theme(plot.title = element_text(hjust = 0.5)))
-	dev.off()		
+	dev.off()
+	}		
 }
 
