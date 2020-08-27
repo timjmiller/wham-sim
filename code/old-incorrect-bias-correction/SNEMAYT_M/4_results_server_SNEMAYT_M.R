@@ -505,3 +505,82 @@ for(ty in 1:length(types)){
 	}		
 }
 
+
+	
+	# df.plot <- filter(results, type==levels(results$type)[ty])
+	# p1 <- ggplot(df.plot, aes(x=em.x, y=SSB.rel)) +
+ #            	  geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #            	  scale_fill_jco(name="Estimation model") +
+ #            	  coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                xlab(NULL) +
+ #            	  # ylab(expression(SSB["sim fit"]~"/"~SSB["sim data"])) +
+	#               ylab("SSB") +
+ #            	  # labs(title="Operating model") +
+ #            	  geom_hline(yintercept = 1, linetype=2, color='black') +
+ #            	  facet_wrap(vars(om), nrow=1) +
+ #            	  theme_bw()
+ #  p2 <- ggplot(df.plot, aes(x=em.x, y=F.rel)) +
+ #                geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #                scale_fill_jco(name="Estimation model") +
+ #                coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                 xlab(NULL) +
+ #                # ylab(expression(F["sim fit"]~"/"~F["sim data"])) +
+ #                ylab("F") +
+ #                # labs(title="Operating model") +
+ #                geom_hline(yintercept = 1, linetype=2, color='black') +
+ #                facet_wrap(vars(om), nrow=1) +
+ #                theme_bw()
+ #  p3 <- ggplot(df.plot, aes(x=em.x, y=relB.rel)) +
+ #                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #                 scale_fill_jco(name="Estimation model") +
+ #                 coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                 xlab(NULL) +
+ #                 # ylab(expression(frac(B,B[40]["%"])~"(sim fit)"~"/"~frac(B,B[40]["%"])~"(sim data)")) +
+ #                # ylab(expression(frac(B,B[40]["%"]))) +
+ #                ylab(expression(B/B[40]["%"])) +
+ #                 # labs(title="Operating model") +
+ #                 geom_hline(yintercept = 1, linetype=2, color='black') +
+ #                 facet_wrap(vars(om), nrow=1) +
+ #                 theme_bw()
+ #  p4 <- ggplot(df.plot, aes(x=em.x, y=relF.rel)) +
+ #                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #                 scale_fill_jco(name="Estimation model") +
+ #                 coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                 xlab(NULL) +
+ #                 # ylab(expression(frac(F,F[40]["%"])~"(sim fit)"~"/"~frac(F,F[40]["%"])~"(sim data)")) +
+ #                # ylab(expression(frac(F,F[40]["%"]))) +
+ #                ylab(expression(F/F[40]["%"])) +
+ #                 # labs(title="Operating model") +
+ #                 geom_hline(yintercept = 1, linetype=2, color='black') +
+ #                 facet_wrap(vars(om), nrow=1) +
+ #                 theme_bw()
+ #  p5 <- ggplot(df.plot, aes(x=em.x, y=catch.rel)) +
+ #                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #                 scale_fill_jco(name="Estimation model") +
+ #                 coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                 xlab(NULL) +
+ #                 # ylab(expression(Catch["sim fit"]~"/"~Catch["sim data"])) +
+ #                 ylab("Catch") +
+ #                 # labs(title="Operating model") +
+ #                 geom_hline(yintercept = 1, linetype=2, color='black') +
+ #                 facet_wrap(vars(om), nrow=1) +
+ #                 theme_bw()
+ #  p6 <- ggplot(df.plot, aes(x=em.x, y=R.rel)) +
+ #                 geom_boxplot(aes(fill=em), outlier.shape = NA) +
+ #                 scale_fill_jco(name="Estimation model") +
+ #                 coord_cartesian(ylim=c(0,2)) +
+ #                 # xlab("Estimation model") +
+ #                 xlab(NULL) +
+ #                 # ylab(expression(Recruitment["sim fit"]~"/"~Recruitment["sim data"])) +
+ #                 ylab("Recruitment") +
+ #                 # labs(title="Operating model") +
+ #                 geom_hline(yintercept = 1, linetype=2, color='black') +
+ #                 facet_wrap(vars(om), nrow=1) +
+ #                 theme_bw()
+	# plot_grid(p1, p2, p3, p4, p5, p6, ncol=1)
+  
