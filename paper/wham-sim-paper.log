@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.24)  27 AUG 2020 17:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.24)  28 AUG 2020 23:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1183,7 +1183,7 @@ File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<wham-sim-paper_files/figure-latex/snemayt-naa-1.pdf, id=241, 433.62pt x 614.29
+<wham-sim-paper_files/figure-latex/snemayt-naa-1.pdf, id=282, 433.62pt x 614.29
 5pt>
 File: wham-sim-paper_files/figure-latex/snemayt-naa-1.pdf Graphic file (type pd
 f)
@@ -1200,7 +1200,7 @@ Overfull \hbox (3.63416pt too wide) in paragraph at lines 472--472
 LaTeX Warning: Float too large for page by 15.20172pt on input line 473.
 
 [12 <./wham-sim-paper_files/figure-latex/snemayt-naa-1.pdf>]
-<wham-sim-paper_files/figure-latex/snemayt-m-1.pdf, id=253, 433.62pt x 614.295p
+<wham-sim-paper_files/figure-latex/snemayt-m-1.pdf, id=294, 433.62pt x 614.295p
 t>
 File: wham-sim-paper_files/figure-latex/snemayt-m-1.pdf Graphic file (type pdf)
 
@@ -1211,21 +1211,84 @@ d on input line 480.
 
 LaTeX Warning: Float too large for page by 11.89159pt on input line 481.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 483.
-[13 <./wham-sim-paper_files/figure-latex/snemayt-m-1.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 483.
+<wham-sim-paper_files/figure-latex/unnamed-chunk-3-1.pdf, id=295, 433.62pt x 61
+4.295pt>
+File: wham-sim-paper_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file (typ
+e pdf)
+<use wham-sim-paper_files/figure-latex/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: wham-sim-paper_files/figure-latex/unnamed-chunk-3-1.pd
+f  used on input line 493.
+(pdftex.def)             Requested size: 433.63878pt x 614.3216pt.
+[13
+
+
+
+] [14 <./wham-sim-paper_files/figure-latex/snemayt-m-1.pdf>]
+Overfull \vbox (22.31215pt too high) has occurred while \output is active []
+
+[15 <./wham-sim-paper_files/figure-latex/unnamed-chunk-3-1.pdf>]
+<wham-sim-paper_files/figure-latex/unnamed-chunk-3-2.pdf, id=324, 433.62pt x 61
+4.295pt>
+File: wham-sim-paper_files/figure-latex/unnamed-chunk-3-2.pdf Graphic file (typ
+e pdf)
+<use wham-sim-paper_files/figure-latex/unnamed-chunk-3-2.pdf>
+Package pdftex.def Info: wham-sim-paper_files/figure-latex/unnamed-chunk-3-2.pd
+f  used on input line 506.
+(pdftex.def)             Requested size: 433.63878pt x 614.3216pt.
+[16]
+Overfull \vbox (22.31215pt too high) has occurred while \output is active []
+
+[17 <./wham-sim-paper_files/figure-latex/unnamed-chunk-3-2.pdf>]
+<wham-sim-paper_files/figure-latex/unnamed-chunk-3-3.pdf, id=341, 433.62pt x 61
+4.295pt>
+File: wham-sim-paper_files/figure-latex/unnamed-chunk-3-3.pdf Graphic file (typ
+e pdf)
+<use wham-sim-paper_files/figure-latex/unnamed-chunk-3-3.pdf>
+Package pdftex.def Info: wham-sim-paper_files/figure-latex/unnamed-chunk-3-3.pd
+f  used on input line 519.
+(pdftex.def)             Requested size: 433.63878pt x 614.3216pt.
+[18]
+Overfull \vbox (22.31215pt too high) has occurred while \output is active []
+
+[19 <./wham-sim-paper_files/figure-latex/unnamed-chunk-3-3.pdf>]
+<wham-sim-paper_files/figure-latex/unnamed-chunk-3-4.pdf, id=359, 433.62pt x 61
+4.295pt>
+File: wham-sim-paper_files/figure-latex/unnamed-chunk-3-4.pdf Graphic file (typ
+e pdf)
+<use wham-sim-paper_files/figure-latex/unnamed-chunk-3-4.pdf>
+Package pdftex.def Info: wham-sim-paper_files/figure-latex/unnamed-chunk-3-4.pd
+f  used on input line 532.
+(pdftex.def)             Requested size: 433.63878pt x 614.3216pt.
+[20]
+Overfull \vbox (22.31215pt too high) has occurred while \output is active []
+
+[21 <./wham-sim-paper_files/figure-latex/unnamed-chunk-3-4.pdf>]
+<wham-sim-paper_files/figure-latex/unnamed-chunk-3-5.pdf, id=376, 433.62pt x 61
+4.295pt>
+File: wham-sim-paper_files/figure-latex/unnamed-chunk-3-5.pdf Graphic file (typ
+e pdf)
+<use wham-sim-paper_files/figure-latex/unnamed-chunk-3-5.pdf>
+Package pdftex.def Info: wham-sim-paper_files/figure-latex/unnamed-chunk-3-5.pd
+f  used on input line 546.
+(pdftex.def)             Requested size: 433.63878pt x 614.3216pt.
+[22]
+Overfull \vbox (22.31215pt too high) has occurred while \output is active []
+
+[23 <./wham-sim-paper_files/figure-latex/unnamed-chunk-3-5.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 550.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 550.
 (./wham-sim-paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 483.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 483.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 550.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 550.
 Package rerunfilecheck Info: File `wham-sim-paper.out' has not changed.
-(rerunfilecheck)             Checksum: DE0B6027A7B6E88E961D3C8119CF9F8D;4127.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 483.
+(rerunfilecheck)             Checksum: CF6476DD36D5F6D39AFE6B7F97A6B1ED;6326.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 550.
  ) 
 Here is how much of TeX's memory you used:
- 15656 strings out of 494923
- 229468 string characters out of 6180742
- 339590 words of memory out of 5000000
- 18552 multiletter control sequences out of 15000+600000
+ 15726 strings out of 494923
+ 231797 string characters out of 6180742
+ 340242 words of memory out of 5000000
+ 18592 multiletter control sequences out of 15000+600000
  66032 words of font info for 91 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  36i,12n,39p,718b,407s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1240,10 +1303,10 @@ pe1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb></usr
 c/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss
 8.pfb>
-Output written on wham-sim-paper.pdf (13 pages, 275120 bytes).
+Output written on wham-sim-paper.pdf (23 pages, 340980 bytes).
 PDF statistics:
- 334 PDF objects out of 1000 (max. 8388607)
- 300 compressed objects within 3 object streams
- 100 named destinations out of 1000 (max. 500000)
- 14555 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 468 PDF objects out of 1000 (max. 8388607)
+ 412 compressed objects within 5 object streams
+ 130 named destinations out of 1000 (max. 500000)
+ 14660 words of extra memory for PDF output out of 17280 (max. 10000000)
 

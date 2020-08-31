@@ -1,0 +1,119 @@
+# Brian Stock
+# June 15 2020
+# Simulation test WHAM
+
+# source(here::here("code","ICEherring_M","1_fit_ICEherring_M.R"))
+
+# devtools::load_all("/home/bstock/Documents/wham")
+# devtools::install_github("timjmiller/wham", dependencies=TRUE)
+library(wham)
+library(here)
+library(tidyverse)
+
+res_dir <- here("results","ICEherring_M")
+dir.create(res_dir, showWarnings=FALSE)
+ins_dir <- here("data","simdata","ICEherring_M")
+
+# Iceland herring
+# see /home/bstock/Documents/wg_MGWG/state-space/ICEherring/WHAM/fit_wham_models.r
+# Fbar.ages = 5:10 - 2 #first age is 3 in the model
+# 11 ages
+# 2 selectivity blocks
+#   logistic (default)
+#   age-specific fix 5:8 at 1, 9:11 at 0
+# age comps: 7 (logistic normal, treat 0 obs as missing)
+asap3 <- read_asap3_dat(here("data","ICEherring_ASAP.dat"))
+
+# Fit 3 M operating models (best models from 2D-AR1-survival paper
+#  1. None
+#  2. IID
+#  3. 2D AR1
+df.mods <- data.frame(M_re = c('none','iid','2dar1'), stringsAsFactors=FALSE)
+n.mods <- dim(df.mods)[1]
+df.mods$Model <- paste0("m",1:n.mods)
+df.mods <- df.mods %>% select(Model, everything()) # moves Model to first col
+df.mods
+
+# Fit models
+for(m in 2:n.mods){
+  input <- prepare_wham_input(asap3, recruit_model = 2,
+                              model_name = df.mods$Model[m],                         
+                              NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
+                              M = list(re=df.mods$M_re[m]),
+                              selectivity=list(model=c("logistic","age-specific"),
+                                 initial_pars=list(c(6,6), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
+                                 fix_pars=list(NULL, 5:11)))
+
+  # # 1st logistic par (a50) estimated at 19. Fix at Inf by initializing at max age.
+  # input <- prepare_wham_input(asap3, recruit_model = 2,
+  #                             model_name = df.mods$Model[m],                         
+  #                             NAA_re = list(cor="iid", sigma="rec"), # m1/base NAA model
+  #                             M = list(re=df.mods$M_re[m]),
+  #                             selectivity=list(model=c("logistic","age-specific"),
+  #                                initial_pars=list(c(11,3), c(.5,.5,.5,.5,1,1,1,1,0,0,0)),
+  #                                fix_pars=list(1, 5:11)))
+
+  # age comp = 7, logistic normal, treat 0 obs as missing, 1 par
+  input$data$age_comp_model_indices = rep(7, input$data$n_indices)
+  input$data$age_comp_model_fleets = rep(7, input$data$n_fleets)
+  input$data$n_age_comp_pars_indices = rep(1, input$data$n_indices)
+  input$data$n_age_comp_pars_fleets = rep(1, input$data$n_fleets)
+  input$par$index_paa_pars = rep(0, input$data$n_indices)
+  input$par$catch_paa_pars = rep(0, input$data$n_fleets)
+  input$map = input$map[!(names(input$map) %in% c("index_paa_pars", "catch_paa_pars"))]
+
+  # analytical bias correction, both obs and process error
+  input$data$bias_correct_oe = 1
+  input$data$bias_correct_pe = 1
+
+  input$data$Fbar_ages = 5:10 - 2
+  # input$data$Fbar_ages = seq(asap3$dat$Frep_ages[1], asap3$dat$Frep_ages[2])
+  input$par$log_N1_pars = log(asap3$dat$N1_ini)
+  input$par$log_NAA = matrix(input$par$log_N1_pars, ncol=asap3$dat$n_ages, nrow=asap3$dat$n_years-1, byrow=TRUE)
+  input$par$log_F1 = log(asap3$dat$F1_ini)  
+ 
+  # Fit model
+  # mod <- fit_wham(input, do.retro=F, do.osa=F, do.proj=F) # no TMB bias correction
+  mod <- fit_wham(input, do.sdrep=F, do.retro=F, do.osa=F, do.proj=F, do.check=TRUE)  
+  if(exists("err")) rm("err") # need to clean this up
+  mod$sdrep = TMB::sdreport(mod, bias.correct=TRUE) # also do bias correction
+  # simdata <- mod$simulate(par=mod$env$last.par.best, complete=TRUE)
+
+  # Save model
+  if(exists("err")) rm("err") # need to clean this up
+  saveRDS(mod, file=file.path(res_dir, paste0(df.mods$Model[m],".rds")))
+  saveRDS(input, file=file.path(ins_dir, paste0(df.mods$Model[m],"_input.rds")))
+}
+
+# check that all models converged, pdHess, and bias correction succeeded
+mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
+mods <- lapply(mod.list, readRDS)
+conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
+conv
+
+# # check bad pars
+# m = 3
+# is.re = length(mods[[m]]$env$random)>0
+# fe = mods[[m]]$env$last.par.best
+# if(is.re) fe = fe[-c(mods[[m]]$env$random)]
+# Gr = mods[[m]]$gr(fe)
+# if(any(Gr > 0.01)){
+#   df <- data.frame(param = names(fe),
+#                    MLE = fe,
+#                    gr.at.MLE = Gr)
+#   ind.hi <- which(Gr > 0.01)
+#   mods[[m]]$badpar <- df[ind.hi,]
+#   warning(paste("","Some parameter(s) have high gradients at the MLE:","",
+#     paste(capture.output(print(mods[[m]]$badpar)), collapse = "\n"), sep="\n"))
+# } else {
+#   test <- TMBhelper::Check_Identifiable(mods[[m]])
+#   if(length(test$WhichBad) > 0){
+#     bad.par <- as.character(test$BadParams$Param[test$BadParams$Param_check=='Bad'])
+#     bad.par.grep <- grep(bad.par, test$BadParams$Param)
+#     mods[[m]]$badpar <- test$BadParams[bad.par.grep,]
+#     warning(paste("","Some fixed effect parameter(s) are not identifiable.",
+#       "Consider 1) removing them from the mods[[m]] by fixing input$par and input$map = NA, or",
+#       "2) changing your mods[[m]] configuration.","",
+#       paste(capture.output(print(test$BadParams[bad.par.grep,])), collapse = "\n"), sep="\n"))    
+#   }
+# }
