@@ -1,0 +1,12 @@
+# commands to run on venus in corresponding directory.
+# Simulation test WHAM
+#   Step 3: Fit OMs to simulated datasets
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 1 1 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 1 2 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 1 3 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 2 1 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 2 2 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 2 3 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 3 1 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 3 2 &
+Rscript --vanilla 3_fit_sims_GBhaddock_sel.R 3 3 &

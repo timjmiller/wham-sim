@@ -7,8 +7,10 @@
 setwd("/home/bstock/Documents/ms/wham-sim")
 ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","NScod")
 re = c(rep("NAA",5), rep("M",3))
-bc.type = 2 # _oepe
-# bc.type = 1 # _oe
+# ids = c("SNEMAYT","butterfish","NScod")
+# re = rep("M",3)
+# bc.type = 2 # _oepe
+bc.type = 1 # _oe
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)

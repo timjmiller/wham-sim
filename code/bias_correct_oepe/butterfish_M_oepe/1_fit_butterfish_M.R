@@ -89,6 +89,8 @@ mods <- lapply(mod.list, readRDS)
 conv = sapply(mods, function(x) if(x$sdrep$pdHess) TRUE else FALSE)
 conv
 
+# sapply(mods, function(x) {s1 <- summary(x$sdrep); exp(s1[rownames(s1) == "log_NAA_sigma",1])[1]})
+
 # # check bad pars
 # is.re = length(mods[[2]]$env$random)>0
 # fe = mods[[2]]$env$last.par.best

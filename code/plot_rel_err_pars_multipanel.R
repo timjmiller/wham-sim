@@ -36,8 +36,10 @@ plot_rel_err_pars_multipanel <- function(ids, re, bc.type=2, sim.types=1:2, plot
       # names(par.labs.expr) <- par.labs
     }
     if(names(id.list)[ni] == "M"){
-      par.labs <- c("sigM","phiY","phiA")
-      par.labs.expr <- c(expression(sigma[M]), expression(phi[Y]), expression(phi[A]))
+      # par.labs <- c("sigM","phiY","phiA")
+      # par.labs.expr <- c(expression(sigma[M]), expression(phi[Y]), expression(phi[A]))
+      par.labs <- c("sigR","sigM","phiY","phiA")
+      par.labs.expr <- c(expression(sigma[R]), expression(sigma[M]), expression(phi[Y]), expression(phi[A]))
     }
     n.pars <- length(par.labs)
     
@@ -101,17 +103,34 @@ plot_rel_err_pars_multipanel <- function(ids, re, bc.type=2, sim.types=1:2, plot
                   tmp$par.true[3:4] <- rev(inv.rho.trans(mod$parList$trans_NAA_rho))
                 }
                 if(names(id.list)[ni] == "M"){
-                  if(em > 1){ # sigma_M, rho_M_a, rho_M_y aren't in sdrep if no M random effects
-                    tmp$par.est[1] <- s1[rownames(s1) == "sigma_M",1]
-                    if(em == 3){
-                      tmp$par.est[2] <- s1[rownames(s1) == "rho_M_y",1]
-                      tmp$par.est[3] <- s1[rownames(s1) == "rho_M_a",1]
+                  if(n.pars == 3){ # M re pars only (no sigR)
+                    if(em > 1){ # sigma_M, rho_M_a, rho_M_y aren't in sdrep if no M random effects
+                      tmp$par.est[1] <- s1[rownames(s1) == "sigma_M",1]
+                      if(em == 3){
+                        tmp$par.est[2] <- s1[rownames(s1) == "rho_M_y",1]
+                        tmp$par.est[3] <- s1[rownames(s1) == "rho_M_a",1]
+                      }
                     }
-                  }
-                  if(om == 1) tmp$par.true <- 0
-                  if(om > 1){
-                    tmp$par.true[1] <- exp(mod$parList$M_repars[1])
-                    tmp$par.true[2:3] <- rev(inv.rho.trans(mod$parList$M_repars[2:3]))
+                    if(om == 1) tmp$par.true <- 0
+                    if(om > 1){
+                      tmp$par.true[1] <- exp(mod$parList$M_repars[1])
+                      tmp$par.true[2:3] <- rev(inv.rho.trans(mod$parList$M_repars[2:3]))
+                    }
+                  } else { # 4 pars (also plot sigR)
+                    tmp$par.est[1] <- exp(s1[rownames(s1) == "log_NAA_sigma",1])[1] # sigR
+                    if(em > 1){ # sigma_M, rho_M_a, rho_M_y aren't in sdrep if no M random effects
+                      tmp$par.est[2] <- s1[rownames(s1) == "sigma_M",1]
+                      if(em == 3){
+                        tmp$par.est[3] <- s1[rownames(s1) == "rho_M_y",1]
+                        tmp$par.est[4] <- s1[rownames(s1) == "rho_M_a",1]
+                      }
+                    }
+                    tmp$par.true[1] <- exp(mod$parList$log_NAA_sigma)[1]
+                    if(om == 1) tmp$par.true[2:4] <- 0
+                    if(om > 1){
+                      tmp$par.true[2] <- exp(mod$parList$M_repars[1])
+                      tmp$par.true[3:4] <- rev(inv.rho.trans(mod$parList$M_repars[2:3]))
+                    }
                   }
                 }
               }
@@ -124,9 +143,9 @@ plot_rel_err_pars_multipanel <- function(ids, re, bc.type=2, sim.types=1:2, plot
       df.par.all <- rbind(df.par.all, df.par)
     }
     
-    # only plot m2 and m3 for M
+    # only plot m2 and m3 for M (if not plotting sigR)
     plot.mods <- 1:n.mods
-    if(names(id.list)[ni] == "M"){
+    if(names(id.list)[ni] == "M" & n.pars == 3){
       plot.mods <- 2:n.mods
       df.par.all <- df.par.all[df.par.all$om %in% plot.mods & df.par.all$em %in% plot.mods,]
       mlabs <- mlabs[plot.mods]
@@ -177,8 +196,9 @@ plot_rel_err_pars_multipanel <- function(ids, re, bc.type=2, sim.types=1:2, plot
       theme(axis.text.x = element_text(size=12), plot.margin = unit(c(0.3,0.1,0.1,0.1), "in"))
       
       plots_dir_i <- file.path(plots_dir, bc)
-      if(n.pars == 4) png(file.path(plots_dir_i, paste0("estpar_",names(id.list)[ni],"_",types[ty],".png")), width=7, height=7.5, units='in',res=300)
-      if(n.pars == 3) png(file.path(plots_dir_i, paste0("estpar_",names(id.list)[ni],"_",types[ty],".png")), width=4, height=5, units='in',res=300)
+      if(n.pars == 4 & names(id.list)[ni] == "NAA") png(file.path(plots_dir_i, paste0("estpar_",names(id.list)[ni],"_",types[ty],".png")), width=7, height=7.5, units='in',res=300)
+      if(n.pars == 4 & names(id.list)[ni] == "M") png(file.path(plots_dir_i, paste0("estpar_",names(id.list)[ni],"_4par_",types[ty],".png")), width=6, height=5, units='in',res=300)
+      if(n.pars == 3) png(file.path(plots_dir_i, paste0("estpar_",names(id.list)[ni],"_3par_",types[ty],".png")), width=4, height=5, units='in',res=300)
       print(p)
       # grid::grid.text(unit(0.98,"npc"),0.5, label = 'Operating model', rot = 270) # right
       grid::grid.text(unit(0.5,"npc"),unit(.98,'npc'), label = 'Operating model', rot = 0)   # top)
