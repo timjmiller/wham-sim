@@ -5,12 +5,14 @@
 # source("/home/bstock/Documents/ms/wham-sim/code/results_all.R")
 
 setwd("/home/bstock/Documents/ms/wham-sim")
-ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","NScod")
-re = c(rep("NAA",5), rep("M",3))
+ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","NScod","SNEMAYT","GBhaddock")
+re = c(rep("NAA",5), rep("M",3),"Ecov","sel")
 # ids = c("SNEMAYT","butterfish","NScod")
 # re = rep("M",3)
-# bc.type = 2 # _oepe
-bc.type = 1 # _oe
+# ids = c("SNEMAYT","GBhaddock")
+# re = c("Ecov","sel")
+bc.type = 2 # _oepe
+# bc.type = 1 # _oe
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -20,30 +22,29 @@ library(ggplotFL)
 library(ggsci)
 library(cowplot)
 inv.rho.trans <- function(x) return(2/(1 + exp(-2*x)) - 1)
+rho_trans <- function(x) return(2/(1 + exp(-2*x)) - 1)
 source("/home/bstock/Documents/ms/wham-sim/code/plot_rel_err.R")
 source("/home/bstock/Documents/ms/wham-sim/code/plot_rel_err_pars.R")
 source("/home/bstock/Documents/ms/wham-sim/code/plot_rel_err_pars_multipanel.R")
 source("/home/bstock/Documents/ms/wham-sim/code/plot_conv.R")
 source("/home/bstock/Documents/ms/wham-sim/code/get_conv.R")
 source("/home/bstock/Documents/ms/wham-sim/code/get_results.R")
+source("/home/bstock/Documents/ms/wham-sim/code/get_aic.R")
+source("/home/bstock/Documents/ms/wham-sim/code/plot_aic_cross.R")
+source("/home/bstock/Documents/ms/wham-sim/code/plot_daic.R")
 
+# ---------------------------------------------------------
+# Relative error plots
 for(j in 1:length(ids)){
-# for(j in 6:length(ids)){
   results <- get_results(stock.id=ids[j], re=re[j], bc.type=bc.type)
-    
-	# bc.type     bias corrected obs only (= 1) or obs + process (= 2)
-	# sim.types   simulated obs only (= 1) and/or obs + process (= 2)
-	# n.mods      4 if all NAA models converged
-	# multipanel  TRUE makes a 5-panel plot (B, F, relB, relF, recruit), FALSE makes individual plots
-	# plot.eps    FALSE does not plot the TMB epsilon results, TRUE does
 	plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, multipanel=TRUE)
 	plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, multipanel=FALSE, plot.eps=FALSE)
-	plot_rel_err_pars(stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, 
-	              n.mods=length(table(results$om)), n.sim=length(table(results$sim)), plot.eps=FALSE)
+	plot_rel_err_pars(stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
 }
-
 plot_rel_err_pars_multipanel(ids=ids, re=re, bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
 
+# --------------------------------------------------------
+# Convergence plots
 df.colnames <- c("type","om","em","p.conv","id","bc.type","sim.type","re")
 df.conv <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
 colnames(df.conv) <- df.colnames
@@ -54,6 +55,20 @@ for(j in 1:length(ids)){
 saveRDS(df.conv, file.path(getwd(),"results",c("bias_correct_oe","bias_correct_oepe")[bc.type],"conv.rds"))
 plot_conv(df.conv, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bias_correct_oepe")[bc.type]))
 
+# ------------------------------------------------------
+# AIC and dAIC plots
+ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","SNEMAYT","GBhaddock")
+re = c(rep("NAA",5), rep("M",2),"Ecov","sel") # remove NScod M bc only 2/3 models fit
 
+df.colnames <- c("om","em","sim","aic","id","bc.type","sim.type","re")
+df.aic <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
+colnames(df.aic) <- df.colnames
+for(j in 1:length(ids)){
+  df.aic <- rbind(df.aic, get_aic(id.j=ids[j], re.j=re[j], bc.type=bc.type, sim.types=1:2))
+}
+saveRDS(df.aic, file.path(getwd(),"results",c("bias_correct_oe","bias_correct_oepe")[bc.type],"aic.rds"))
+plot_aic_cross(df.aic, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bias_correct_oepe")[bc.type]), bystock=TRUE) # plot each stock individually
+plot_aic_cross(df.aic, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bias_correct_oepe")[bc.type]), bystock=FALSE) # aggregate across stocks
 
+plot_daic() # dAIC multipanel full fits (all stocks each re)
 

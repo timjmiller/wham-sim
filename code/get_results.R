@@ -36,7 +36,7 @@ get_results <- function(stock.id="SNEMAYT", re="NAA", bc.type=2,
     mlabs_short <- mlabs
     names(mlabs_short) = paste0("m",1:4)
   }
-  if(re == "M" & n.mods == 3){
+  if(n.mods == 3){ # M or selectivity
     mlabs = c("m1: none","m2: IID","m3: 2D AR1")
     mlabs_expr = c(expression(paste("m1:")~paste("none")), 
                    expression(paste("m2:")~paste("IID")), 
@@ -48,6 +48,19 @@ get_results <- function(stock.id="SNEMAYT", re="NAA", bc.type=2,
     mlabs = c("m1: none","m2: IID")
     mlabs_expr = c(expression(paste("m1:")~paste("none")), 
                    expression(paste("m2:")~paste("IID")))
+    mlabs_short <- mlabs
+    names(mlabs_short) = paste0("m",1:2)
+  }
+  if(re == "Ecov" & n.mods == 1){
+    mlabs = c("m1: CPI-Recruitment")
+    mlabs_expr = c(expression(paste("m1:")~paste("CPI-Recruitment")))
+    mlabs_short <- mlabs
+    names(mlabs_short) = paste0("m",1)
+  }  
+  if(re == "Ecov" & n.mods == 2){
+    mlabs = c("m1: none","m2: CPI-Recruitment")
+    mlabs_expr = c(expression(paste("m1:")~paste("none")), 
+                   expression(paste("m2:")~paste("CPI-Recruitment")))
     mlabs_short <- mlabs
     names(mlabs_short) = paste0("m",1:2)
   }

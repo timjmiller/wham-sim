@@ -5,8 +5,8 @@
 # source(here::here("code","bias_correct_oepe","GBhaddock_sel_oepe","1_fit_GBhaddock_sel.R"))
 
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-devtools::load_all("/home/bstock/Documents/wham")
-# library(wham)
+# devtools::load_all("/home/bstock/Documents/wham")
+library(wham)
 library(here)
 library(tidyverse)
 

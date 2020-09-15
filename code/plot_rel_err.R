@@ -105,6 +105,7 @@ plot_rel_err <- function(results, stock.id="SNEMAYT", re="NAA", bc.type=2, sim.t
       if(n.mods == 4) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=6.5, units='in', res=300)
       if(n.mods == 3) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=5, units='in', res=300)
       if(n.mods == 2) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=4, units='in', res=300)
+      if(n.mods == 1) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=3, units='in', res=300)
       print(p1)
       dev.off()
     }

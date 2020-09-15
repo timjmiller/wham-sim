@@ -13,8 +13,8 @@
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-# library(wham)
-devtools::load_all("/home/bstock/Documents/wham")
+library(wham)
+# devtools::load_all("/home/bstock/Documents/wham")
 library(here)
 library(tidyverse)
 library(ggplotFL)
@@ -442,12 +442,26 @@ for(ty in 1:length(types)){
 }
 
 # Fig 6. Recruitment (sim data) / Recruitment (true data)
-simdata <- lapply(1:3, function(x) readRDS(here("data","simdata","GBhaddock_sel",paste0("simdata_om",x,".rds"))))
+simdata <- lapply(1:3, function(x) readRDS(here("data","simdata","bias_correct_oepe","GBhaddock_sel_oepe",paste0("simdata_om",x,".rds"))))
 # results <- results[complete.cases(results),]
-res.R <- results %>% group_by(om, em, type, sim) %>%
-	mutate(R.sim = simdata[[unique(om)]][[unique(sim)]][[unique(type)]]$NAA[,1],
-		   R.rel = NAA1 / R.sim,
-		   R.rel.bc = NAA1_bc / R.sim)
+
+tylabs <- c("Simulated data: Obs error", "Simulated data: Obs + Process error (new NAA)")
+mlabs <- c("m1: none","m2: IID","m3: 2D AR1")
+results$R.sim = NA
+for(om in 1:3){
+for(em in 1:3){
+  for(i in 1:100){
+    for(ty in 1:2){
+      res.ind <- which(results$om == mlabs[om] & results$em == mlabs[em] & results$sim == i & results$ty == tylabs[ty])
+      results$R.sim[res.ind] <- simdata[[om]][[i]][[ty]]$NAA[,1]
+    }
+  }
+}
+}
+results$R.rel <- results$NAA1 / results$R.sim
+results$R.rel.bc <- results$NAA1_bc / results$R.sim
+res.R <- results %>% group_by(om, em, type, sim)
+
 for(ty in 1:length(types)){
 	df.plot <- filter(res.R, type==levels(res.R$type)[ty])
 	p <- ggplot(df.plot, aes(x=year, y=R.rel)) +

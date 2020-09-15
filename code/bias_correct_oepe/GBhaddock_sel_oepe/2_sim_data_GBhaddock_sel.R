@@ -5,9 +5,9 @@
 # Assumes you open R in project directory
 # source(here::here("code","bias_correct_oepe","GBhaddock_sel_oepe","2_sim_data_GBhaddock_sel.R"))
 
-devtools::load_all("/home/bstock/Documents/wham")
+# devtools::load_all("/home/bstock/Documents/wham")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-# library(wham)
+library(wham)
 library(here)
 library(tidyverse)
 

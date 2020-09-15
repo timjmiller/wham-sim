@@ -7,8 +7,8 @@
 
 # devtools::load_all("/home/bstock/Documents/wham")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-# library(wham)
-devtools::load_all("/home/bstock/Documents/wham")
+library(wham)
+# devtools::load_all("/home/bstock/Documents/wham")
 library(here)
 library(tidyverse)
 
@@ -31,15 +31,25 @@ cpi$use[is.nan(cpi$CPI)] = 0 # don't use 2017 (NaN, fall survey missing)
 #  Ecov: CPI, ar1
 #  Ecov-Rec link: Bev-Holt limiting, linear (as in Miller 2016)
 
-# 3 models for Ecov obs:
-#  1. fix sigY_y (as in Miller 2016)
-#  2. est sigY (constant)
-#  3. est sigY_y (hierarchical)
+# Two models
+#  1. refit original with CPI
+ # 2. random walk
+#  3. AR1
 df.mods <- data.frame(ecov_obs_sig = c('fixed','est_1','est_re'), stringsAsFactors=FALSE)
 n.mods <- dim(df.mods)[1]
 df.mods$Model <- paste0("m",1:n.mods)
 df.mods <- df.mods %>% select(Model, everything()) # moves Model to first col
 df.mods
+
+# # 3 models for Ecov obs:
+# #  1. fix sigY_y (as in Miller 2016)
+# #  2. est sigY (constant)
+# #  3. est sigY_y (hierarchical)
+# df.mods <- data.frame(ecov_obs_sig = c('fixed','est_1','est_re'), stringsAsFactors=FALSE)
+# n.mods <- dim(df.mods)[1]
+# df.mods$Model <- paste0("m",1:n.mods)
+# df.mods <- df.mods %>% select(Model, everything()) # moves Model to first col
+# df.mods
 
 # Fit models
 for(m in 1:n.mods){

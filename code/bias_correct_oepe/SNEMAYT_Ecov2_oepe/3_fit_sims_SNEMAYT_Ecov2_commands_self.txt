@@ -1,0 +1,8 @@
+# commands to run on venus in corresponding directory.
+# Simulation test WHAM
+#   Step 3: Fit OMs to simulated datasets
+Rscript --vanilla 3_fit_sims_SNEMAYT_Ecov2.R 1 1 &
+Rscript --vanilla 3_fit_sims_SNEMAYT_Ecov2.R 2 2 &
+Rscript --vanilla 3_fit_sims_SNEMAYT_Ecov2.R 3 3 &
+Rscript --vanilla 3_fit_sims_SNEMAYT_Ecov2.R 4 4 &
+Rscript --vanilla 3_fit_sims_SNEMAYT_Ecov2.R 5 5 &
