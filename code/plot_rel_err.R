@@ -90,11 +90,13 @@ plot_rel_err <- function(results, stock.id="SNEMAYT", re="NAA", bc.type=2, sim.t
     	  geom_hline(yintercept = 0, linetype=2, color='black') +
     	  geom_linerange(aes(ymin=rel_err_lo, ymax=rel_err_hi), size=.5) +
     	  geom_point(aes(fill=em2), shape=21, size=3) +
-    	   scale_fill_jco(name="", labels=lapply(levels(df.plot$em2), function(x) parse(text=x))) +
+    	   # scale_fill_jco(name="", labels=lapply(levels(df.plot$em2), function(x) parse(text=x))) +
+    	   scale_fill_jco() +
     	   coord_cartesian(ylim=c(-.5,.5)) +
     	  facet_grid(rows=vars(variable), cols=vars(om2), labeller = label_parsed) +
     	  theme_bw() +
-    	  theme(legend.position="bottom",
+    	  # theme(legend.position="bottom",
+    	  theme(legend.position="none",
     	        strip.text.y = element_text(size = 10), strip.text.x = element_text(size = 10, margin = margin(3,1,1,1, "pt")),
     	        axis.title.x = element_text(size = 12), axis.text.x = element_text(size = 8),
     	        legend.text = element_text(margin = margin(r = 6, l=1,unit = "pt"), hjust = 0, size=10), 
@@ -102,6 +104,7 @@ plot_rel_err <- function(results, stock.id="SNEMAYT", re="NAA", bc.type=2, sim.t
     	title <- ggdraw() + draw_label("Operating model", hjust = 0.3, vjust=1) + theme(plot.margin = margin(0, 0, 0, 0))
       p1 <- plot_grid(title, p, ncol = 1, rel_heights = c(0.045, 1))
 
+      if(n.mods == 5) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=7, units='in', res=300)
       if(n.mods == 4) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=6.5, units='in', res=300)
       if(n.mods == 3) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=5, units='in', res=300)
       if(n.mods == 2) png(file.path(plots_dir, paste0("0_",id,"_medianCI_",types[ty],".png")), height=8, width=4, units='in', res=300)

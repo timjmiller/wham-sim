@@ -6,7 +6,7 @@
 
 setwd("/home/bstock/Documents/ms/wham-sim")
 ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","NScod","SNEMAYT","GBhaddock")
-re = c(rep("NAA",5), rep("M",3),"Ecov","sel")
+re = c(rep("NAA",5), rep("M",3),"Ecov2","sel")
 # ids = c("SNEMAYT","butterfish","NScod")
 # re = rep("M",3)
 # ids = c("SNEMAYT","GBhaddock")
@@ -39,7 +39,7 @@ for(j in 1:length(ids)){
   results <- get_results(stock.id=ids[j], re=re[j], bc.type=bc.type)
 	plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, multipanel=TRUE)
 	plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, multipanel=FALSE, plot.eps=FALSE)
-	plot_rel_err_pars(stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
+	# plot_rel_err_pars(stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
 }
 plot_rel_err_pars_multipanel(ids=ids, re=re, bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
 
@@ -57,16 +57,21 @@ plot_conv(df.conv, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bi
 
 # ------------------------------------------------------
 # AIC and dAIC plots
-ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","SNEMAYT","GBhaddock")
-re = c(rep("NAA",5), rep("M",2),"Ecov","sel") # remove NScod M bc only 2/3 models fit
+# ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","SNEMAYT","GBhaddock")
+# re = c(rep("NAA",5), rep("M",2),"Ecov","sel") # remove NScod M bc only 2/3 models fit
+# ids = c("GBhaddock")
+# re = c("sel")
+ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","GBhaddock","SNEMAYT")
+re = c(rep("NAA",5), rep("M",2),"sel","Ecov2") # remove NScod M bc only 2/3 models fit
 
-df.colnames <- c("om","em","sim","aic","id","bc.type","sim.type","re")
-df.aic <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
-colnames(df.aic) <- df.colnames
-for(j in 1:length(ids)){
-  df.aic <- rbind(df.aic, get_aic(id.j=ids[j], re.j=re[j], bc.type=bc.type, sim.types=1:2))
-}
-saveRDS(df.aic, file.path(getwd(),"results",c("bias_correct_oe","bias_correct_oepe")[bc.type],"aic.rds"))
+# df.colnames <- c("om","em","sim","aic","id","bc.type","sim.type","re")
+# df.aic <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
+# colnames(df.aic) <- df.colnames
+# for(j in 1:length(ids)){
+#   df.aic <- rbind(df.aic, get_aic(id.j=ids[j], re.j=re[j], bc.type=bc.type, sim.types=1:2))
+# }
+# saveRDS(df.aic, file.path(getwd(),"results",c("bias_correct_oe","bias_correct_oepe")[bc.type],"aic.rds"))
+df.aic <- readRDS(file.path(getwd(),"results",c("bias_correct_oe","bias_correct_oepe")[bc.type],"aic.rds"))
 plot_aic_cross(df.aic, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bias_correct_oepe")[bc.type]), bystock=TRUE) # plot each stock individually
 plot_aic_cross(df.aic, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bias_correct_oepe")[bc.type]), bystock=FALSE) # aggregate across stocks
 

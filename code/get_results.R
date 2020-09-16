@@ -18,7 +18,8 @@ get_results <- function(stock.id="SNEMAYT", re="NAA", bc.type=2,
   res_dir <- file.path(res_dir, bc, id)
   res.files <- list.files(path=res_dir, pattern = "results", full.names = TRUE)
   res.list <- lapply(res.files, readRDS)
-  n.mods <- sqrt(length(res.list))
+  mod.files <- list.files(path=res_dir, pattern = "^m..rds", full.names = TRUE)
+  n.mods <- length(mod.files)
   n.sim <- length(res.list[[1]][[1]])
   flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X)
   results <- do.call(rbind, flatten.nested.list(res.list)) %>% as.data.frame
@@ -63,6 +64,16 @@ get_results <- function(stock.id="SNEMAYT", re="NAA", bc.type=2,
                    expression(paste("m2:")~paste("CPI-Recruitment")))
     mlabs_short <- mlabs
     names(mlabs_short) = paste0("m",1:2)
+  }
+  if(re == "Ecov2" & n.mods == 5){
+    mlabs = c("m1: RW-none","m2: RW-linear","m3: RW-poly","m4: AR1-linear","m5: AR1-poly")
+    mlabs_expr = c(expression(paste("m1:")~paste("RW-none")), 
+                   expression(paste("m2:")~paste("RW-linear")),
+                   expression(paste("m3:")~paste("RW-poly")),
+                   expression(paste("m4:")~paste("AR1-linear")),
+                   expression(paste("m5:")~paste("AR1-poly")))
+    mlabs_short <- mlabs
+    names(mlabs_short) = paste0("m",1:n.mods)
   }
   results$om <- factor(results$om, levels=1:n.mods, labels=mlabs)
   results$em <- factor(results$em, levels=1:n.mods, labels=mlabs)

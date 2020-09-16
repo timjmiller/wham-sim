@@ -75,6 +75,16 @@ plot_rel_err_pars <- function(stock.id="SNEMAYT", re="NAA", bc.type=2, sim.types
     mlabs_short <- mlabs
     names(mlabs_short) = paste0("m",1:2)
   }
+  if(re == "Ecov2" & n.mods == 5){
+    mlabs = c("m1: RW-none","m2: RW-linear","m3: RW-poly","m4: AR1-linear","m5: AR1-poly")
+    mlabs_expr = c(expression(paste("m1:")~paste("RW-none")), 
+                   expression(paste("m2:")~paste("RW-linear")),
+                   expression(paste("m3:")~paste("RW-poly")),
+                   expression(paste("m4:")~paste("AR1-linear")),
+                   expression(paste("m5:")~paste("AR1-poly")))
+    mlabs_short <- mlabs
+    names(mlabs_short) = paste0("m",1:n.mods)
+  }  
   
   par.colnames <- c("om","em","type","sim","par.true","par.est","par.lab")
   df.par <- as.data.frame(matrix(NA, ncol = length(par.colnames), nrow = 0))
