@@ -449,102 +449,166 @@ and population dynamics examples. Fisheries Research 175, 66--74.
 
 \caption{\label{tab:stock-list}Stocks used in simulation tests.}
 \centering
-\begin{tabular}[t]{llllrrlrrr}
+\begin{tabular}[t]{lllllrrlrrr}
 \toprule
-\multicolumn{1}{c}{ } & \multicolumn{3}{c}{Modules tested} & \multicolumn{2}{c}{Model dim} & \multicolumn{2}{c}{Biol. par.} & \multicolumn{2}{c}{Stock status} \\
-\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-6} \cmidrule(l{3pt}r{3pt}){7-8} \cmidrule(l{3pt}r{3pt}){9-10}
-Stock & NAA & M & Ecov & \# Ages & \# Years & $M$ & $\sigma_R$ & $\frac{B}{B_{40}}$ & $\frac{F}{F_{40}}$\\
+\multicolumn{1}{c}{ } & \multicolumn{4}{c}{Modules tested} & \multicolumn{2}{c}{Model dim} & \multicolumn{2}{c}{Biol. par.} & \multicolumn{2}{c}{Stock status} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){8-9} \cmidrule(l{3pt}r{3pt}){10-11}
+Stock & NAA & M & Sel & Ecov & \# Ages & \# Years & $M$ & $\sigma_R$ & $\frac{B}{B_{40}}$ & $\frac{F}{F_{40}}$\\
 \midrule
-SNEMA yellowtail flounder & x & x & x & 6 & 49 & 0.2-0.4 & 1.67 & 0.01 & 0.44\\
-Butterfish & x & x &  & 5 & 31 & 1.3 & 0.23 & 2.52 & 0.03\\
-North Sea cod & x & x &  & 6 & 54 & 0.2-1.2 & 0.87 & 0.14 & 2.00\\
-Icelandic herring & x &  &  & 11 & 30 & 0.1 & 0.55 & 0.40 & 1.81\\
-Georges Bank haddock & x &  &  & 9 & 86 & 0.2 & 1.65 & 4.30 & 0.12\\
+SNEMA yellowtail flounder & x & x &  & x & 6 & 49 & 0.2-0.4 & 1.67 & 0.01 & 0.44\\
+Butterfish & x & x &  &  & 5 & 31 & 1.3 & 0.23 & 2.57 & 0.03\\
+North Sea cod & x & x &  &  & 6 & 54 & 0.2-1.2 & 0.87 & 0.14 & 2.00\\
+Icelandic herring & x &  &  &  & 11 & 30 & 0.1 & 0.55 & 0.40 & 1.81\\
+Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\clearpage
-
-\newgeometry{top=1cm}
-
-\begin{figure}
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/snemayt-naa-1} \caption{Relative error of key quantities estimated for Southern New England-Mid-Atlantic yellowtail flounder using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations (AR1). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:snemayt-naa}
-\end{figure}
-
-\restoregeometry
-
 \pagebreak
 
 \begin{figure}
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/snemayt-m-1} \caption{Relative error of key quantities estimated for Southern New England-Mid-Atlantic yellowtail flounder using three models of natural mortality (\textit{M}) random effects. m1 = no random effects on M. m2 = \textit{M} deviations are independent and identically distributed (IID). m3 = \textit{M} deviations are correlated by age and year (2D AR1).}\label{fig:snemayt-m}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
+
+}
+
+\caption{Survival deviations estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:devs-ICEherring-naa}
 \end{figure}
 
 \pagebreak
 
-\hypertarget{stock-southern-new-england-mid-atlantic-snema-yellowtail-flounder}{%
-\subsection{Stock: Southern New England-Mid Atlantic (SNEMA) Yellowtail
-Flounder}\label{stock-southern-new-england-mid-atlantic-snema-yellowtail-flounder}}
+\begin{figure}
 
-\hypertarget{model-numbers-at-age-naa}{%
-\subsubsection{Model: Numbers-at-age
-(NAA)}\label{model-numbers-at-age-naa}}
+{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M} 
 
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/unnamed-chunk-3-1}
+}
 
-\pagebreak
+\caption{Natural mortality (\textit{M}) estimated for butterfish using three random effects models. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations are independent and identically distributed (IID). m3 = \textit{M} deviations are correlated by age and year (2D AR1).}\label{fig:devs-butterfish-m}
+\end{figure}
 
 \pagebreak
 
-\hypertarget{stock-butterfish}{%
-\subsection{Stock: Butterfish}\label{stock-butterfish}}
+\begin{figure}
 
-\hypertarget{model-numbers-at-age-naa-1}{%
-\subsubsection{Model: Numbers-at-age
-(NAA)}\label{model-numbers-at-age-naa-1}}
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
 
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/unnamed-chunk-3-2}
+}
 
-\pagebreak
+\caption{Selectivity estimated for Georges Bank haddock using three random effects models. m1 = no random effects (constant logistic selectivity). m2 = selectivity deviations are independent and identically distributed (IID). m3 = selectivity deviations are correlated by parameter and year (2D AR1).}\label{fig:devs-GBhaddock-sel}
+\end{figure}
 
 \pagebreak
 
-\hypertarget{stock-north-sea-cod}{%
-\subsection{Stock: North Sea Cod}\label{stock-north-sea-cod}}
+\begin{figure}
 
-\hypertarget{model-numbers-at-age-naa-2}{%
-\subsubsection{Model: Numbers-at-age
-(NAA)}\label{model-numbers-at-age-naa-2}}
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
 
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/unnamed-chunk-3-3}
+}
 
-\pagebreak
+\caption{Beverton-Holt stock-recruit relationships fit for Southern New England-Mid Atlantic yellowtail flounder, with and without effects of the Cold Pool Index (CPI). A) CPI estimated from the model with lowest AIC (m4, AR1-linear). Points are observations with 95\% CI, and the line with shading is the model-estimated CPI with 95\% CI. Note the increased uncertainty surrounding the CPI estimate in 2017 (no observation). B) Estimates of spawning stock biomass (SSB), recruitment, and the stock-recruit function from the model without a CPI effect, m1. C) Estimates of SSB and recruitment from m4, with an effect of the CPI on $\beta$. Lines depict the expected stock-recruit relationship in each year $t$, given the CPI in year $t-1$ (color).}\label{fig:devs-SNEMAYT-ecov}
+\end{figure}
 
 \pagebreak
 
-\hypertarget{stock-icelandic-herring}{%
-\subsection{Stock: Icelandic Herring}\label{stock-icelandic-herring}}
+\begin{landscape}
+\begin{figure}
 
-\hypertarget{model-numbers-at-age-naa-3}{%
-\subsubsection{Model: Numbers-at-age
-(NAA)}\label{model-numbers-at-age-naa-3}}
+{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
 
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/unnamed-chunk-3-4}
+}
+
+\caption{AIC differences by model and stock when fit to full datasets. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT), North Sea cod (NScod), Icelandic herring (ICEherring), and Georges Bank haddock (GBhaddock).}\label{fig:daic}
+\end{figure}
+\end{landscape}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining numbers-at-age (NAA) random effects. Four models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-naa}
+\end{figure}
 
 \pagebreak
 
-\pagebreak
+\begin{figure}
 
-\hypertarget{stock-georges-bank-haddock}{%
-\subsection{Stock: Georges Bank
-Haddock}\label{stock-georges-bank-haddock}}
+{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
 
-\hypertarget{model-numbers-at-age-naa-4}{%
-\subsubsection{Model: Numbers-at-age
-(NAA)}\label{model-numbers-at-age-naa-4}}
+}
 
-\includegraphics[width=6in]{wham-sim-paper_files/figure-latex/unnamed-chunk-3-5}
+\caption{Relative error of parameters constraining natural mortality (\textit{M}) random effects. Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations were independent and identically distributed (IID). m3 = \textit{M} deviations were correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT) and North Sea cod (NScod, m3 did not converge).}\label{fig:estpar-m}
+\end{figure}
 
 \pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining selectivity random effects for Georges Bank haddock (GBhaddock). Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects (constant selectivity). m2 = selectivity deviations were independent and identically distributed (IID). m3 = selectivity deviations were correlated by parameter and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-sel}
+\end{figure}
+
+\pagebreak
+
+\begin{landscape}
+\begin{figure}
+
+{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining variation in recruitment for Southern New England-Mid Atlantic yellowtail flounder (SNEMAYT). Five models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. All models estimated recruitment using the Beverton-Holt function and included CPI effects on $\beta$: $\hat{R}_{t+1} = \frac{\alpha S_{t}}{1 + e^{\beta_0 + \beta_1 x_{t} + \beta_2 x^2_{t}} S_t}$. m1 = Cold Pool Index (CPI) modeled as a random walk (RW) with no effect on recruitment ($\beta_1 = \beta_2 = 0$). m2 = CPI as RW, linear effect on $\beta$. m3 = CPI as RW, 2nd order polynomial effect on $\beta$. m4 = CPI as AR1, linear effect. m5 = CPI as AR1, polynomial effect. Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-ecov}
+\end{figure}
+\end{landscape}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+
+}
+
+\caption{Relative error of key quantities estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-ICEherring-naa}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
+
+}
+
+\caption{Relative error of key quantities estimated for butterfish using three models of natural mortality (\textit{M}) random effects. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations are independent and identically distributed (IID). m3 = \textit{M} deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-butterfish-m}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+
+}
+
+\caption{Relative error of key quantities estimated for Georges Bank haddock using three models of selectivity random effects. m1 = no random effects (constant logistic selectivity). m2 = selectivity deviations are independent and identically distributed (IID). m3 = selectivity deviations are correlated by parameter and year (2D AR1).}\label{fig:rel-error-GBhaddock-sel}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+
+}
+
+\caption{Proportion of simulations in which each model had the lowest AIC. A) Numbers-at-age (NAA), aggregated across all five stocks. B) Natural mortality (\textit{M}), aggregated over two stocks (SNEMAYT and NScod). C) Selectivity (GBhaddock). Not all estimation models converged for each simulation, even when the operating model matched.}\label{fig:aic-cross}
+\end{figure}
 
 \end{document}
