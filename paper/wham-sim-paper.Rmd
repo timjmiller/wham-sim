@@ -45,46 +45,110 @@ state-space; stock assessment; random effects; time-varying; environmental effec
 
 # Introduction  
 
-The last two decades have increasingly seen a push for more holistic, ecosystem-based fisheries management [@larkin1996Concepts; @link2002What]. In part, this is a recognition that considering single species in isolation produces riskier and less robust outcomes long-term [@patrick2015Myths]. In several high-profile cases, fisheries management has failed to prevent collapses because they did not reduce fishing pressure in responses to changes in natural mortality ($M$), recruitment, or migration patterns caused by dynamics external to the stock in question [Northern cod: @shelton2006Fishing, @rose2015Northern; Gulf of Maine cod: @pershing2015Slow; Pacific sardine: @zwolinski2012Cold]. This is particularly concerning in the context of climate change and the wide range of biological processes—often assumed to be constant—in stock assessments that are likely to be affected [@stock2011Use].
+The last two decades have increasingly seen a push for more holistic, ecosystem-based fisheries management [@larkin1996Concepts; @link2002What]. In part, this is a recognition that considering single species in isolation produces riskier and less robust outcomes long-term [@patrick2015Myths]. In several high-profile cases, fisheries management has failed to prevent collapses because they did not reduce fishing pressure in responses to changes in natural mortality ($M$), recruitment, or migration patterns caused by dynamics external to the stock in question [Northern cod: @shelton2006Fishing; @rose2015Northern; Gulf of Maine cod: @pershing2015Slow; Pacific sardine: @zwolinski2012Cold]. This is particularly concerning in the context of climate change and the wide range of biological processes—often assumed to be constant—in stock assessments that are likely to be affected [@stock2011Use].
 
-One approach to account for changing productivity is to explicitly link population processes to environmental covariates in single-species stock assessments, i.e. the mechanistic approach *sensu* @punt2014Fisheries. Traditional single-species assessments are based on internal population dynamics and the effect of fishing mortality ($F$), and typically ignore effects of the environment or interactions with other species, even though fisheries scientists have long known that these are important drivers of time-varying population processes, e.g. recruitment, mortality, growth, and movement [@garstang1900Impoverishment; @hjort1914Fluctuations]. Despite how counterintuitive this may seem to ecologists and oceanographers who study such relationships, the evidence for direct linkages to specific environmental covariates is often weak and can break down over time [@mcclatchie2010Reassessment; @myers1998When]. Additionally, the primary goal of most assessments is to provide management advice on near-term sustainable harvest levels—not to explain ecological relationships. Even if an environmental covariate directly affects fish productivity, including the effect in an assessment may not improve management advice if the effect is weak [@deoliveira2005Limits]. Worse, including environmental effects in an assessment or management system has been shown to actually provide worse management in some cases [@deoliveira2005Limits; @punt2014Fisheries; @walters1988Research]. This can be true even in cases of relatively well-understood mechanistic links between oceanic conditions and fish populations, as in the case of sea surface temperature and Pacific sardine [@hill2018Assessment; @zwolinski2012Cold].
+One approach to account for changing productivity is to explicitly link population processes to environmental covariates in single-species stock assessments, i.e. the mechanistic approach *sensu* @punt2014Fisheries. Traditional single-species assessments are based on internal population dynamics and the effect of fishing mortality ($F$), and typically ignore effects of the environment or interactions with other species, even though fisheries scientists have long known that these are important drivers of time-varying population processes, e.g. recruitment, mortality, growth, and movement [@garstang1900Impoverishment; @hjort1914Fluctuations]. Despite how counterintuitive this may seem to ecologists and oceanographers who study such relationships, the evidence for direct linkages to specific environmental covariates is often weak and can break down over time [@mcclatchie2010Reassessment; @myers1998When]. Additionally, the primary goal of most assessments is to provide management advice on near-term sustainable harvest levels—not to explain ecological relationships. Even if an environmental covariate directly affects fish productivity, including the effect in an assessment may not improve management advice if the effect is weak [@deoliveira2005Limits]. Worse, including environmental effects in an assessment or management system has been shown to actually provide worse management in some cases [@deoliveira2005Limits; @punt2014Fisheries; @walters1988Research]. This can be true even in cases of relatively well-understood mechanistic links between oceanic conditions and fish populations, as in the case of sea surface temperature and Pacific sardine [@hill2018Assessment; @zwolinski2012Cold]. Still, incorporating mechanistic environment-productivity links does have the potential to reduce uncertainty in reference points and improve projections of stock status [@miller2016Statespace].
 
-An alternative approach is to allow biological parameters to vary stochastically over time, without explanation, i.e. the empirical approach *sensu* @punt2014Fisheries. Statistical catch-at-age (SCAA) models typically only estimate year-specific recruitment ($R_t$) and $F_t$, often as deviations from a mean, e.g. $\text{log}R_t = \text{log}R_0 + \epsilon_t$. The main reason that other parameters are assumed constant is simply that there are not enough degrees of freedom to estimate many time-varying parameters. One common solution is to penalize the deviations, e.g. $\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)$, although the penalty terms, $\sigma^2_\epsilon$, must be fixed and are therefore subjective [@methot2013Stock; @xu2019Comparing]. State-space models that treat parameters as unobserved states can avoid such subjectivity by estimating the penalty terms as variance parameters constraining random effects [@aeberhard2018Review]. In this way, state-space models can allow processes to vary in time while simultaneously estimating fewer parameters. 
+An alternative approach is to allow biological parameters to vary stochastically over time, without explanation, i.e. the empirical approach *sensu* @punt2014Fisheries. Statistical catch-at-age (SCAA) models typically only estimate year-specific recruitment ($R_t$) and $F_t$, often as deviations from a mean, e.g. $\text{log}R_t = \text{log}R_0 + \epsilon_t$. The main reason that other parameters are assumed constant is simply that there are not enough degrees of freedom to estimate many time-varying parameters. One common solution is to penalize the deviations, e.g. $\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)$, although the penalty terms, $\sigma^2_\epsilon$, must be fixed or iteratively tuned and are therefore somewhat subjective [@methot2011Adjusting; @methot2013Stock; @xu2019Comparing; @aeberhard2018Review]. State-space models that treat parameters as unobserved states can avoid such subjectivity by estimating the penalty terms as variance parameters constraining random effects. In this way, state-space models can allow processes to vary in time while simultaneously estimating fewer parameters. 
 
 Although state-space stock assessments have existed for some time [@gudmundsson1994Time; @mendelssohn1988Problems; @sullivan1992Kalman], the recent development of Template Model Builder [TMB, @kristensen2016TMB] software to perform efficient Laplace approximation has greatly expanded their use [@cadigan2016Statespace; @miller2016Statespace; @nielsen2014Estimation]. In addition to the key advantage of objectively estimating variance, or "data weighting", parameters, state-space models naturally predict unobserved states, and therefore handle missing data and short-term projections in a straightforward way [@ices2020Workshop]. In comparisons with SCAA models, they generally have larger (more realistic) uncertainty and lower retrospective bias (**Miller et al. in prep**). 
 
-Retrospective bias can occur when changing environmental conditions lead to changes in productivity that are unaccounted for in stock assessments, and this is a concern commen to several groundfish stocks on the Northeast U.S. Shelf [@brooks2016Retrospective]. The Northeast U.S. Shelf ecosystem is rapidly changing, and this has motivated managers to make the "continue[d] development of stock assessment models that include environmental terms" a top priority [@hare2016Northeast]. In addition to providing short-term (1-3 years) catch advice with reduced retrospective bias, it is hoped that environment-linked assessments will help create realistic rebuilding plans in the medium-term (3-10 years) for stocks that have not responded to dramatic decreases in $F$. @miller2016Statespace developed a state-space model for yellowtail flounder with an environmental effect on recruitment, which reduced retrospective patterns and residual variance. Similar applications that include environmental effects on growth, $M$, and maturity in a state-space framework have also proven promising [@miller2018Temporal; @miller2018Evaluating; @oleary2019Understanding; @xu2018Evaluating]. 
+Retrospective bias can occur when changing environmental conditions lead to changes in productivity that are unaccounted for in stock assessments, and this is a concern commen to several groundfish stocks on the Northeast U.S. Shelf [@brooks2016Retrospective]. The Northeast U.S. Shelf ecosystem is rapidly changing, and this has motivated managers to make the "continue[d] development of stock assessment models that include environmental terms" a top priority [@hare2016Northeast]. In addition to providing short-term (1-3 years) catch advice with reduced retrospective bias, it is hoped that environment-linked assessments will help create realistic rebuilding plans in the medium-term (3-10 years) for stocks that have not rebounded in response to dramatic decreases in $F$. @miller2016Statespace developed a state-space model for yellowtail flounder with an environmental effect on recruitment, which reduced retrospective patterns and residual variance. Additional applications that include environmental effects on growth, $M$, and maturity in a similar state-space framework have also proven promising [@miller2018Temporal; @miller2018Evaluating; @oleary2019Understanding; @xu2018Evaluating]. 
 
-In summary, to address the needs of fisheries management in a changing climate we seek an assessment framework that 1) estimates time-varying parameters as random effects (i.e. a state-space model), and 2) includes environmental effects. The framework should also allow for easy testing against status quo SCAA models to ease gradual adoption through the "research track" or "benchmark" assessment process [@lynch2018Implementing]. The objectives of this manuscript are to introduce the Woods Hole Assessment Model (WHAM) framework and demonstrate its ability to:
+To address the needs of fisheries management in a changing climate, we seek an assessment framework that combines both the empirical and mechanistic approaches. Namely, it should be able to 1) estimate time-varying parameters as random effects (i.e. a state-space model), and 2) include environmental effects directly on biological parameters. The framework should also allow for easy testing against status quo SCAA models to ease gradual adoption through the "research track" or "benchmark" assessment process [@lynch2018Implementing]. The objectives of this manuscript are to introduce the Woods Hole Assessment Model (WHAM) framework and demonstrate its ability to:
 
 1. estimate time- and age-varying random effects on survival, $M$, and selectivity;
 2. fit environmental time-series with process and observation error, missing data, and a link to a population process; and
-3. simulate new data and random effects to conduct self- and cross-tests [*sensu* @deroba2015Simulation].
+3. simulate new data and random effects to conduct self- and cross-tests [*sensu* @deroba2015Simulation] to estimate bias in parameters and derived quantities.
 
-Finally, we describe how the above are implemented using an open-source software package available to the stock assessment community [@miller2020Woods].
+Finally, we describe how the above are implemented using the open-source WHAM software package [@miller2020Woods].
 
 # Methods
 
 ## Model description
 
-Similar to ASAP. Empirical weight-at-age.
+WHAM is a generalization and extension of @miller2016Statespace, which is in part a re-coding of the Age-Structured Assessment Program [ASAP, @legault1998Flexible; @miller2015Technical] in TMB. WHAM retains characteristics of ASAP, such as its input file structure and reliance on empirical weight-at-age data, so that existing assessments in the U.S. Northeast can be easily replicated and tested against models with state-space and environmental effects in a single framework.
 
-### Modules with random effects
+*Either put core model equations here or in supplement*
 
-See Table \ref{tab:model-descriptions}.
+### Processes with random effects
 
-#### Numbers-at-age (survival)
+WHAM primarily (**??**) diverges from ASAP through the implementation of random effects on four processes: survival (numbers at age transitions, *NAA*), natural mortality (*M*), selectivity (*Sel*), and environmental covariates (*Ecov*). Across processes, WHAM makes heavy use of first-order autoregression, AR1, to constrain the random effects, especially a 2D AR1 covariance structure which is AR1 over both age and year. The 2D AR1 structure has been widely used to model deviations by age and year in the parameters $F_{a,y}$ [@nielsen2014Estimation], $M_{a,y}$ [@cadigan2016Statespace; @stockthisissueImplementing], $Sel_{a,y}$ [@xu2018New], and $N_{a,y}$ [@stockthisissueImplementing], as well as in the catch ($C_{a,y}$) and survey index ($I_{a,y}$) observations [@berg2016Accounting].
 
-#### Natural mortality ($M$)
+#### Numbers at age (*NAA*) / survival
 
-#### Selectivity
+The stock equations in WHAM that describe the transitions between numbers at age are identical to @miller2016Statespace and @nielsen2014Estimation:
 
-#### Environmental covariate(s)
+\begin{equation}
+\label{eq:NAA}
+  \text{log}N_{a,y}=\left\{
+    \begin{array}{@{}lll@{}}
+      \text{log} \left( f(SSB_{y-1}) \right) + \varepsilon_{1,y}, & \text{if}\ a = 1 \\
+      \text{log} \left( N_{a-1,y-1} \right) - Z_{a-1,y-1} + \varepsilon_{a,y}, & \text{if}\ 1 < a < A \\
+      \text{log} \left( N_{A-1,y-1} e^{-Z_{A-1,y-1}} + N_{A,y-1} e^{-Z_{A,y-1}} \right) + \varepsilon_{A,y}, & \text{if}\ a = A
+    \end{array}\right.
+\end{equation}
+
+where $N_{a,y}$ are the numbers at age *a* in year *y*, *Z* is the total mortality rate ($F + M$), and $f$ is the stock-recruit function, *Y* is the total number of observation and prediction years, and *A* represents the plus-group. In this analysis we demonstrate four possible models for the *NAA* deviations, $\varepsilon_{a,y}$.
+
+m1 is most similar to a SCAA model, where only recruitment deviations, $\varepsilon_{1,y}$, are estimated (i.e. $\varepsilon_{a,y} = 0$ for $a > 1$ in Eqn \ref{eq:NAA}). In m1, the recruitment deviations are assumed to be independent and identically distributed (IID):
+
+$$\varepsilon_{1,y} \sim \mathcal{N}(0, \sigma^2_R)$$
+The only difference between m1 and a SCAA is that the recruitment variance, $\sigma^2_R$, is estimated as a parameter within the model instead of being fixed or tuned externally.
+
+m2 is the same as m1, except that the recruitment deviations are AR1 with autocorrelation parameter $\rho_R$:
+
+$$\varepsilon_{1,y+1} \sim \mathcal{N}(\rho_R \varepsilon_{1,y}, \sigma^2_R)$$
+
+m3 is the "full state-space" model from @nielsen2014Estimation and @miller2016Statespace, where all numbers at age are independent random effects and:
+
+\begin{equation}
+  \varepsilon_{a,y} \sim \left\{
+    \begin{array}{@{}ll@{}}
+      \mathcal{N} \left( 0, \sigma^2_R \right), & \text{if}\ a = 1 \\
+      \mathcal{N} \left( 0, \sigma^2_a \right), & \text{if}\ a > 1
+    \end{array}\right.
+\end{equation}
+
+where $\sigma^2_a$ for all ages $a > 1$ are assumed to be the same but different from age $a = 1$, i.e. recruitment. This assumption is sensible because survival variations for young-of-the-year (recruitment) are typically larger than for other ages.
+
+m4 treats the numbers at all ages as random effects, as in m3, but constrains the *NAA* deviations with a 2D AR1 structure:
+
+$$\mathbf{E} \sim \mathcal{MVN} \left( 0, \Sigma \right)$$
+
+where $\mathbf{E} = (\varepsilon_{1,1}, \ldots, \varepsilon_{1,Y-1}, \varepsilon_{2,1}, \ldots, \varepsilon_{2,Y-1}, \ldots, \varepsilon_{A,1}, \ldots, \varepsilon_{A,Y-1})'$ is a vector of all *NAA* deviations, $\boldsymbol{\Sigma}$ is the covariance matrix of $\mathbf{E}$ defined by:
+
+$$ \text{Cov} \left( \varepsilon_{a,y}, \varepsilon_{\tilde{a},\tilde{y}} \right) = \frac{\sigma_a \sigma_{\tilde{a}} \rho^{|a-\tilde{a}|}_{a} \rho^{|y-\tilde{y}|}_{y}}{\left(1-\rho^2_{a}\right) \left(1-\rho^2_{y}\right)}$$
+and $\rho_a$ and $\rho_y$ are the AR1 coefficients in age and year, respectively. As in m3, $\sigma^2_a$ for all ages $a > 1$ are assumed to be the same but different from age $a = 1$, $\sigma^2_R$.
+
+#### Natural mortality (*M*)
+
+WHAM can estimate or fix $\mu_{M_a}$, the mean natural mortality at age *a*, or estimate one *M* for all ages, $\mu_M$, as fixed effect parameters. In addition, *M* can be specified as a function of weight-at-age, $M_{a,y} = \mu_M \text{W}^b_{a,y}$, as in @lorenzen1996Relationship and @miller2018Evaluating. Regardless of whether $\mu_{M_a}$ are fixed or estimated, WHAM can estimate random effect deviations in *M*, $\delta_{a,y}$, similar to the *NAA* deviations [@cadigan2016Statespace; @stockthisissueImplementing]:
+
+\begin{equation}
+  \begin{array}{cc}
+    \text{log}\left( M_{a,y} \right) = \mu_{M_a} + \delta_{a,y} \\
+    \text{Cov} \left( \delta_{a,y}, \delta_{\tilde{a},\tilde{y}} \right) = \frac{\sigma^2_M \varphi^{|a-\tilde{a}|}_{a} \varphi^{|y-\tilde{y}|}_{y}}{\left(1-\varphi^2_{a}\right) \left(1-\varphi^2_{y}\right)}
+  \end{array}
+\end{equation}
+
+where $\sigma^2_M$, $\varphi_a$, and $\varphi_y$ are the AR1 variance and correlation coefficients in age and year, respectively.
+
+In this analysis, we demonstrate three alternative *M* random effects models. For simplicity, all models treat $\mu_{M_a}$ as known, as in the assessments. m1 is identical to the base *NAA* model, with no random effects on *M* ($\sigma^2_M = \varphi_a = \varphi_y = 0$ and not estimated). m2 allows IID *M* deviations, estimating $\sigma^2_M$ but fixing $\varphi_a = \varphi_y = 0$. m3 estimates the full 2D AR1 structure for *M* deviations.
+
+#### Selectivity (*Sel*)
+
+#### Environmental covariates (*Ecov*)
 ##### Time-series model
 ##### Observation model
 ##### Link to population
 
-## How is WHAM different from SAM?
+### Data/observation model
+
+#### Catch (agg, age comp)
+#### Index (agg, age comp)
+
+### How is WHAM different from SAM?
 
 *Not sure where to put this... some could be in Intro or Discussion. Definitely will be a question in readers' minds so may be good to introduce early?*
 
@@ -95,11 +159,6 @@ Goal is to replicate ASAP assessments in the U.S. Northeast. Can easily turn on/
 Observation model is natural for landings data that are measured as total weight plus age composition sampling. Age composition sampling often done separately with survey data.
 
 Treating $F$ and $Sel$ separately can be useful for projections. Oftentimes we want to specify $F$ in projections to calculate a reference point, as opposed to continuing a $F$ time-series process.
-
-### Data/observation model
-
-#### Catch (agg, age comp)
-#### Index (agg, age comp)
 
 ### Bias correction
 
@@ -113,13 +172,13 @@ Should these all be used?
 
 Fit each model to original dataset. Use each model to simulate new data and random effects, keeping fixed effect parameters constant at values estimated in original fits. Re-fit each model to datasets simulated under each operating model. We used the stocks in Table \ref{tab:stock-list}.
 
-We used R [@rcoreteam2020Language]. WHAM is available as an R package [@miller2020Woods].
+We used R [@rcoreteam2020Language]. WHAM is available as an R package [@miller2020Woods]. Table \ref{tab:model-descriptions} summarizes the models fit for each process. Tutorials for how to specify additional random effect structures in WHAM are available at https://timjmiller.github.io/wham/.
 
 # Results
 
 ## Original datasets
 
-2D AR1 structure performed well across modules and stocks (Fig. \ref{fig:daic}).
+2D AR1 structure performed well across processes and stocks (Fig. \ref{fig:daic}).
 
 ### Numbers-at-age
 
@@ -169,6 +228,21 @@ Fig. \ref{fig:estpar-ecov}.
 
 We described WHAM. Sim tests showed no bias in self-tests (when estimation model matched operating model). Some bias in cross-tests.
 
+Contrast mechanistic vs. empirical approaches. Empirical approaches allows time-varying productivity and with AR1 can propagate effect of changing productivity in short-term projections [@stockthisissueImplementing]. However, the empirical approach cannot predict values beyond extremes in observed time-series. This is an issue because many ecosystems are changing to such extent that conditions in the near future have never been observed. E.g. last time it was close to this warm on the U.S. Northeast Shelf was the 1940s, and few fisheries or oceanographic time-series stretch back that far. Thus, longer term projections likely require mechanistic approach. Think about other sources of data? Fish catch, not just surveys + age data? Continuous Plankton Recorder (other side of Atlantic, but correlated?). 1951 was almost as warm (annual mean), but warm in winter instead of summer (diff seasonal change).
+
+Mechanistic approach: more likely to find environmental effects in cases with:
+
+- history of overfishing [@free2019Impacts]
+- more rapid environmental change [@free2019Impacts]
+- stocks at edge of species’ range [@free2019Impacts]
+- opportunistic species (short-lived) vs. longer-lived [@free2019Impacts]
+- longer time series
+- stronger signals (wider ranges of observed stock status and environmental conditions)
+- periodic signal where we’ve recorded more than one cycle (e.g. PDO/sst sardine)
+- lower trophic level (e.g. generally tighter relationship between PO and zooplankton, then small pelagics TL2, then TL3+). PO forecasting group look at zooplankton indices? See Perretti 2017 (recruitment regime shifts)
+
+Reducing uncertainty may be just as valuable as improving accuracy / reducing bias.
+
 ## Future work
 
 WHAM will be used in upcoming research track assessments. Could transition to operational. Potential to improve several NEFSC assessments.
@@ -180,6 +254,9 @@ WHAM will be used in upcoming research track assessments. Could transition to op
 ## Extensions
 
 ### Multivariate spatiotemporal environmental data
+
+Most examples that include environment-recruitment effects are univariate, but in many cases it is likely that multiple factors have to align for successful recruitment (e.g. temperature and currents for Nassau Grouper).
+
 ### Length/growth estimation
 ### Ecov models
 
