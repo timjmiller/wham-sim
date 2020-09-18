@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.24)  16 SEP 2020 22:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.8.24)  17 SEP 2020 21:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -965,33 +965,33 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 ) (./wham-sim-paper.aux)
 \openout1 = `wham-sim-paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 94.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 94.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 95.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 95.
 (/usr/share/texlive/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 94.
-LaTeX Font Info:    ... okay on input line 94.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 94.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 95.
+LaTeX Font Info:    ... okay on input line 95.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 95.
 (/usr/share/texmf/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Info: Redefining \microtypecontext on input line 94.
+LaTeX Info: Redefining \microtypecontext on input line 95.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -1006,7 +1006,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 \AtBeginShipoutBox=\box45
-Package hyperref Info: Link coloring OFF on input line 94.
+Package hyperref Info: Link coloring OFF on input line 95.
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -1014,9 +1014,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count143
 )
-LaTeX Info: Redefining \ref on input line 94.
-LaTeX Info: Redefining \pageref on input line 94.
-LaTeX Info: Redefining \nameref on input line 94.
+LaTeX Info: Redefining \ref on input line 95.
+LaTeX Info: Redefining \pageref on input line 95.
+LaTeX Info: Redefining \nameref on input line 95.
 (./wham-sim-paper.out) (./wham-sim-paper.out)
 \@outlinefile=\write3
 \openout3 = `wham-sim-paper.out'.
@@ -1092,231 +1092,232 @@ Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
 Package caption Info: threeparttable package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 96.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 97.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 96.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 97.
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 96.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 97.
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 96.
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 97.
 
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 96.
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 97.
 
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 96.
+(Font)              <12> on input line 97.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 96.
+(Font)              <8> on input line 97.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 96.
-LaTeX Font Info:    Try loading font information for U+msa on input line 96.
+(Font)              <6> on input line 97.
+LaTeX Font Info:    Try loading font information for U+msa on input line 97.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 96.
+LaTeX Font Info:    Try loading font information for U+msb on input line 97.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 97.
+(Font)              <10> on input line 98.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 97.
+(Font)              <7> on input line 98.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 97.
+(Font)              <5> on input line 98.
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--101
+Underfull \hbox (badness 10000) in paragraph at lines 98--102
 
  []
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 131.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5]
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 317.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3] [4] [5] [6] [7] [8] [9] [10]
-Overfull \hbox (4.69003pt too wide) in paragraph at lines 452--465
+) [6] [7] [8] [9] [10] [11] [12] [13] [14] [15]
+Overfull \hbox (4.69003pt too wide) in paragraph at lines 774--787
  [][] 
  []
 
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA.pn
-g, id=236, 505.89pt x 505.89pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_N
-AA.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NA
-A.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
-REdevs_ICEherring_NAA.png  used on input line 471.
-(pdftex.def)             Requested size: 469.76265pt x 469.76265pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M.png,
- id=237, 433.62pt x 361.35pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M
-.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M.
-png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
-REdevs_butterfish_M.png  used on input line 482.
-(pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel.png
-, id=238, 505.89pt x 361.35pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_se
-l.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel
-.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
-REdevs_GBhaddock_sel.png  used on input line 493.
-(pdftex.def)             Requested size: 469.76265pt x 335.54477pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov
-2.png, id=239, 578.16pt x 542.025pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT
-_Ecov2.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_
-Ecov2.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
-CPI_Recruit_SNEMAYT_Ecov2.png  used on input line 504.
-(pdftex.def)             Requested size: 469.75385pt x 440.39423pt.
-[11] [12 </home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherri
-ng_NAA.png (PNG copy)>] [13 </home/bstock/Documents/ms/wham-sim/plots/into_pape
-r/8_REdevs_butterfish_M.png (PNG copy)>] [14 </home/bstock/Documents/ms/wham-si
-m/plots/into_paper/8_REdevs_GBhaddock_sel.png (PNG copy)>] [15 </home/bstock/Do
-cuments/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2.png (PNG copy)
->]
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/daic.png, id=269, 578.16pt
+[16]
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/daic.png, id=390, 578.16pt
  x 216.81pt>
 File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/daic.png Graphic file
  (type png)
 <use /home/bstock/Documents/ms/wham-sim/plots/into_paper/daic.png>
 Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/da
-ic.png  used on input line 516.
+ic.png  used on input line 794.
 (pdftex.def)             Requested size: 578.18504pt x 216.81938pt.
-[16
+[17
+
+
 
  </home/bstock/Documents/ms/wham-sim/plots/into_paper/daic.png>]
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png, id=27
-6, 505.89pt x 542.025pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png G
-raphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
-tpar_NAA_OEPE.png  used on input line 528.
-(pdftex.def)             Requested size: 469.76265pt x 503.31714pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.png, id
-=277, 433.62pt x 361.35pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.pn
-g Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.png
->
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
-tpar_M_4par_OEPE.png  used on input line 539.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA.pn
+g, id=396, 505.89pt x 505.89pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_N
+AA.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NA
+A.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
+REdevs_ICEherring_NAA.png  used on input line 806.
+(pdftex.def)             Requested size: 469.76265pt x 469.76265pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M.png,
+ id=397, 433.62pt x 361.35pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M
+.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M.
+png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
+REdevs_butterfish_M.png  used on input line 817.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png, id=27
-8, 505.89pt x 216.81pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png G
-raphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
-tpar_sel_OEPE.png  used on input line 550.
-(pdftex.def)             Requested size: 469.76265pt x 201.32684pt.
-[17 </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png (P
-NG copy)>] [18 </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4p
-ar_OEPE.png (PNG copy)>] [19 </home/bstock/Documents/ms/wham-sim/plots/into_pap
-er/estpar_sel_OEPE.png (PNG copy)>]
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png, id=
-296, 722.7pt x 216.81pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png
- Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png>
-
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
-tpar_Ecov2_OEPE.png  used on input line 562.
-(pdftex.def)             Requested size: 650.43501pt x 195.1305pt.
-[20
-
-
- </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png (PN
-G copy)>]
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_
-OEPE.png, id=302, 469.755pt x 578.16pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medi
-anCI_OEPE.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_media
-nCI_OEPE.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
-ICEherring_NAA_medianCI_OEPE.png  used on input line 574.
-(pdftex.def)             Requested size: 469.75386pt x 578.15858pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OE
-PE.png, id=303, 361.35pt x 578.16pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_median
-CI_OEPE.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianC
-I_OEPE.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
-butterfish_M_medianCI_OEPE.png  used on input line 585.
-(pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_O
-EPE.png, id=304, 361.35pt x 578.16pt>
-File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_media
-nCI_OEPE.png Graphic file (type png)
-<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_median
-CI_OEPE.png>
-Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
-GBhaddock_sel_medianCI_OEPE.png  used on input line 596.
-(pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel.png
+, id=398, 505.89pt x 361.35pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_se
+l.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel
+.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
+REdevs_GBhaddock_sel.png  used on input line 828.
+(pdftex.def)             Requested size: 469.76265pt x 335.54477pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov
+2.png, id=399, 578.16pt x 542.025pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT
+_Ecov2.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_
+Ecov2.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/8_
+CPI_Recruit_SNEMAYT_Ecov2.png  used on input line 839.
+(pdftex.def)             Requested size: 469.75385pt x 440.39423pt.
 </home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel.png, 
-id=305, 289.08pt x 722.7pt>
+id=400, 289.08pt x 722.7pt>
 File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel.
 png Graphic file (type png)
 <use /home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel.p
 ng>
 Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/ai
-c_cross_multipanel.png  used on input line 607.
+c_cross_multipanel.png  used on input line 850.
 (pdftex.def)             Requested size: 252.94437pt x 632.36095pt.
 
-LaTeX Warning: Float too large for page by 29.93094pt on input line 612.
+LaTeX Warning: Float too large for page by 29.93094pt on input line 855.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 614.
-[21 </home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_media
-nCI_OEPE.png (PNG copy)>] [22 </home/bstock/Documents/ms/wham-sim/plots/into_pa
-per/0_butterfish_M_medianCI_OEPE.png (PNG copy)>] [23 </home/bstock/Documents/m
-s/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE.png (PNG copy)>] [24 
-</home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel.png (
-PNG copy)>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 614.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png, id=40
+1, 505.89pt x 542.025pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png G
+raphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
+tpar_NAA_OEPE.png  used on input line 861.
+(pdftex.def)             Requested size: 469.76265pt x 503.31714pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_
+OEPE.png, id=402, 469.755pt x 578.16pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medi
+anCI_OEPE.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_media
+nCI_OEPE.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
+ICEherring_NAA_medianCI_OEPE.png  used on input line 872.
+(pdftex.def)             Requested size: 469.75386pt x 578.15858pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.png, id
+=403, 433.62pt x 361.35pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.pn
+g Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.png
+>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
+tpar_M_4par_OEPE.png  used on input line 883.
+(pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OE
+PE.png, id=404, 361.35pt x 578.16pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_median
+CI_OEPE.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianC
+I_OEPE.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
+butterfish_M_medianCI_OEPE.png  used on input line 894.
+(pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png, id=40
+5, 505.89pt x 216.81pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png G
+raphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
+tpar_sel_OEPE.png  used on input line 905.
+(pdftex.def)             Requested size: 469.76265pt x 201.32684pt.
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_O
+EPE.png, id=406, 361.35pt x 578.16pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_media
+nCI_OEPE.png Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_median
+CI_OEPE.png>
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/0_
+GBhaddock_sel_medianCI_OEPE.png  used on input line 916.
+(pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
+[18 </home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NA
+A.png (PNG copy)>] [19 </home/bstock/Documents/ms/wham-sim/plots/into_paper/8_R
+Edevs_butterfish_M.png (PNG copy)>] [20 </home/bstock/Documents/ms/wham-sim/plo
+ts/into_paper/8_REdevs_GBhaddock_sel.png (PNG copy)>] [21 </home/bstock/Documen
+ts/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2.png (PNG copy)>] [2
+2 </home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel.png
+ (PNG copy)>] [23 </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_N
+AA_OEPE.png (PNG copy)>] [24 </home/bstock/Documents/ms/wham-sim/plots/into_pap
+er/0_ICEherring_NAA_medianCI_OEPE.png (PNG copy)>] [25 </home/bstock/Documents/
+ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE.png (PNG copy)>] [26 </home/bst
+ock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE.png (PN
+G copy)>] [27 </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_O
+EPE.png (PNG copy)>] [28 </home/bstock/Documents/ms/wham-sim/plots/into_paper/0
+_GBhaddock_sel_medianCI_OEPE.png (PNG copy)>]
+</home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png, id=
+454, 722.7pt x 216.81pt>
+File: /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png
+ Graphic file (type png)
+<use /home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png>
+
+Package pdftex.def Info: /home/bstock/Documents/ms/wham-sim/plots/into_paper/es
+tpar_Ecov2_OEPE.png  used on input line 928.
+(pdftex.def)             Requested size: 650.43501pt x 195.1305pt.
+[29
+
+
+ </home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE.png (PN
+G copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 936.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 936.
 (./wham-sim-paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 614.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 614.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 936.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 936.
 Package rerunfilecheck Info: File `wham-sim-paper.out' has not changed.
-(rerunfilecheck)             Checksum: DE0B6027A7B6E88E961D3C8119CF9F8D;4127.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 614.
+(rerunfilecheck)             Checksum: C5BA28D96E62F7583CB3F9F7C15EEF3F;4457.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 936.
  ) 
 Here is how much of TeX's memory you used:
- 15752 strings out of 494923
- 233974 string characters out of 6180742
- 346687 words of memory out of 5000000
- 18609 multiletter control sequences out of 15000+600000
- 69641 words of font info for 100 fonts, out of 8000000 for 9000
+ 15851 strings out of 494923
+ 235382 string characters out of 6180742
+ 357865 words of memory out of 5000000
+ 18622 multiletter control sequences out of 15000+600000
+ 71229 words of font info for 118 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 36i,12n,43p,1238b,407s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,12n,39p,1239b,424s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/en
-c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/s
-hare/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
--ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
+c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/shar
+e/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
+m-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
 onts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmmi5.pfb></usr/share/texmf/fonts/t
 ype1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></us
@@ -1325,10 +1326,10 @@ lic/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.pfb></usr/share/t
 exmf/fonts/type1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr
 8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/font
 s/type1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on wham-sim-paper.pdf (24 pages, 2284266 bytes).
+Output written on wham-sim-paper.pdf (29 pages, 2306595 bytes).
 PDF statistics:
- 407 PDF objects out of 1000 (max. 8388607)
- 349 compressed objects within 4 object streams
- 122 named destinations out of 1000 (max. 500000)
- 14610 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 549 PDF objects out of 1000 (max. 8388607)
+ 485 compressed objects within 5 object streams
+ 172 named destinations out of 1000 (max. 500000)
+ 14658 words of extra memory for PDF output out of 17280 (max. 10000000)
 

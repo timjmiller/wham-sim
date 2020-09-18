@@ -29,7 +29,7 @@
 }
 \usepackage{hyperref}
 \hypersetup{
-            pdftitle={The Woods Hole Assessment Model (WHAM): Incorporating environmental covariates into a state-space assessment framework},
+            pdftitle={The Woods Hole Assessment Model (WHAM): a general state-space assessment framework that incorporates time- and age-varying processes via random effects and environmental covariates},
             pdfauthor={Brian C. Stock1, Timothy J. Miller 1},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -86,8 +86,9 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 
-\title{The Woods Hole Assessment Model (WHAM): Incorporating environmental
-covariates into a state-space assessment framework}
+\title{The Woods Hole Assessment Model (WHAM): a general state-space assessment
+framework that incorporates time- and age-varying processes via random
+effects and environmental covariates}
 \author{Brian C. Stock\textsuperscript{1}, Timothy J. Miller \textsuperscript{1}}
 \date{}
 
@@ -111,124 +112,131 @@ WHAM is great.
 \subsubsection*{Keywords}\label{keywords}}
 \addcontentsline{toc}{subsubsection}{Keywords}
 
-state-space; stock assessment; mixed effects; random effects;
-time-varying; Template Model Builder (TMB)
+state-space; stock assessment; random effects; time-varying;
+environmental effects; recruitment; survival; natural mortality;
+Template Model Builder (TMB)
 
 \pagebreak
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Grab stuff from NRC and Fish/Climate proposals.
+The last two decades have increasingly seen a push for more holistic,
+ecosystem-based fisheries management (Larkin, 1996; Link, 2002). In
+part, this is a recognition that considering single species in isolation
+produces riskier and less robust outcomes long-term (Patrick and Link,
+2015). In several high-profile cases, fisheries management has failed to
+prevent collapses because they did not reduce fishing pressure in
+responses to changes in natural mortality (\(M\)), recruitment, or
+migration patterns caused by dynamics external to the stock in question
+(Northern cod: Shelton et al., 2006, @rose2015Northern; Gulf of Maine
+cod: Pershing et al., 2015; Pacific sardine: Zwolinski and Demer, 2012).
+This is particularly concerning in the context of climate change and the
+wide range of biological processes---often assumed to be constant---in
+stock assessments that are likely to be affected (Stock et al., 2011).
 
-\hypertarget{context-assessments-in-the-u.s.-northeast}{%
-\subsection{Context: assessments in the U.S.
-Northeast}\label{context-assessments-in-the-u.s.-northeast}}
+One approach to account for changing productivity is to explicitly link
+population processes to environmental covariates in single-species stock
+assessments, i.e.~the mechanistic approach \emph{sensu} Punt et al.
+(2014). Traditional single-species assessments are based on internal
+population dynamics and the effect of fishing mortality (\(F\)), and
+typically ignore effects of the environment or interactions with other
+species, even though fisheries scientists have long known that these are
+important drivers of time-varying population processes,
+e.g.~recruitment, mortality, growth, and movement (Garstang, 1900;
+Hjort, 1914). Despite how counterintuitive this may seem to ecologists
+and oceanographers who study such relationships, the evidence for direct
+linkages to specific environmental covariates is often weak and can
+break down over time (McClatchie et al., 2010; Myers, 1998).
+Additionally, the primary goal of most assessments is to provide
+management advice on near-term sustainable harvest levels---not to
+explain ecological relationships. Even if an environmental covariate
+directly affects fish productivity, including the effect in an
+assessment may not improve management advice if the effect is weak (De
+Oliveira and Butterworth, 2005). Worse, including environmental effects
+in an assessment or management system has been shown to actually provide
+worse management in some cases (De Oliveira and Butterworth, 2005; Punt
+et al., 2014; Walters and Collie, 1988). This can be true even in cases
+of relatively well-understood mechanistic links between oceanic
+conditions and fish populations, as in the case of sea surface
+temperature and Pacific sardine (Hill et al., 2018; Zwolinski and Demer,
+2012).
 
-\begin{itemize}
+An alternative approach is to allow biological parameters to vary
+stochastically over time, without explanation, i.e.~the empirical
+approach \emph{sensu} Punt et al. (2014). Statistical catch-at-age
+(SCAA) models typically only estimate year-specific recruitment
+(\(R_t\)) and \(F_t\), often as deviations from a mean, e.g.
+\(\text{log}R_t = \text{log}R_0 + \epsilon_t\). The main reason that
+other parameters are assumed constant is simply that there are not
+enough degrees of freedom to estimate many time-varying parameters. One
+common solution is to penalize the deviations, e.g.
+\(\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)\), although the
+penalty terms, \(\sigma^2_\epsilon\), must be fixed and are therefore
+subjective (Methot and Wetzel, 2013; Xu et al., 2019). State-space
+models that treat parameters as unobserved states can avoid such
+subjectivity by estimating the penalty terms as variance parameters
+constraining random effects (Aeberhard et al., 2018). In this way,
+state-space models can allow processes to vary in time while
+simultaneously estimating fewer parameters.
+
+Although state-space stock assessments have existed for some time
+(Gudmundsson, 1994; Mendelssohn, 1988; Sullivan, 1992), the recent
+development of Template Model Builder (TMB, Kristensen et al., 2016)
+software to perform efficient Laplace approximation has greatly expanded
+their use (Cadigan, 2016; Miller et al., 2016; Nielsen and Berg, 2014).
+In addition to the key advantage of objectively estimating variance, or
+``data weighting'', parameters, state-space models naturally predict
+unobserved states, and therefore handle missing data and short-term
+projections in a straightforward way (ICES, 2020). In comparisons with
+SCAA models, they generally have larger (more realistic) uncertainty and
+lower retrospective bias (\textbf{Miller et al.~in prep}).
+
+Retrospective bias can occur when changing environmental conditions lead
+to changes in productivity that are unaccounted for in stock
+assessments, and this is a concern commen to several groundfish stocks
+on the Northeast U.S. Shelf (Brooks and Legault, 2016). The Northeast
+U.S. Shelf ecosystem is rapidly changing, and this has motivated
+managers to make the ``continue{[}d{]} development of stock assessment
+models that include environmental terms'' a top priority (Hare et al.,
+2016). In addition to providing short-term (1-3 years) catch advice with
+reduced retrospective bias, it is hoped that environment-linked
+assessments will help create realistic rebuilding plans in the
+medium-term (3-10 years) for stocks that have not responded to dramatic
+decreases in \(F\). Miller et al. (2016) developed a state-space model
+for yellowtail flounder with an environmental effect on recruitment,
+which reduced retrospective patterns and residual variance. Similar
+applications that include environmental effects on growth, \(M\), and
+maturity in a state-space framework have also proven promising (Miller
+and Hyun, 2018; Miller et al., 2018; O'Leary et al., 2019; Xu et al.,
+2018).
+
+In summary, to address the needs of fisheries management in a changing
+climate we seek an assessment framework that 1) estimates time-varying
+parameters as random effects (i.e.~a state-space model), and 2) includes
+environmental effects. The framework should also allow for easy testing
+against status quo SCAA models to ease gradual adoption through the
+``research track'' or ``benchmark'' assessment process (Lynch et al.,
+2018). The objectives of this manuscript are to introduce the Woods Hole
+Assessment Model (WHAM) framework and demonstrate its ability to:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Long history, high F (pre-data)
+  estimate time- and age-varying random effects on survival, \(M\), and
+  selectivity;
 \item
-  Empirical weight-at-age
+  fit environmental time-series with process and observation error,
+  missing data, and a link to a population process; and
 \item
-  Retrospective patterns
-\item
-  ASAP3/4
-\item
-  Operational vs.~research-track
-\item
-  The Northeast U.S. Shelf LME is rapidly changing. Top priority is to
-  ``continue development of stock assessment models that include
-  environmental terms'' (Hare et al., 2016).
-\end{itemize}
+  simulate new data and random effects to conduct self- and cross-tests
+  (\emph{sensu} Deroba et al., 2015).
+\end{enumerate}
 
-\hypertarget{motivation-1-advantages-of-state-space-stock-assessments}{%
-\subsection{Motivation \#1: advantages of state-space stock
-assessments}\label{motivation-1-advantages-of-state-space-stock-assessments}}
-
-\begin{itemize}
-\tightlist
-\item
-  objective estimation of process errors and data weighting, e.g.
-  \(\sigma_R\), instead of ad-hoc
-\item
-  inherently predict unobserved states, so predicting missing data/years
-  and into the future is natural
-\item
-  allow for time/age variation in demographic processes while estimating
-  fewer parameters
-\item
-  natural framework to include environmental time-series
-\item
-  lower retros and AIC, larger (more realistic) uncertainty compared to
-  SCAAs. Cite ICES state-space if in review.
-\end{itemize}
-
-(Aeberhard et al., 2018; Miller et al., 2016; Nielsen and Berg, 2014)
-
-\hypertarget{motivation-2-allow-for-environmental-effects}{%
-\subsection{Motivation \#2: allow for environmental
-effects}\label{motivation-2-allow-for-environmental-effects}}
-
-\begin{itemize}
-\tightlist
-\item
-  Reduced retrospective patterns
-\item
-  Lower residual variance
-\end{itemize}
-
-(Miller et al., 2016; Miller and Hyun, 2018; O'Leary et al., 2019)
-
-\hypertarget{how-is-wham-different-from-sam}{%
-\subsection{How is WHAM different from
-SAM?}\label{how-is-wham-different-from-sam}}
-
-\emph{Not sure where to put this\ldots{} may be more natural after
-introducing equations in Methods, some in Discussion. Definitely will be
-a question in readers' minds so may be good to introduce early?}
-
-Most assessments in the U.S. assume separability in \(F_{a,t}\),
-estimate \(F_t\) and \(Sel_a\). WHAM does this. SAM estimates
-\(F_{a,t}\) directly. WHAM and SAM also make different separability
-assumptions for the catch/index data (aggregate total + age comps vs.
-\(C_{a,t}\) directly). Should be similar (?) but could test.
-
-Goal is to replicate ASAP assessments in the U.S. Northeast. Can easily
-turn on/off random effects.
-
-Observation model is natural for landings data that are measured as
-total weight plus age composition sampling. Age composition sampling
-often done separately with survey data.
-
-Treating \(F\) and \(Sel\) separately can be useful for projections.
-Oftentimes we want to specify \(F\) in projections to calculate a
-reference point, as opposed to continuing a \(F\) time-series process.
-
-\hypertarget{bias-correction}{%
-\subsection{Bias correction}\label{bias-correction}}
-
-\begin{itemize}
-\tightlist
-\item
-  Analytical obs error. (Aldrin et al., 2020).
-\item
-  Analytical process error.
-\item
-  TMB epsilon. (Thorson, 2019; Thorson and Kristensen, 2016)
-\end{itemize}
-
-Should these all be used?
-
-\hypertarget{overview}{%
-\subsection{Overview}\label{overview}}
-
-In summary, the NEFSC wants an assessment framework that i) estimates
-random effects (i.e.~a state-space model), ii) includes environmental
-effects, and iii) is easy to test against status quo SCAA models (ASAP).
-The objectives of this manuscript are to introduce the WHAM framework
-and demonstrate unbiasedness in self- and cross-tests.
+Finally, we describe how the above are implemented using an open-source
+software package available to the stock assessment community (Miller and
+Stock, 2020).
 
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
@@ -236,9 +244,13 @@ and demonstrate unbiasedness in self- and cross-tests.
 \hypertarget{model-description}{%
 \subsection{Model description}\label{model-description}}
 
-\hypertarget{unobserved-states-random-effects}{%
-\subsubsection{Unobserved states (random
-effects)}\label{unobserved-states-random-effects}}
+Similar to ASAP. Empirical weight-at-age.
+
+\hypertarget{modules-with-random-effects}{%
+\subsubsection{Modules with random
+effects}\label{modules-with-random-effects}}
+
+See Table \ref{tab:model-descriptions}.
 
 \hypertarget{numbers-at-age-survival}{%
 \paragraph{Numbers-at-age (survival)}\label{numbers-at-age-survival}}
@@ -262,6 +274,31 @@ effects)}\label{unobserved-states-random-effects}}
 \hypertarget{link-to-population}{%
 \subparagraph{Link to population}\label{link-to-population}}
 
+\hypertarget{how-is-wham-different-from-sam}{%
+\subsection{How is WHAM different from
+SAM?}\label{how-is-wham-different-from-sam}}
+
+\emph{Not sure where to put this\ldots{} some could be in Intro or
+Discussion. Definitely will be a question in readers' minds so may be
+good to introduce early?}
+
+Most assessments in the U.S. assume separability in \(F_{a,t}\),
+estimate \(F_t\) and \(Sel_a\). WHAM does this. SAM estimates
+\(F_{a,t}\) directly. WHAM and SAM also make different separability
+assumptions for the catch/index data (aggregate total + age comps vs.
+\(C_{a,t}\) directly). Should be similar (?) but could test.
+
+Goal is to replicate ASAP assessments in the U.S. Northeast. Can easily
+turn on/off random effects.
+
+Observation model is natural for landings data that are measured as
+total weight plus age composition sampling. Age composition sampling
+often done separately with survey data.
+
+Treating \(F\) and \(Sel\) separately can be useful for projections.
+Oftentimes we want to specify \(F\) in projections to calculate a
+reference point, as opposed to continuing a \(F\) time-series process.
+
 \hypertarget{dataobservation-model}{%
 \subsubsection{Data/observation model}\label{dataobservation-model}}
 
@@ -271,24 +308,98 @@ effects)}\label{unobserved-states-random-effects}}
 \hypertarget{index-agg-age-comp}{%
 \paragraph{Index (agg, age comp)}\label{index-agg-age-comp}}
 
+\hypertarget{bias-correction}{%
+\subsubsection{Bias correction}\label{bias-correction}}
+
+\begin{itemize}
+\tightlist
+\item
+  Analytical obs error. (Aldrin et al., 2020).
+\item
+  Analytical process error.
+\item
+  TMB epsilon. (Thorson, 2019; Thorson and Kristensen, 2016)
+\end{itemize}
+
+Should these all be used?
+
 \hypertarget{simulation-tests}{%
 \subsection{Simulation tests}\label{simulation-tests}}
 
-We used the stocks in Table \ref{tab:stock-list}.
+Fit each model to original dataset. Use each model to simulate new data
+and random effects, keeping fixed effect parameters constant at values
+estimated in original fits. Re-fit each model to datasets simulated
+under each operating model. We used the stocks in Table
+\ref{tab:stock-list}.
 
 We used R (R Core Team, 2020). WHAM is available as an R package (Miller
-and Stock, 2020). OSA residuals.
+and Stock, 2020).
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
-Sweet figures.
+\hypertarget{original-datasets}{%
+\subsection{Original datasets}\label{original-datasets}}
+
+2D AR1 structure performed well across modules and stocks (Fig.
+\ref{fig:daic}).
+
+\hypertarget{numbers-at-age}{%
+\subsubsection{Numbers-at-age}\label{numbers-at-age}}
+
+Fig. \ref{fig:devs-ICEherring-naa}.
+
+\hypertarget{natural-mortality}{%
+\subsubsection{Natural mortality}\label{natural-mortality}}
+
+Fig. \ref{fig:devs-butterfish-m}.
+
+\hypertarget{selectivity-1}{%
+\subsubsection{Selectivity}\label{selectivity-1}}
+
+Fig. \ref{fig:devs-GBhaddock-sel}.
+
+\hypertarget{ecov-recruitment}{%
+\subsubsection{Ecov-Recruitment}\label{ecov-recruitment}}
+
+Fig. \ref{fig:devs-SNEMAYT-ecov}.
+
+\hypertarget{simulation-tests-1}{%
+\subsection{Simulation tests}\label{simulation-tests-1}}
+
+Not all models converged. Fig. \ref{fig:aic-cross}.
+
+\hypertarget{numbers-at-age-1}{%
+\subsubsection{Numbers-at-age}\label{numbers-at-age-1}}
+
+Fig. \ref{fig:estpar-naa}.
+
+Fig. \ref{fig:rel-error-ICEherring-naa}.
+
+\hypertarget{natural-mortality-1}{%
+\subsubsection{Natural mortality}\label{natural-mortality-1}}
+
+Fig. \ref{fig:estpar-m}.
+
+Fig. \ref{fig:rel-error-butterfish-m}.
+
+\hypertarget{selectivity-2}{%
+\subsubsection{Selectivity}\label{selectivity-2}}
+
+Fig. \ref{fig:estpar-sel}.
+
+Fig. \ref{fig:rel-error-GBhaddock-sel}.
+
+\hypertarget{ecov-recruitment-1}{%
+\subsubsection{Ecov-Recruitment}\label{ecov-recruitment-1}}
+
+Fig. \ref{fig:estpar-ecov}.
 
 \hypertarget{discussion}{%
 \section{Discussion}\label{discussion}}
 
-\hypertarget{overview-1}{%
-\subsection{Overview}\label{overview-1}}
+\hypertarget{overview}{%
+\subsection{Overview}\label{overview}}
 
 We described WHAM. Sim tests showed no bias in self-tests (when
 estimation model matched operating model). Some bias in cross-tests.
@@ -357,7 +468,7 @@ direction.
 \addcontentsline{toc}{subsection}{Acknowledgements}
 
 This research was performed while BCS held an NRC Research Associateship
-award at the NEFSC. NOAA Fish \& Climate grant number.
+award at the NEFSC. NOAA Fish \& Climate grant number ??.
 
 \pagebreak
 
@@ -384,6 +495,48 @@ Aldrin, M., Tvete, I., Aanes, S., Subbey, S., 2020. The specification of
 the data model part in the SAM model matters. Fisheries Research 229,
 105585. \url{https://doi.org/10.1016/j.fishres.2020.105585}
 
+\leavevmode\hypertarget{ref-brooks2016Retrospective}{}%
+Brooks, E.N., Legault, C.M., 2016. Retrospective forecasting evaluating
+performance of stock projections for New England groundfish stocks. Can.
+J. Fish. Aquat. Sci. 73, 935--950.
+\url{https://doi.org/10.1139/cjfas-2015-0163}
+
+\leavevmode\hypertarget{ref-cadigan2016Statespace}{}%
+Cadigan, N.G., 2016. A state-space stock assessment model for northern
+cod, including under-reported catches and variable natural mortality
+rates. Canadian Journal of Fisheries and Aquatic Sciences 73, 296--308.
+\url{https://doi.org/10.1139/cjfas-2015-0047}
+
+\leavevmode\hypertarget{ref-deoliveira2005Limits}{}%
+De Oliveira, J., Butterworth, D., 2005. Limits to the use of
+environmental indices to reduce risk and/or increase yield in the South
+African anchovy fishery. African Journal of Marine Science 27, 191--203.
+\url{https://doi.org/10.2989/18142320509504078}
+
+\leavevmode\hypertarget{ref-deroba2015Simulation}{}%
+Deroba, J.J., Butterworth, D.S., Methot, R.D., De Oliveira, J.a.A.,
+Fernandez, C., Nielsen, A., Cadrin, S.X., Dickey-Collas, M., Legault,
+C.M., Ianelli, J., Valero, J.L., Needle, C.L., O'Malley, J.M., Chang,
+Y.-J., Thompson, G.G., Canales, C., Swain, D.P., Miller, D.C.M.,
+Hintzen, N.T., Bertignac, M., Ibaibarriaga, L., Silva, A., Murta, A.,
+Kell, L.T., de Moor, C.L., Parma, A.M., Dichmont, C.M., Restrepo, V.R.,
+Ye, Y., Jardim, E., Spencer, P.D., Hanselman, D.H., Blaylock, J., Mood,
+M., Hulson, P.-J.F., 2015. Simulation testing the robustness of stock
+assessment models to error: Some results from the ICES strategic
+initiative on stock assessment methods. ICES J Mar Sci 72, 19--30.
+\url{https://doi.org/10.1093/icesjms/fst237}
+
+\leavevmode\hypertarget{ref-garstang1900Impoverishment}{}%
+Garstang, W., 1900. The Impoverishment of the Sea. A Critical Summary of
+the Experimental and Statistical Evidence bearing upon the Alleged
+Depletion of the Trawling Grounds. Journal of the Marine Biological
+Association of the United Kingdom 6, 1--69.
+\url{https://doi.org/10.1017/S0025315400072374}
+
+\leavevmode\hypertarget{ref-gudmundsson1994Time}{}%
+Gudmundsson, G., 1994. Time series analysis of catch-at-age
+observations. Applied Statistics 43, 117--126.
+
 \leavevmode\hypertarget{ref-hare2016Northeast}{}%
 Hare, J.A., Borggaard, D.L., Friedland, K.D., Anderson, J., Burns, P.,
 Chu, K., Clay, P.M., Collins, M.J., Cooper, P., Fratantoni, P.S.,
@@ -391,6 +544,59 @@ Johnson, M.R., Manderson, J.P., Milke, L., Miller, T.J., Orphanides,
 C.D., Saba, V.S., 2016. Northeast Regional Action Plan - NOAA Fisheries
 Climate Science Strategy (No. NMFS-NE-239). NOAA Fisheries, Northeast
 Fisheries Science Center, Woods Hole, MA.
+
+\leavevmode\hypertarget{ref-hill2018Assessment}{}%
+Hill, K.T., Crone, P.R., Zwolinski, J.P., 2018. Assessment of the
+Pacific sardine resource in 2018 for U.S. Management in 2018-2019 (No.
+NOAA Technical Memorandum NMFS-SWFSC-600). US Department of Commerce.
+
+\leavevmode\hypertarget{ref-hjort1914Fluctuations}{}%
+Hjort, J., 1914. Fluctuations in the great fisheries of Northern Europe
+viewed in the light of biological research. Rapports et Procès-Verbaux
+des Réunions du Conseil Permanent International Pour L'Exploration de la
+Mer 20, 1--228.
+
+\leavevmode\hypertarget{ref-ices2020Workshop}{}%
+ICES, 2020. Workshop on the Review and Future of State Space Stock
+Assessment Models in ICES (WKRFSAM). ICES Scientific Reports 2, 23p.
+\url{https://doi.org/10.17895/ices.pub.6004}
+
+\leavevmode\hypertarget{ref-kristensen2016TMB}{}%
+Kristensen, K., Nielsen, A., Berg, C., Skaug, H., Bell, B.M., 2016. TMB:
+Automatic differentiation and Laplace approximation. Journal of
+Statistical Software 70, 1--21.
+\url{https://doi.org/10.18637/jss.v070.i05}
+
+\leavevmode\hypertarget{ref-larkin1996Concepts}{}%
+Larkin, P., 1996. Concepts and issues in marine ecosystem management.
+Reviews in Fish Biology and Fisheries 6, 139--164.
+\url{https://doi.org/10.1007/BF00182341}
+
+\leavevmode\hypertarget{ref-link2002What}{}%
+Link, J.S., 2002. What Does Ecosystem-Based Fisheries Management Mean?
+Fisheries 27, 5.
+
+\leavevmode\hypertarget{ref-lynch2018Implementing}{}%
+Lynch, P.D., Methot, R.D., Link, J.S. (Eds.), 2018. Implementing a Next
+Generation Stock Assessment Enterprise. An Update to the NOAA Fisheries
+Stock Assessment Improvement Plan, in:. U.S. Dep. Commer., NOAA Tech.
+Memo. NMFS-F/ SPO-183, p. 127. \url{https://doi.org/10.7755/TMSPO.183}
+
+\leavevmode\hypertarget{ref-mcclatchie2010Reassessment}{}%
+McClatchie, S., Goericke, R., Auad, G., Hill, K., 2010. Re-assessment of
+the stockRecruit and temperatureRecruit relationships for Pacific
+sardine (Sardinops sagax). Can. J. Fish. Aquat. Sci. 67, 1782--1790.
+\url{https://doi.org/10.1139/F10-101}
+
+\leavevmode\hypertarget{ref-mendelssohn1988Problems}{}%
+Mendelssohn, R., 1988. Some problems in estimating population sizes from
+catch-at-age data. Fishery Bulletin 86, 617--630.
+
+\leavevmode\hypertarget{ref-methot2013Stock}{}%
+Methot, R.D., Wetzel, C.R., 2013. Stock synthesis: A biological and
+statistical framework for fish stock assessment and fishery management.
+Fisheries Research 142, 86--99.
+\url{https://doi.org/10.1016/j.fishres.2012.10.012}
 
 \leavevmode\hypertarget{ref-miller2016Statespace}{}%
 Miller, T.J., Hare, J.A., Alade, L.A., 2016. A state-space approach to
@@ -406,8 +612,18 @@ age-structured assessment model. Canadian Journal of Fisheries and
 Aquatic Sciences 75, 691--703.
 \url{https://doi.org/10.1139/cjfas-2017-0035}
 
+\leavevmode\hypertarget{ref-miller2018Temporal}{}%
+Miller, T.J., O'Brien, L., Fratantoni, P.S., 2018. Temporal and
+environmental variation in growth and maturity and effects on management
+reference points of Georges Bank Atlantic cod. Can. J. Fish. Aquat. Sci.
+1--13. \url{https://doi.org/10.1139/cjfas-2017-0124}
+
 \leavevmode\hypertarget{ref-miller2020Woods}{}%
 Miller, T.J., Stock, B.C., 2020. The Woods Hole Assessment Model (WHAM).
+
+\leavevmode\hypertarget{ref-myers1998When}{}%
+Myers, R.A., 1998. When do environment-recruitment correlations work?
+Reviews in Fish Biology and Fisheries 8, 285--305.
 
 \leavevmode\hypertarget{ref-nielsen2014Estimation}{}%
 Nielsen, A., Berg, C.W., 2014. Estimation of time-varying selectivity in
@@ -422,15 +638,58 @@ oceanography-dependent vital rates in Bayesian hierarchical models. Can.
 J. Fish. Aquat. Sci. 76, 1275--1294.
 \url{https://doi.org/10.1139/cjfas-2018-0092}
 
+\leavevmode\hypertarget{ref-patrick2015Myths}{}%
+Patrick, W.S., Link, J.S., 2015. Myths that Continue to Impede Progress
+in Ecosystem-Based Fisheries Management. Fisheries 40, 155--160.
+\url{https://doi.org/10.1080/03632415.2015.1024308}
+
+\leavevmode\hypertarget{ref-pershing2015Slow}{}%
+Pershing, A.J., Alexander, M.A., Hernandez, C.M., Kerr, L.A., Bris,
+A.L., Mills, K.E., Nye, J.A., Record, N.R., Scannell, H.A., Scott, J.D.,
+Sherwood, G.D., Thomas, A.C., 2015. Slow adaptation in the face of rapid
+warming leads to collapse of the Gulf of Maine cod fishery. Science 350,
+809--812. \url{https://doi.org/10.1126/science.aac9819}
+
+\leavevmode\hypertarget{ref-punt2014Fisheries}{}%
+Punt, A.E., A'mar, T., Bond, N.A., Butterworth, D.S., de Moor, C.L., De
+Oliveira, J.A.A., Haltuch, M.A., Hollowed, A.B., Szuwalski, C., 2014.
+Fisheries management under climate and environmental uncertainty:
+Control rules and performance simulation. ICES J Mar Sci 71, 2208--2220.
+\url{https://doi.org/10.1093/icesjms/fst057}
+
 \leavevmode\hypertarget{ref-rcoreteam2020Language}{}%
 R Core Team, 2020. R: A Language and Environment for Statistical
 Computing.
+
+\leavevmode\hypertarget{ref-rose2015Northern}{}%
+Rose, G.A., Rowe, S., 2015. Northern cod comeback. Can. J. Fish. Aquat.
+Sci. 72, 1789--1798. \url{https://doi.org/10.1139/cjfas-2015-0346}
+
+\leavevmode\hypertarget{ref-shelton2006Fishing}{}%
+Shelton, P.A., Sinclair, A.F., Chouinard, G.A., Mohn, R., Duplisea,
+D.E., 2006. Fishing under low productivity conditions is further
+delaying recovery of Northwest Atlantic cod (Gadus morhua). Can. J.
+Fish. Aquat. Sci. 63, 235--238. \url{https://doi.org/10.1139/f05-253}
 
 \leavevmode\hypertarget{ref-stockthisissueImplementing}{}%
 Stock, B.C., Xu, H., Miller, T.J., Thorson, J.T., Nye, J.A., n.d.
 Implementing a 2-dimensional smoother on either survival or natural
 mortality improves a state-space assessment model for Southern New
 England-Mid Atlantic yellowtail flounder.
+
+\leavevmode\hypertarget{ref-stock2011Use}{}%
+Stock, C.A., Alexander, M.A., Bond, N.A., Brander, K.M., Cheung, W.W.,
+Curchitser, E.N., Delworth, T.L., Dunne, J.P., Griffies, S.M., Haltuch,
+M.A., Hare, J.A., Hollowed, A.B., Lehodey, P., Levin, S.A., Link, J.S.,
+Rose, K.A., Rykaczewski, R.R., Sarmiento, J.L., Stouffer, R.J., Schwing,
+F.B., Vecchi, G.A., Werner, F.E., 2011. On the use of IPCC-class models
+to assess the impact of climate on Living Marine Resources. Progress in
+Oceanography 88, 1--27.
+\url{https://doi.org/10.1016/j.pocean.2010.09.001}
+
+\leavevmode\hypertarget{ref-sullivan1992Kalman}{}%
+Sullivan, P.J., 1992. A Kalman filter approach to catch-at-length
+analysis. Biometrics 48, 237--257.
 
 \leavevmode\hypertarget{ref-thorson2019Perspective}{}%
 Thorson, J.T., 2019. Perspective: Let's simplify stock assessment by
@@ -442,6 +701,69 @@ Thorson, J.T., Kristensen, K., 2016. Implementing a generic method for
 bias correction in statistical models using random effects, with spatial
 and population dynamics examples. Fisheries Research 175, 66--74.
 \url{https://doi.org/10.1016/j.fishres.2015.11.016}
+
+\leavevmode\hypertarget{ref-walters1988Research}{}%
+Walters, C.J., Collie, J.S., 1988. Is Research on Environmental Factors
+Useful to Fisheries Management? Can. J. Fish. Aquat. Sci. 45,
+1848--1854. \url{https://doi.org/10.1139/f88-217}
+
+\leavevmode\hypertarget{ref-xu2018Evaluating}{}%
+Xu, H., Miller, T.J., Hameed, S., Alade, L.A., Nye, J.A., 2018.
+Evaluating the utility of the Gulf Stream Index for predicting
+recruitment of Southern New England-Mid Atlantic yellowtail flounder.
+Fisheries Oceanography 27, 85--95.
+\url{https://doi.org/10.1111/fog.12236}
+
+\leavevmode\hypertarget{ref-xu2019Comparing}{}%
+Xu, H., Thorson, J.T., Methot, R.D., 2019. Comparing the performance of
+three data-weighting methods when allowing for time-varying selectivity.
+Can. J. Fish. Aquat. Sci. 1--17.
+\url{https://doi.org/10.1139/cjfas-2019-0107}
+
+\leavevmode\hypertarget{ref-zwolinski2012Cold}{}%
+Zwolinski, J.P., Demer, D.A., 2012. A cold oceanographic regime with
+high exploitation rates in the Northeast Pacific forecasts a collapse of
+the sardine stock. Proceedings of the National Academy of Sciences 109,
+4175--4180. \url{https://doi.org/10.1073/pnas.1113806109}
+
+\pagebreak
+
+\begin{landscape}
+\begin{table}
+
+\caption{\label{tab:model-descriptions}Model descriptions and estimated parameters. Parameter descriptions and equations are given in text. Note that the base model in the $M$ module is NAA m1, and the base model in the Selectivity and Ecov-Recruitment modules is NAA m3. Ecov m1 fits the Cold Pool Index data and estimates $\sigma_x$ in order to allow comparison to m2-m5 using AIC (same data needed in likelihood).}
+\centering
+\begin{tabular}[t]{lll}
+\toprule
+Model & Description & Estimated parameters\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Numbers-at-age (NAA)}}\\
+\hspace{1em}m1: SCAA (IID) & Recruitment deviations are IID random effects & $\sigma_R$\\
+\hspace{1em}m2: SCAA (AR1) & Recruitment deviations are autocorrelated (AR1) random effects & $\sigma_R$, $\rho_y$\\
+\hspace{1em}m3: NAA (IID) & All NAA deviations are IID random effects & $\sigma_R$, $\sigma_a$\\
+\hspace{1em}m4: NAA (2D AR1) & All NAA deviations are random effects with correlation by year and age (2D AR1) & $\sigma_R$, $\sigma_a$, $\rho_y$, $\rho_a$\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Natural mortality ($M$)}}\\
+\hspace{1em}m1: none & No random effects on $M$ & $\sigma_R$\\
+\hspace{1em}m2: IID & $M$ deviations are IID random effects & $\sigma_R$, $\sigma_M$\\
+\hspace{1em}m3: 2D AR1 & $M$ deviations are random effects with correlation by year and age (2D AR1) & $\sigma_R$, $\sigma_M$, $\varphi_y$, $\varphi_a$\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Selectivity (Sel)}}\\
+\hspace{1em}m1: none & No random effects on selectivity & $\sigma_R$, $\sigma_a$\\
+\hspace{1em}m2: IID & Selectivity deviations are IID random effects & $\sigma_R$, $\sigma_a$, $\sigma_{Sel}$\\
+\hspace{1em}m3: 2D AR1 & Selectivity deviations are random effects with correlation by year and age (2D AR1) & $\sigma_R$, $\sigma_a$, $\sigma_{Sel}$, $\phi_y$, $\phi_a$\\
+\addlinespace[0.3em]
+\multicolumn{3}{l}{\textbf{Ecov-Recruitment (Ecov)}}\\
+\hspace{1em}m1: RW-none & Ecov: random walk (RW), effect on $\beta$: none & $\sigma_R$, $\sigma_a$, $\sigma_x$\\
+\hspace{1em}m2: RW-linear & Ecov: random walk (RW), effect on $\beta$: linear & $\sigma_R$, $\sigma_a$, $\sigma_x$, $\beta_1$\\
+\hspace{1em}m3: RW-poly & Ecov: random walk (RW), effect on $\beta$: 2nd order polynomial (poly) & $\sigma_R$, $\sigma_a$, $\sigma_x$, $\beta_1$, $\beta_2$\\
+\hspace{1em}m4: AR1-linear & Ecov: autocorrelated (AR1), effect on $\beta$: linear & $\sigma_R$, $\sigma_a$, $\sigma_x$, $\phi_x$, $\beta_1$\\
+\hspace{1em}m5: AR1-poly & Ecov: autocorrelated (AR1), effect on $\beta$: 2nd order polynomial (poly) & $\sigma_R$, $\sigma_a$, $\sigma_x$, $\phi_x$, $\beta_1$, $\beta_2$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{landscape}
 
 \pagebreak
 
@@ -463,6 +785,19 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\pagebreak
+
+\begin{landscape}
+\begin{figure}
+
+{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
+
+}
+
+\caption{AIC differences by model and stock when fit to original datasets. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT), North Sea cod (NScod), Icelandic herring (ICEherring), and Georges Bank haddock (GBhaddock).}\label{fig:daic}
+\end{figure}
+\end{landscape}
 
 \pagebreak
 
@@ -510,16 +845,14 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \pagebreak
 
-\begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
+{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
 
 }
 
-\caption{AIC differences by model and stock when fit to full datasets. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT), North Sea cod (NScod), Icelandic herring (ICEherring), and Georges Bank haddock (GBhaddock).}\label{fig:daic}
+\caption{Proportion of simulations in which each model had the lowest AIC. A) Numbers-at-age (NAA), aggregated across all five stocks. B) Natural mortality (\textit{M}), aggregated over two stocks (SNEMAYT and NScod). C) Selectivity (GBhaddock). Not all estimation models converged for each simulation, even when the operating model matched.}\label{fig:aic-cross}
 \end{figure}
-\end{landscape}
 
 \pagebreak
 
@@ -530,6 +863,17 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 }
 
 \caption{Relative error of parameters constraining numbers-at-age (NAA) random effects. Four models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-naa}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+
+}
+
+\caption{Relative error of key quantities estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-ICEherring-naa}
 \end{figure}
 
 \pagebreak
@@ -547,46 +891,22 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
-
-}
-
-\caption{Relative error of parameters constraining selectivity random effects for Georges Bank haddock (GBhaddock). Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects (constant selectivity). m2 = selectivity deviations were independent and identically distributed (IID). m3 = selectivity deviations were correlated by parameter and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-sel}
-\end{figure}
-
-\pagebreak
-
-\begin{landscape}
-\begin{figure}
-
-{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
-
-}
-
-\caption{Relative error of parameters constraining variation in recruitment for Southern New England-Mid Atlantic yellowtail flounder (SNEMAYT). Five models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. All models estimated recruitment using the Beverton-Holt function and included CPI effects on $\beta$: $\hat{R}_{t+1} = \frac{\alpha S_{t}}{1 + e^{\beta_0 + \beta_1 x_{t} + \beta_2 x^2_{t}} S_t}$. m1 = Cold Pool Index (CPI) modeled as a random walk (RW) with no effect on recruitment ($\beta_1 = \beta_2 = 0$). m2 = CPI as RW, linear effect on $\beta$. m3 = CPI as RW, 2nd order polynomial effect on $\beta$. m4 = CPI as AR1, linear effect. m5 = CPI as AR1, polynomial effect. Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-ecov}
-\end{figure}
-\end{landscape}
-
-\pagebreak
-
-\begin{figure}
-
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
-
-}
-
-\caption{Relative error of key quantities estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-ICEherring-naa}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}
-
 {\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
 
 }
 
 \caption{Relative error of key quantities estimated for butterfish using three models of natural mortality (\textit{M}) random effects. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations are independent and identically distributed (IID). m3 = \textit{M} deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-butterfish-m}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining selectivity random effects for Georges Bank haddock (GBhaddock). Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects (constant selectivity). m2 = selectivity deviations were independent and identically distributed (IID). m3 = selectivity deviations were correlated by parameter and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-sel}
 \end{figure}
 
 \pagebreak
@@ -602,13 +922,15 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \pagebreak
 
+\begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
 
 }
 
-\caption{Proportion of simulations in which each model had the lowest AIC. A) Numbers-at-age (NAA), aggregated across all five stocks. B) Natural mortality (\textit{M}), aggregated over two stocks (SNEMAYT and NScod). C) Selectivity (GBhaddock). Not all estimation models converged for each simulation, even when the operating model matched.}\label{fig:aic-cross}
+\caption{Relative error of parameters constraining variation in recruitment for Southern New England-Mid Atlantic yellowtail flounder (SNEMAYT). Five models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. All models estimated recruitment using the Beverton-Holt function and included CPI effects on $\beta$: $\hat{R}_{t+1} = \frac{\alpha S_{t}}{1 + e^{\beta_0 + \beta_1 x_{t} + \beta_2 x^2_{t}} S_t}$. m1 = Cold Pool Index (CPI) modeled as a random walk (RW) with no effect on recruitment ($\beta_1 = \beta_2 = 0$). m2 = CPI as RW, linear effect on $\beta$. m3 = CPI as RW, 2nd order polynomial effect on $\beta$. m4 = CPI as AR1, linear effect. m5 = CPI as AR1, polynomial effect. Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-ecov}
 \end{figure}
+\end{landscape}
 
 \end{document}
