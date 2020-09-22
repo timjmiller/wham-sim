@@ -264,17 +264,22 @@ with state-space and environmental effects in a single framework.
 effects}\label{processes-with-random-effects}}
 
 WHAM primarily (\textbf{??}) diverges from ASAP through the
-implementation of random effects on four processes: survival (numbers at
-age transitions, \emph{NAA}), natural mortality (\emph{M}), selectivity
-(\emph{Sel}), and environmental covariates (\emph{Ecov}). Across
-processes, WHAM makes heavy use of first-order autoregression, AR1, to
-constrain the random effects, especially a 2D AR1 covariance structure
-which is AR1 over both age and year. The 2D AR1 structure has been
-widely used to model deviations by age and year in the parameters
-\(F_{a,y}\) (Nielsen and Berg, 2014), \(M_{a,y}\) (Cadigan, 2016; Stock
-et al., n.d.), \(Sel_{a,y}\) (Xu, Thorson, et al., 2018), and
-\(N_{a,y}\) (Stock et al., n.d.), as well as in the catch (\(C_{a,y}\))
-and survey index (\(I_{a,y}\)) observations (Berg and Nielsen, 2016).
+implementation of random effects on three processes: survival (numbers
+at age transitions, \emph{NAA}), natural mortality (\emph{M}),
+selectivity (\emph{Sel}), and allowing effects of environmental
+covariates (\emph{Ecov}) on recruitment and natural mortality (but see
+ASAP4). The environmental covariates and their observations are also
+treated using state-space models with true values treated as random
+effects and observation on them having error. The random effects for
+these processes are generally assumed to be first-order autoregressive
+(AR1). Other than environmental covariates, the processes are assumed to
+have a two dimensional (2D) AR1 covariance structure over age and year.
+The 2D AR1 structure has been widely used to model deviations by age and
+year in the parameters \(F_{a,y}\) (Nielsen and Berg, 2014), \(M_{a,y}\)
+(Cadigan, 2016; Stock et al., n.d.), \(Sel_{a,y}\) (Xu, Thorson, et al.,
+2018), and \(N_{a,y}\) (Stock et al., n.d.), as well as in the catch
+(\(C_{a,y}\)) and survey index (\(I_{a,y}\)) observations (Berg and
+Nielsen, 2016).
 
 \hypertarget{numbers-at-age-naa-survival}{%
 \paragraph{\texorpdfstring{Numbers at age (\emph{NAA}) /
@@ -307,12 +312,11 @@ m1 is most similar to a SCAA model, where only recruitment deviations,
 assumed to be independent and identically distributed (IID):
 
 \[\varepsilon_{1,y} \sim \mathcal{N}(0, \sigma^2_R)\] The only
-difference between m1 and a SCAA is that the recruitment variance,
-\(\sigma^2_R\), is estimated as a parameter within the model instead of
-being fixed or tuned externally.
+difference between m1 and a SCAA is that annual recruitments are random
+effects and \(\sigma^2_R\) is an estimated parameter within the model.
 
-m2 is the same as m1, except that the recruitment deviations are AR1
-with autocorrelation parameter \(\rho_R\):
+m2 is the same as m1, except that the recruitment deviations are
+stationary AR1 with autocorrelation parameter \(-1<\rho_R<1\):
 
 \[\varepsilon_{1,y+1} \sim \mathcal{N}(\rho_R \varepsilon_{1,y}, \sigma^2_R)\]
 
@@ -333,8 +337,8 @@ but different from age \(a = 1\), i.e.~recruitment. This assumption is
 sensible because survival variations for young-of-the-year (recruitment)
 are typically larger than for other ages.
 
-m4 treats the numbers at all ages as random effects, as in m3, but
-constrains the \emph{NAA} deviations with a 2D AR1 structure:
+m4 treats the numbers at all ages as random effects, as in m3, but the
+\emph{NAA} deviations have a 2D stationary AR1 structure:
 
 \[\mathbf{E} \sim \mathcal{MVN} \left( 0, \Sigma \right)\]
 
@@ -344,22 +348,24 @@ is a vector of all \emph{NAA} deviations, \(\boldsymbol{\Sigma}\) is the
 covariance matrix of \(\mathbf{E}\) defined by:
 
 \[ \text{Cov} \left( \varepsilon_{a,y}, \varepsilon_{\tilde{a},\tilde{y}} \right) = \frac{\sigma_a \sigma_{\tilde{a}} \rho^{|a-\tilde{a}|}_{a} \rho^{|y-\tilde{y}|}_{y}}{\left(1-\rho^2_{a}\right) \left(1-\rho^2_{y}\right)}\]
-and \(\rho_a\) and \(\rho_y\) are the AR1 coefficients in age and year,
-respectively. As in m3, \(\sigma^2_a\) for all ages \(a > 1\) are
-assumed to be the same but different from age \(a = 1\), \(\sigma^2_R\).
+and \(-1<\rho_a<1\) and \(-1<\rho_y<1\) are the AR1 coefficients in age
+and year, respectively. As in m3, \(\sigma^2_a\) for all ages \(a > 1\)
+are assumed to be the same but different from age \(a = 1\),
+\(\sigma^2_R\).
 
 \hypertarget{natural-mortality-m}{%
 \paragraph{\texorpdfstring{Natural mortality
 (\emph{M})}{Natural mortality (M)}}\label{natural-mortality-m}}
 
-WHAM can estimate or fix \(\mu_{M_a}\), the mean natural mortality at
-age \emph{a}, or estimate one \emph{M} for all ages, \(\mu_M\), as fixed
-effect parameters. In addition, \emph{M} can be specified as a function
-of weight-at-age, \(M_{a,y} = \mu_M \text{W}^b_{a,y}\), as in Lorenzen
-(1996) and Miller and Hyun (2018). Regardless of whether \(\mu_{M_a}\)
-are fixed or estimated, WHAM can estimate random effect deviations in
-\emph{M}, \(\delta_{a,y}\), similar to the \emph{NAA} deviations
-(Cadigan, 2016; Stock et al., n.d.):
+For natural mortality, there are mean parameters \(\mu_{M_a}\) that may
+be configured to differ for different sets of ages, each of which may be
+estimated freely or fixed at the initial values. There is also an option
+for \emph{M} to be specified as a function of weight-at-age,
+\(M_{a,y} = \mu_M \text{W}^b_{a,y}\), as in Lorenzen (1996) and Miller
+and Hyun (2018). Regardless of whether \(\mu_{M_a}\) are fixed or
+estimated, WHAM can also be configured to estimate deviations in
+\emph{M}, \(\delta_{a,y}\), as random effect analogous to the \emph{NAA}
+deviations (Cadigan, 2016; Stock et al., n.d.):
 
 \begin{equation}
   \begin{array}{cc}
@@ -405,31 +411,6 @@ for \emph{M} deviations.
 
 \hypertarget{index-agg-age-comp}{%
 \paragraph{Index (agg, age comp)}\label{index-agg-age-comp}}
-
-\hypertarget{how-is-wham-different-from-sam}{%
-\subsubsection{How is WHAM different from
-SAM?}\label{how-is-wham-different-from-sam}}
-
-\emph{Not sure where to put this\ldots{} some could be in Intro or
-Discussion. Definitely will be a question in readers' minds so may be
-good to introduce early?}
-
-Most assessments in the U.S. assume separability in \(F_{a,t}\),
-estimate \(F_t\) and \(Sel_a\). WHAM does this. SAM estimates
-\(F_{a,t}\) directly. WHAM and SAM also make different separability
-assumptions for the catch/index data (aggregate total + age comps vs.
-\(C_{a,t}\) directly). Should be similar (?) but could test.
-
-Goal is to replicate ASAP assessments in the U.S. Northeast. Can easily
-turn on/off random effects.
-
-Observation model is natural for landings data that are measured as
-total weight plus age composition sampling. Age composition sampling
-often done separately with survey data.
-
-Treating \(F\) and \(Sel\) separately can be useful for projections.
-Oftentimes we want to specify \(F\) in projections to calculate a
-reference point, as opposed to continuing a \(F\) time-series process.
 
 \hypertarget{bias-correction}{%
 \subsubsection{Bias correction}\label{bias-correction}}
@@ -495,6 +476,13 @@ Fig. \ref{fig:devs-SNEMAYT-ecov}.
 
 Not all models converged. Fig. \ref{fig:aic-cross}.
 
+Bias is usually so tiny and not significant based on confidence
+intervals when the estimation and operating model are consistent. Bias
+is also often small when more complex models are fitted to less
+complicated operating model simulations. Bias of variance parameters is
+as expected (negative). REML should be used if more accurate estimation
+of these is a priority.
+
 \hypertarget{numbers-at-age-1}{%
 \subsubsection{Numbers-at-age}\label{numbers-at-age-1}}
 
@@ -534,7 +522,11 @@ Contrast mechanistic vs.~empirical approaches. Empirical approaches
 allows time-varying productivity and with AR1 can propagate effect of
 changing productivity in short-term projections (Stock et al., n.d.).
 However, the empirical approach cannot predict values beyond extremes in
-observed time-series. This is an issue because many ecosystems are
+observed time-series (\emph{TJM: This is always true? I suspect certain
+types of time series models might predict outside of time series. E.g.,
+if there is an increase with the last observation being the greatest,
+some higher order AR models might predict the next few observations
+higher than the last}). This is an issue because many ecosystems are
 changing to such extent that conditions in the near future have never
 been observed. E.g. last time it was close to this warm on the U.S.
 Northeast Shelf was the 1940s, and few fisheries or oceanographic
@@ -575,6 +567,51 @@ with:
 
 Reducing uncertainty may be just as valuable as improving accuracy /
 reducing bias.
+
+\hypertarget{differences-from-other-assessment-model-frameworks}{%
+\subsection{Differences from other assessment model
+frameworks}\label{differences-from-other-assessment-model-frameworks}}
+
+How is WHAM different from SAM?
+
+\emph{Not sure where to put this\ldots{} some could be in Intro or
+Discussion. Definitely will be a question in readers' minds so may be
+good to introduce early?}
+
+WHAM estimates annual full F as fixed effects and selectivity of surveys
+or fisheries as constant or time-varying random effects with various
+autoregressive assumptions possible. SAM estimates FAA as a multivariate
+log-normal random walk. WHAM can estimate interannual transitions as
+random walk processes like SAM or as a function of autoregressive
+deviations. Alternatively (or simultaneously) WHAM can estimate
+deviations in natural mortality as autoregressive processes like NCAM
+(Cadican 2015). Uniquely, WHAM can model multiple covariate time series
+as state-space processes and include their effects (nonlinearly) in
+various ways on recruitment or natural mortality.
+
+Like SS, ASAP, BAM, WHAM treats aggregate and composition observations
+separately for fisheries and indices. This differs from SAM where
+observations of numbers at age are treated as multivariate log-normal.
+
+Most assessments in the U.S. assume separability in \(F_{a,t}\),
+estimate \(F_t\) and \(Sel_a\). WHAM does this. SAM estimates
+\(F_{a,t}\) directly. WHAM and SAM also make different separability
+assumptions for the catch/index data (aggregate total + age comps vs.
+\(C_{a,t}\) directly). Should be similar (?) but could test.
+
+To move from traditional SCAA models to state-space models with random
+effects in the Northeast US, WHAM can be configured to fit models very
+similar to ASAP and therefore bridge between these frameworks. Goal is
+to replicate ASAP assessments in the U.S. Northeast. Can easily turn
+on/off random effects.
+
+Observation model is natural for landings data that are measured as
+total weight plus age composition sampling. Age composition sampling
+often done separately with survey data.
+
+Treating \(F\) and \(Sel\) separately can be useful for projections.
+Oftentimes we want to specify \(F\) in projections to calculate a
+reference point, as opposed to continuing a \(F\) time-series process.
 
 \hypertarget{future-work}{%
 \subsection{Future work}\label{future-work}}
@@ -1004,7 +1041,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
+{\centering \includegraphics[width=8in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/daic} 
 
 }
 
@@ -1016,7 +1053,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
 
 }
 
@@ -1027,7 +1064,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M} 
 
 }
 
@@ -1038,7 +1075,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
 
 }
 
@@ -1049,7 +1086,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
 
 }
 
@@ -1060,7 +1097,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+{\centering \includegraphics[width=3.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel} 
 
 }
 
@@ -1071,7 +1108,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE} 
 
 }
 
@@ -1082,7 +1119,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
 
 }
 
@@ -1093,7 +1130,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE} 
 
 }
 
@@ -1104,7 +1141,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
 
 }
 
@@ -1115,7 +1152,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE} 
 
 }
 
@@ -1126,7 +1163,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
 
 }
 
@@ -1138,7 +1175,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
+{\centering \includegraphics[width=9in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE} 
 
 }
 
