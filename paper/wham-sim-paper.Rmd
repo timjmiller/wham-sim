@@ -218,6 +218,9 @@ Fig. \ref{fig:estpar-ecov}.
 
 ## Overview
 
+Our results suggest that the WHAM package can be a useful tool for stock assessment when environmental effects on recruitment or natural mortality, variation in selectivity or natural mortality, or stochastic changes in the numbers at age are of interest. The simulation tests showed negligible or no bias in estimation of important assessment outputs (SSB, F, stock and harvest status).
+
+
 We described WHAM. Sim tests showed no bias in self-tests (when estimation model matched operating model). Some bias in cross-tests.
 
 
