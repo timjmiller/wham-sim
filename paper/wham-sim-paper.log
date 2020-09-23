@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.9.9)  21 SEP 2020 20:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.9.9)  23 SEP 2020 15:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1146,12 +1146,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 98--102
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] [5] [6] [7]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 421.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 429.
 
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [8] [9] [10] [11] [12] [13] [14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (4.69003pt too wide) in paragraph at lines 1024--1037
+Overfull \hbox (4.69003pt too wide) in paragraph at lines 1039--1052
  [][] 
  []
 
@@ -1162,7 +1162,7 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/daic.png Graphic file
 (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/daic.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/dai
-c.png  used on input line 1044.
+c.png  used on input line 1059.
 (pdftex.def)             Requested size: 578.18504pt x 216.81938pt.
 [22
 
@@ -1176,7 +1176,7 @@ A.png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA
 .png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_R
-Edevs_ICEherring_NAA.png  used on input line 1056.
+Edevs_ICEherring_NAA.png  used on input line 1071.
 (pdftex.def)             Requested size: 469.76265pt x 469.76265pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M.png, 
 id=443, 433.62pt x 361.35pt>
@@ -1185,7 +1185,7 @@ png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M.p
 ng>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_R
-Edevs_butterfish_M.png  used on input line 1067.
+Edevs_butterfish_M.png  used on input line 1082.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel.png,
  id=444, 505.89pt x 361.35pt>
@@ -1194,7 +1194,7 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel.
 png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_R
-Edevs_GBhaddock_sel.png  used on input line 1078.
+Edevs_GBhaddock_sel.png  used on input line 1093.
 (pdftex.def)             Requested size: 469.76265pt x 335.54477pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2
 .png, id=445, 578.16pt x 542.025pt>
@@ -1203,7 +1203,7 @@ Ecov2.png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_E
 cov2.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/8_C
-PI_Recruit_SNEMAYT_Ecov2.png  used on input line 1089.
+PI_Recruit_SNEMAYT_Ecov2.png  used on input line 1104.
 (pdftex.def)             Requested size: 469.75385pt x 440.39423pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel.png, i
 d=446, 289.08pt x 722.7pt>
@@ -1212,10 +1212,10 @@ ng Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel.pn
 g>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/aic
-_cross_multipanel.png  used on input line 1100.
+_cross_multipanel.png  used on input line 1115.
 (pdftex.def)             Requested size: 252.94437pt x 632.36095pt.
 
-LaTeX Warning: Float too large for page by 29.93094pt on input line 1105.
+LaTeX Warning: Float too large for page by 29.93094pt on input line 1120.
 
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE.png, id=447
 , 505.89pt x 542.025pt>
@@ -1223,7 +1223,7 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE.png Gr
 aphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/est
-par_NAA_OEPE.png  used on input line 1111.
+par_NAA_OEPE.png  used on input line 1126.
 (pdftex.def)             Requested size: 469.76265pt x 503.31714pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_medianCI_O
 EPE.png, id=448, 469.755pt x 578.16pt>
@@ -1232,7 +1232,7 @@ nCI_OEPE.png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_median
 CI_OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_I
-CEherring_NAA_medianCI_OEPE.png  used on input line 1122.
+CEherring_NAA_medianCI_OEPE.png  used on input line 1137.
 (pdftex.def)             Requested size: 469.75386pt x 578.15858pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE.png, id=
 449, 433.62pt x 361.35pt>
@@ -1241,7 +1241,7 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE.png
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE.png>
 
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/est
-par_M_4par_OEPE.png  used on input line 1133.
+par_M_4par_OEPE.png  used on input line 1148.
 (pdftex.def)             Requested size: 433.61894pt x 361.34912pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI_OEP
 E.png, id=450, 361.35pt x 578.16pt>
@@ -1250,7 +1250,7 @@ I_OEPE.png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI
 _OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_b
-utterfish_M_medianCI_OEPE.png  used on input line 1144.
+utterfish_M_medianCI_OEPE.png  used on input line 1159.
 (pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE.png, id=451
 , 505.89pt x 216.81pt>
@@ -1258,7 +1258,7 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE.png Gr
 aphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/est
-par_sel_OEPE.png  used on input line 1155.
+par_sel_OEPE.png  used on input line 1170.
 (pdftex.def)             Requested size: 469.76265pt x 201.32684pt.
 </home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianCI_OE
 PE.png, id=452, 361.35pt x 578.16pt>
@@ -1267,7 +1267,7 @@ CI_OEPE.png Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianC
 I_OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/0_G
-Bhaddock_sel_medianCI_OEPE.png  used on input line 1166.
+Bhaddock_sel_medianCI_OEPE.png  used on input line 1181.
 (pdftex.def)             Requested size: 361.35463pt x 578.1674pt.
 [23 </home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA
 .png (PNG copy)>] [24 </home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REd
@@ -1289,31 +1289,31 @@ File: /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE.png
 Graphic file (type png)
 <use /home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE.png>
 Package pdftex.def Info: /home/tmiller2/work/wham/wham_sim/plots/into_paper/est
-par_Ecov2_OEPE.png  used on input line 1178.
+par_Ecov2_OEPE.png  used on input line 1193.
 (pdftex.def)             Requested size: 650.43501pt x 195.1305pt.
 [34
 
 
  </home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE.png (PNG
  copy)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1186.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1186.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1201.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1201.
 (./wham-sim-paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1186.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1186.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1201.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1201.
 
 Package rerunfilecheck Info: File `wham-sim-paper.out' has not changed.
 (rerunfilecheck)             Checksum: 88B77B78EEEA69C227A3A481081F3C47;4562.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1186.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1201.
  ) 
 Here is how much of TeX's memory you used:
- 15915 strings out of 492982
- 236283 string characters out of 6134897
- 363097 words of memory out of 5000000
+ 15917 strings out of 492982
+ 236295 string characters out of 6134897
+ 363088 words of memory out of 5000000
  18893 multiletter control sequences out of 15000+600000
- 87365 words of font info for 137 fonts, out of 8000000 for 9000
+ 87448 words of font info for 138 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 36i,12n,39p,1239b,403s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 36i,12n,39p,1239b,399s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
 vips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/shar
 e/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
@@ -1330,7 +1330,7 @@ b></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/ty
 pe1/public/lm/lmss8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></us
 r/share/texmf/fonts/type1/public/lm/lmsy5.pfb></usr/share/texmf/fonts/type1/pub
 lic/lm/lmsy7.pfb>
-Output written on wham-sim-paper.pdf (34 pages, 2352868 bytes).
+Output written on wham-sim-paper.pdf (34 pages, 2355690 bytes).
 PDF statistics:
  613 PDF objects out of 1000 (max. 8388607)
  539 compressed objects within 6 object streams

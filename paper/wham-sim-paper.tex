@@ -113,8 +113,8 @@ WHAM is great.
 \addcontentsline{toc}{subsubsection}{Keywords}
 
 state-space; stock assessment; random effects; time-varying;
-environmental effects; recruitment; survival; natural mortality;
-Template Model Builder (TMB)
+environmental effects; recruitment; natural mortality; Template Model
+Builder (TMB)
 
 \pagebreak
 
@@ -140,46 +140,52 @@ population processes to environmental covariates in single-species stock
 assessments, i.e.~the mechanistic approach \emph{sensu} Punt et al.
 (2014). Traditional single-species assessments are based on internal
 population dynamics and the effect of fishing mortality (\(F\)), and
-typically ignore effects of the environment or interactions with other
-species, even though fisheries scientists have long known that these are
-important drivers of time-varying population processes,
-e.g.~recruitment, mortality, growth, and movement (Garstang, 1900;
-Hjort, 1914). Despite how counterintuitive this may seem to ecologists
-and oceanographers who study such relationships, the evidence for direct
-linkages to specific environmental covariates is often weak and can
-break down over time (McClatchie et al., 2010; Myers, 1998).
-Additionally, the primary goal of most assessments is to provide
-management advice on near-term sustainable harvest levels---not to
-explain ecological relationships. Even if an environmental covariate
-directly affects fish productivity, including the effect in an
-assessment may not improve management advice if the effect is weak (De
-Oliveira and Butterworth, 2005). Worse, including environmental effects
-in an assessment or management system has been shown to actually provide
-worse management in some cases (De Oliveira and Butterworth, 2005; Punt
-et al., 2014; Walters and Collie, 1988). This can be true even in cases
-of relatively well-understood mechanistic links between oceanic
-conditions and fish populations, as in the case of sea surface
-temperature and Pacific sardine (Hill et al., 2018; Zwolinski and Demer,
-2012). Still, incorporating mechanistic environment-productivity links
-does have the potential to reduce uncertainty in reference points and
-improve projections of stock status (Miller et al., 2016).
+effects of the environment or interactions with other species are
+considered contextually rather than explicitly, even though fisheries
+scientists have long known that these are important drivers of
+time-varying population processes, e.g.~recruitment, mortality, growth,
+and movement (Garstang, 1900; Hjort, 1914). (\emph{TJM: However,
+temporal variation in weight at age, maturity at age can affect
+reference points in an empirical fasion in the NEUS}) Despite how
+counterintuitive this may seem to ecologists and oceanographers who
+study such relationships, the evidence for direct linkages to specific
+environmental covariates is often weak and can break down over time
+(McClatchie et al., 2010; Myers, 1998). Additionally, the primary goal
+of most assessments is to provide management advice on near-term
+sustainable harvest levels---not to explain ecological relationships.
+Even if an environmental covariate directly affects fish productivity,
+including the effect in an assessment may not improve management advice
+if the effect is weak (De Oliveira and Butterworth, 2005). Worse,
+including environmental effects in an assessment or management system
+has been shown to actually provide worse management in some cases (De
+Oliveira and Butterworth, 2005; Punt et al., 2014; Walters and Collie,
+1988). This can be true even in cases of relatively well-understood
+mechanistic links between oceanic conditions and fish populations, as in
+the case of sea surface temperature and Pacific sardine (Hill et al.,
+2018; Zwolinski and Demer, 2012). Still, incorporating mechanistic
+environment-productivity links does have the potential to reduce
+uncertainty in reference points and improve projections of stock status
+(Miller et al., 2016) (\emph{TJM: I think we showed large uncertainty
+when using projected temperature, right?}).
 
 An alternative approach is to allow biological parameters to vary
-stochastically over time, without explanation, i.e.~the empirical
-approach \emph{sensu} Punt et al. (2014). Statistical catch-at-age
-(SCAA) models typically only estimate year-specific recruitment
-(\(R_t\)) and \(F_t\), often as deviations from a mean, e.g.
-\(\text{log}R_t = \text{log}R_0 + \epsilon_t\). The main reason that
-other parameters are assumed constant is simply that there are not
-enough degrees of freedom to estimate many time-varying parameters. One
-common solution is to penalize the deviations, e.g.
-\(\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)\), although the
-penalty terms, \(\sigma^2_\epsilon\), must be fixed or iteratively tuned
-and are therefore somewhat subjective (Aeberhard et al., 2018; Methot
-and Taylor, 2011; Methot and Wetzel, 2013; Xu et al., 2019). State-space
-models that treat parameters as unobserved states can avoid such
-subjectivity by estimating the penalty terms as variance parameters
-constraining random effects. In this way, state-space models can allow
+stochastically over time, i.e.~the empirical approach \emph{sensu} Punt
+et al. (2014). In this case, the variation is caused by a range of
+sources that are not explicitly modeled. Statistical catch-at-age (SCAA)
+models typically only estimate year-specific recruitment (\(R_t\)) and
+\(F_t\), often as deviations from a mean that may be a function of
+spawning biomass, e.g. \(\text{log}R_t = \text{log}R_0 + \epsilon_t\).
+The main reason that other parameters are assumed constant is simply
+that there are not enough degrees of freedom to estimate many
+time-varying parameters. One common solution is to penalize the
+deviations, e.g. \(\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)\),
+although the penalty terms, \(\sigma^2_\epsilon\), must be fixed or
+iteratively tuned and are therefore somewhat subjective (Aeberhard et
+al., 2018; Methot and Taylor, 2011; Methot and Wetzel, 2013; Xu et al.,
+2019). State-space models that treat parameters as unobserved states
+can, in principle, avoid such subjectivity by estimating the penalty
+terms as variance parameters constraining random effects and maximizing
+the marginal likelihood. In this way, state-space models can allow
 processes to vary in time while simultaneously estimating fewer
 parameters.
 
@@ -192,8 +198,9 @@ In addition to the key advantage of objectively estimating variance, or
 ``data weighting'', parameters, state-space models naturally predict
 unobserved states, and therefore handle missing data and short-term
 projections in a straightforward way (ICES, 2020). In comparisons with
-SCAA models, they generally have larger (more realistic) uncertainty and
-lower retrospective bias (\textbf{Miller et al.~in prep}).
+SCAA models, state-space models have been shown to have larger, more
+realistic, uncertainty (Miller and Hyun, 2018)(\textbf{TJM: Don't cite:
+Miller et al.~in prep}).
 
 Retrospective bias can occur when changing environmental conditions lead
 to changes in productivity that are unaccounted for in stock
@@ -229,8 +236,8 @@ framework and demonstrate its ability to:
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  estimate time- and age-varying random effects on survival, \(M\), and
-  selectivity;
+  estimate time- and age-varying random effects on annual changes in
+  abundance at age, \(M\), and selectivity;
 \item
   fit environmental time-series with process and observation error,
   missing data, and a link to a population process; and
@@ -264,26 +271,26 @@ with state-space and environmental effects in a single framework.
 effects}\label{processes-with-random-effects}}
 
 WHAM primarily (\textbf{??}) diverges from ASAP through the
-implementation of random effects on three processes: survival (numbers
-at age transitions, \emph{NAA}), natural mortality (\emph{M}),
-selectivity (\emph{Sel}), and allowing effects of environmental
-covariates (\emph{Ecov}) on recruitment and natural mortality (but see
-ASAP4). The environmental covariates and their observations are also
-treated using state-space models with true values treated as random
-effects and observation on them having error. The random effects for
-these processes are generally assumed to be first-order autoregressive
-(AR1). Other than environmental covariates, the processes are assumed to
-have a two dimensional (2D) AR1 covariance structure over age and year.
-The 2D AR1 structure has been widely used to model deviations by age and
-year in the parameters \(F_{a,y}\) (Nielsen and Berg, 2014), \(M_{a,y}\)
-(Cadigan, 2016; Stock et al., n.d.), \(Sel_{a,y}\) (Xu, Thorson, et al.,
-2018), and \(N_{a,y}\) (Stock et al., n.d.), as well as in the catch
-(\(C_{a,y}\)) and survey index (\(I_{a,y}\)) observations (Berg and
-Nielsen, 2016).
+implementation of random effects on three processes: inter-annual
+transitions in abundance at age, \emph{NAA}), natural mortality
+(\emph{M}), selectivity (\emph{Sel}), and allowing effects of
+environmental covariates (\emph{Ecov}) on recruitment and natural
+mortality (but see ASAP4). The environmental covariates and their
+observations are also treated using state-space models with true values
+treated as random effects and observation on them having error. The
+random effects for these processes are generally assumed to be
+first-order autoregressive (AR1). Other than environmental covariates,
+the processes are assumed to have a two dimensional (2D) AR1 covariance
+structure over age and year. The 2D AR1 structure has been widely used
+to model deviations by age and year in the parameters \(F_{a,y}\)
+(Nielsen and Berg, 2014), \(M_{a,y}\) (Cadigan, 2016; Stock et al.,
+n.d.), \(Sel_{a,y}\) (Xu, Thorson, et al., 2018), and \(N_{a,y}\) (Stock
+et al., n.d.), as well as in the catch (\(C_{a,y}\)) and survey index
+(\(I_{a,y}\)) observations (Berg and Nielsen, 2016).
 
-\hypertarget{numbers-at-age-naa-survival}{%
-\paragraph{\texorpdfstring{Numbers at age (\emph{NAA}) /
-survival}{Numbers at age (NAA) / survival}}\label{numbers-at-age-naa-survival}}
+\hypertarget{abundance-at-age-naa}{%
+\paragraph{\texorpdfstring{Abundance at age
+(\emph{NAA})}{Abundance at age (NAA)}}\label{abundance-at-age-naa}}
 
 The stock equations in WHAM that describe the transitions between
 numbers at age are identical to Miller et al. (2016) and Nielsen and
@@ -334,8 +341,9 @@ effects and:
 
 where \(\sigma^2_a\) for all ages \(a > 1\) are assumed to be the same
 but different from age \(a = 1\), i.e.~recruitment. This assumption is
-sensible because survival variations for young-of-the-year (recruitment)
-are typically larger than for other ages.
+sensible because variability of deviations between expected and realized
+recruitment are typically larger than deviations from expected abundance
+at older ages.
 
 m4 treats the numbers at all ages as random effects, as in m3, but the
 \emph{NAA} deviations have a 2D stationary AR1 structure:
@@ -515,6 +523,13 @@ Fig. \ref{fig:estpar-ecov}.
 \hypertarget{overview}{%
 \subsection{Overview}\label{overview}}
 
+Our results suggest that the WHAM package can be a useful tool for stock
+assessment when environmental effects on recruitment or natural
+mortality, variation in selectivity or natural mortality, or stochastic
+changes in the numbers at age are of interest. The simulation tests
+showed negligible or no bias in estimation of important assessment
+outputs (SSB, F, stock and harvest status).
+
 We described WHAM. Sim tests showed no bias in self-tests (when
 estimation model matched operating model). Some bias in cross-tests.
 
@@ -585,7 +600,7 @@ log-normal random walk. WHAM can estimate interannual transitions as
 random walk processes like SAM or as a function of autoregressive
 deviations. Alternatively (or simultaneously) WHAM can estimate
 deviations in natural mortality as autoregressive processes like NCAM
-(Cadican 2015). Uniquely, WHAM can model multiple covariate time series
+(Cadigan, 2016). Uniquely, WHAM can model multiple covariate time series
 as state-space processes and include their effects (nonlinearly) in
 various ways on recruitment or natural mortality.
 
@@ -632,8 +647,8 @@ assessments.
 \item
   How many time/age-varying random effects can be estimated
   simultaneously? Stock et al. (n.d.) estimated random effect deviations
-  in survival and \(M\), as well as an environmental covariate effect on
-  recruitment.
+  in abundance at age and \(M\), as well as an environmental covariate
+  effect on recruitment.
 \item
   Ecov-Recruitment simulation study. How much information does Ecov need
   to have to be useful?
@@ -1057,7 +1072,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
 
 }
 
-\caption{Survival deviations estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:devs-ICEherring-naa}
+\caption{Abundanc-at-age deviations estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:devs-ICEherring-naa}
 \end{figure}
 
 \pagebreak
