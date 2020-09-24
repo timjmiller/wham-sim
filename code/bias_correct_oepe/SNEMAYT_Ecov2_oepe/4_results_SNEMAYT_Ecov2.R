@@ -13,8 +13,8 @@
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
-devtools::load_all("/home/bstock/Documents/wham")
-# library(wham)
+# devtools::load_all("/home/bstock/Documents/wham")
+library(wham)
 library(here)
 library(tidyverse)
 library(ggplotFL)

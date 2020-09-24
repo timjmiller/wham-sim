@@ -33,12 +33,12 @@ minAIC <- min(df.aic$AIC, na.rm=T)
 df.aic$dAIC <- round(df.aic$AIC - minAIC,1)
 df.mods <- cbind(df.mods, df.aic)
 rownames(df.mods) <- NULL
-#  Model dAIC     AIC
-# 1     1 33.1 -1757.8
-# 2     2 12.8 -1778.1
-# 3     3 14.1 -1776.8
-# 4     4  0.0 -1790.9
-# 5     5  1.3 -1789.6
+#   Model dAIC     AIC
+# 1     1 33.0 -1757.8
+# 2     2 12.7 -1778.1
+# 3     3 14.0 -1776.8
+# 4     4  0.0 -1790.8
+# 5     5  1.3 -1789.5
 
 # ----------------------------------------------------
 # Panel 1: CPI
