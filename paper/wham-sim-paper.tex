@@ -185,9 +185,9 @@ al., 2018; Methot and Taylor, 2011; Methot and Wetzel, 2013; Xu et al.,
 2020). State-space models that treat parameters as unobserved states
 can, in principle, avoid such subjectivity by estimating the penalty
 terms as variance parameters constraining random effects and maximizing
-the marginal likelihood. In this way, state-space models can allow
-processes to vary in time while simultaneously estimating fewer
-parameters.
+the marginal likelihood (Thorson, 2019). In this way, state-space models
+can allow processes to vary in time while simultaneously estimating
+fewer parameters.
 
 Although state-space stock assessments have existed for some time
 (Gudmundsson, 1994; Mendelssohn, 1988; Sullivan, 1992), the recent
@@ -246,8 +246,8 @@ framework and demonstrate its ability to:
   derived quantities.
 \end{enumerate}
 
-Finally, we describe how the above are implemented using the open-source
-WHAM software package (Miller and Stock, 2020).
+Throughout, we describe how the above are implemented using the
+open-source WHAM software package (Miller and Stock, 2020).
 
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
@@ -316,14 +316,19 @@ m1 is most similar to a SCAA model, where only recruitment deviations,
 \(a > 1\) in Eqn \ref{eq:NAA}). In m1, the recruitment deviations are
 assumed to be independent and identically distributed (IID):
 
-\[\varepsilon_{1,y} \sim \mathcal{N}(0, \sigma^2_R)\] The only
-difference between m1 and a SCAA is that annual recruitments are random
-effects and \(\sigma^2_R\) is an estimated parameter within the model.
+\[\varepsilon_{1,y} \sim \mathcal{N}\left( - \frac{\sigma^2_R}{2}, \sigma^2_R \right)\]
+The \(- \frac{\sigma^2_R}{2}\) bias correction term is included by
+default so that the expected recruitment, \(E(N_{1,y} = R_y)\) equals
+the expected \(R_y\) from the stock-recruit function (Methot and Taylor,
+2011; Thorson, 2019). This bias correction adjustment can also be turned
+off. The only difference between m1 and a SCAA is that annual
+recruitments are random effects and \(\sigma^2_R\) is an estimated
+parameter within the model.
 
 m2 is the same as m1, except that the recruitment deviations are
-stationary AR1 with autocorrelation parameter \(-1<\rho_R<1\):
+stationary AR1 with autocorrelation parameter \(-1<\rho_y<1\):
 
-\[\varepsilon_{1,y+1} \sim \mathcal{N}(\rho_R \varepsilon_{1,y}, \sigma^2_R)\]
+\[\varepsilon_{1,y+1} \sim \mathcal{N}\left(\rho_y \varepsilon_{1,y} - \frac{\sigma^2_R}{2 (1-\rho^2_y)}, \sigma^2_R \right)\]
 
 m3 is the ``full state-space'' model from Nielsen and Berg (2014) and
 Miller et al. (2016), where all numbers at age are independent random
@@ -332,8 +337,8 @@ effects and:
 \begin{equation}
   \varepsilon_{a,y} \sim \left\{
     \begin{array}{@{}ll@{}}
-      \mathcal{N} \left( 0, \sigma^2_R \right), & \text{if}\ a = 1 \\
-      \mathcal{N} \left( 0, \sigma^2_a \right), & \text{if}\ a > 1
+      \mathcal{N} \left( - \frac{\sigma^2_R}{2}, \sigma^2_R \right), & \text{if}\ a = 1 \\
+      \mathcal{N} \left( - \frac{\sigma^2_a}{2}, \sigma^2_a \right), & \text{if}\ a > 1
     \end{array}\right.
 \end{equation}
 
@@ -358,7 +363,8 @@ covariance matrix of \(\mathbf{E}\) defined by:
 and \(-1<\rho_a<1\) and \(-1<\rho_y<1\) are the AR1 coefficients in age
 and year, respectively. As in m3, \(\sigma^2_a\) for all ages \(a > 1\)
 are assumed to be the same but different from age \(a = 1\),
-\(\sigma^2_R\).
+\(\sigma^2_R\). The bias correction term for age \(a > 1\) in m4 is
+\(- \frac{\sigma^2_a}{2 (1-\rho^2_y)(1-\rho^2_a)}\).
 
 \hypertarget{natural-mortality-m}{%
 \paragraph{\texorpdfstring{Natural mortality
@@ -449,7 +455,7 @@ structure for \emph{s} deviations.
 \paragraph{\texorpdfstring{Environmental covariates
 (\emph{Ecov})}{Environmental covariates (Ecov)}}\label{environmental-covariates-ecov}}
 
-Environmental covariate data are modeled using state-space models with
+WHAM models environmental covariate data using state-space models with
 process and observation components. The true, unobserved values (or
 ``latent states'', \(X_y\)) are then linked to the population dynamics
 equations with user-specified lag. For example, recruitment in year
@@ -463,9 +469,9 @@ need to match, and missing years are allowed. In particular, including
 \hypertarget{process-model}{%
 \subparagraph{Process model}\label{process-model}}
 
-There are currently two options for the \emph{Ecov} process model: a
-normal random walk and AR1. We model the random walk as in Miller et al.
-(2016):
+There are currently two options in WHAM for the \emph{Ecov} process
+model: a normal random walk and AR1. We model the random walk as in
+Miller et al. (2016):
 
 \[X_{y+1} | X_y \sim \mathcal{N}\left( X_y, \sigma^2_X\right)\]
 
@@ -534,9 +540,31 @@ function. For natural mortality, environmental effects are placed on
 \(\mu_M\), shared across ages.
 
 Regardless of where the environment-population link is, the effect can
-be either linear or polynomial. WHAM includes a function to calculate
+be either linear or polynomial. Nonlinear effects of environmental
+covariates are common in ecology, and quadratic effects are to be
+expected in cases where intermediate values are optimal (Agostini et
+al., 2008; Brett, 1971). WHAM includes a function to calculate
 orthogonal polynomials in TMB, akin to the \texttt{poly()} function in
 \texttt{R}.
+
+In this analysis, we compare five models with limiting effects on
+Beverton-Holt recruitment:
+
+\[\hat{R}_{y+1} = \frac{\alpha \text{SSB}_{y}}{1 + e^{\beta_0 + \beta_1 X_{y} + \beta_2 X^2_{y}} \text{SSB}_y}\]
+
+where \(\text{SSB}_y\) is spawning stock biomass in year \emph{y},
+\(\alpha\) and \(\beta_0\) are the standard parameters of the
+Beverton-Holt function, and \(\beta_1\) and \(\beta_2\) are polynomial
+effect terms that modify \(\beta_0\) based on the value of the estimated
+environmental covariate, \(X_y\).
+
+m1 treats \(X_y\) as a random walk (\(\phi_X = 1\)) but does not include
+an effect on recruitment (\(\beta_1 = \beta_2 = 0\)). We include m1 in
+order to compare AIC of the original model to those with effects on
+recruitment. m2 and m3 also treat \(X_y\) as a random walk, but m2
+estimates \(\beta_1\) and m3 estimates both \(\beta_1\) and \(\beta_2\).
+m4 and m5 estimate \(X_y\) as an AR1 process, and m4 estimates
+\(\beta_1\) and m5 estimates both \(\beta_1\) and \(\beta_2\).
 
 \hypertarget{population-observation-model}{%
 \subsubsection{Population observation
@@ -585,81 +613,88 @@ catchability, \(q_i\).
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
 
-default settings are to project 3 years (n.yrs = 3), use average
-maturity-, weight-, and natural mortality-at-age from last 5 model years
-to calculate reference points (avg.yrs), use fishing mortality in the
-last model year (use.last.F = TRUE), and continue the ecov process model
-(cont.ecov = TRUE
+The default settings for short-term projections follow common practice
+for stock assessments in the U.S. Northeast: the population is projected
+three years using the average selectivity, maturity, weight, and natural
+mortality at age from the last five model years to calculate reference
+points. WHAM implements the same options as ASAP4 for specifying \(F_y\)
+in the projection years: apply terminal year \(F_y\), apply \(F\)
+averaged over specified years, apply \(F_{X\%}\) (\(F\) at X\% SPR,
+where X is specified), user-specified \(F_y\), or user-specified catch.
+For models with random effects on \emph{NAA}, \emph{M}, or \emph{Ecov},
+the default is to continue the stochastic process into the projection
+years. WHAM does not do this for selectivity because it is a function of
+management; instead, selectivity is taken as the average of recent model
+years.
 
-WHAM implements four options for handling the environmental covariate(s)
-in the projections. Exactly one of these must be specified in proj.opts
-if ecov is in the model:
-
-\begin{verbatim}
-(Default) Continue the ecov process model (e.g. random walk, AR1). Set cont.ecov = TRUE. WHAM will estimate the ecov process in the projection years (i.e. continue the random walk / AR1 process).
-
-Use last year ecov. Set use.last.ecov = TRUE. WHAM will use ecov value from the terminal year of the population model for projections.
-
-Use average ecov. Provide avg.yrs.ecov, a vector specifying which years to average over the environmental covariate(s) for projections.
-
-Specify ecov. Provide proj.ecov, a matrix of user-specified environmental covariate(s) to use for projections. Dimensions must be the number of projection years (proj.opts$n.yrs) x the number of ecovs (ncols(ecov$mean)).
-\end{verbatim}
-
-Note that for all options, if the original model fit the ecov in years
-beyond the population model, WHAM will use these already-fit ecov values
-for the projections
-
-WHAM implements five options for handling fishing mortality in the
-projections. Exactly one of these must be specified in proj.opts:
-
-\begin{verbatim}
-(Default) Use last year F. Set use.last.F = TRUE. WHAM will use F in the terminal model year for projections.
-
-Use average F. Set use.avg.F = TRUE. WHAM will use F averaged over proj.opts$avg.yrs for projections (as is done for M-, maturity-, and weight-at-age).
-
-Use F at X% SPR. Set use.FXSPR = TRUE. WHAM will calculate and apply F at X% SPR, where X was set by input$data$percentSPR (default = 40%).
-
-Specify F. Provide proj.F, an F vector with length = proj.opts$n.yrs.
-
-Specify catch. Provide proj.catch, a vector of aggregate catch with length = proj.opts$n.yrs. WHAM will calculate F across fleets to apply the specified catch.
-\end{verbatim}
-
-\hypertarget{bias-correction}{%
-\subsubsection{Bias correction}\label{bias-correction}}
-
-\begin{itemize}
-\tightlist
-\item
-  Analytical obs error. (Aldrin et al., 2020).
-\item
-  Analytical process error.
-\item
-  TMB epsilon. (Thorson, 2019; Thorson and Kristensen, 2016)
-\end{itemize}
-
-Should these all be used?
+If the \emph{Ecov} data extend beyond the population model years, WHAM
+will fit the \emph{Ecov} model to all available data and use the
+estimated \(X_y\) in projections. This may often be the case because
+lags can exist in both the physical-biological mechanism and the
+assessment process. As an example, a model with an \emph{Ecov} effect on
+recruitment may link physical conditions in year \(t\) to recruitment in
+year \(t+1\), and the assessment may be conducted in year \(t\) using
+population data through year \(t-1\). In this case, 3-year population
+projections only need the \emph{Ecov} model to be projected one year.
+While the default handling of \emph{Ecov} projections is to continue the
+stochastic process, WHAM includes options to use terminal year \(x_y\),
+\(x_y\) averaged over specified years, or specified \(x_y\). The option
+to specify \(x_y\) allows users to investigate how alternative climate
+projections may affect the stock.
 
 \hypertarget{fits-to-original-datasets}{%
 \subsection{Fits to original datasets}\label{fits-to-original-datasets}}
 
-We used the stocks in Table \ref{tab:stock-list}. For each of the
-\emph{NAA} and \emph{M} models, we used the same selectivity
-parameterization and blocks as in the original assessments. For Georges
-Bank haddock, \ldots{}
+We fit the models described above to data from five stocks with a broad
+range of life history and status: Southern New England-Mid Atlantic
+(SNEMA) yellowtail flounder, butterfish, North Sea cod, Icelandic
+herring, and Georges Bank haddock (Tables \ref{tab:model-descriptions}
+and \ref{tab:stock-list}). We fit the \emph{NAA} random effects models
+to all five stocks since these represent core WHAM functionality. We
+chose to highlight one stock each for the \emph{M}, \emph{s}, and
+\emph{Ecov} processes because all models did not converge for all stocks
+and processes: butterfish (\emph{M}), Georges Bank haddock (\emph{s}),
+and SNEMA yellowtail flounder (\emph{Ecov}). None of the original
+assessments estimated \emph{M}. Except for the haddock \emph{s}
+demonstration, we used the same selectivity parameterization and time
+blocks as in the original assessments. We used the m3 \emph{NAA} model
+(all NAA deviations are IID random effects) in the \emph{s} and
+\emph{Ecov} demonstrations, but the m1 \emph{NAA} model (only
+recruitment deviations are IID random effects) for the \emph{M}
+demonstrations, because the NAA transitions can be interpreted as
+survival and including random effect deviations on both NAA and \emph{M}
+can lead to model non-convergence (Stock et al., n.d.). Within each
+process, we compared the performance of the different random effects
+models using AIC.
+
+We fit all models using the open-source statistical software R (R Core
+Team, 2020) and TMB (Kristensen et al., 2016), as implemented in the R
+package WHAM (Miller and Stock, 2020). Documentation and tutorials for
+how to specify additional random effect structures in WHAM are available
+at \url{https://timjmiller.github.io/wham/}.
 
 \hypertarget{simulation-tests}{%
 \subsection{Simulation tests}\label{simulation-tests}}
 
-Fit each model to original dataset. Use each model to simulate new data
-and random effects, keeping fixed effect parameters constant at values
-estimated in original fits. Re-fit each model to datasets simulated
-under each operating model.
-
-We used R (R Core Team, 2020). WHAM is available as an R package (Miller
-and Stock, 2020). Table \ref{tab:model-descriptions} summarizes the
-models fit for each process. Tutorials for how to specify additional
-random effect structures in WHAM are available at
-\url{https://timjmiller.github.io/wham/}.
+After fitting each model to the original datasets, we used the
+simulation feature of TMB to conduct self- and cross-tests (\emph{sensu}
+Deroba et al., 2015). For each model, we generated 100 sets of new data
+and random effects, keeping the fixed effect parameters constant at
+values estimated in original fits. We then re-fit all models to datasets
+simulated under each as an operating model. We calculated the relative
+error in parameters constraining random effects (Table
+\ref{tab:model-descriptions}) and quantities of interest, such as
+spawning stock biomass (SSB), \(F\),
+\(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\).
+We calculated relative error as \(\frac{\hat{\theta_i}}{\theta}-1\),
+where \(\theta\) is the true value used to simulate data and
+\(\theta_i\) is the value estimated in simulation \emph{i}. To estimate
+bias of each estimation model for a given operating model, we calculated
+95\% confidence intervals of the median relative error using the
+binomial distribution (Thompson, 1936). Finally, for each operating
+model we calculated the proportion of simulations in which each
+estimation model converged and had the lowest AIC, aggregated across
+stocks.
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -936,6 +971,12 @@ Aeberhard, W.H., Mills Flemming, J., Nielsen, A., 2018. Review of
 State-Space Models for Fisheries Science. Annu. Rev. Stat. Appl. 5,
 215--235. \url{https://doi.org/10.1146/annurev-statistics-031017-100427}
 
+\leavevmode\hypertarget{ref-agostini2008Climateocean}{}%
+Agostini, V., Hendrix, A., Hollowed, A., Wilson, C., Pierce, S.,
+Francis, R., 2008. Climate-ocean variability and Pacific hake: A
+geostatistical modeling approach. Journal of Marine Systems 71,
+237--248. \url{https://doi.org/10.1016/j.jmarsys.2007.01.010}
+
 \leavevmode\hypertarget{ref-aldrin2020Specification}{}%
 Aldrin, M., Tvete, I., Aanes, S., Subbey, S., 2020. The specification of
 the data model part in the SAM model matters. Fisheries Research 229,
@@ -945,6 +986,12 @@ the data model part in the SAM model matters. Fisheries Research 229,
 Berg, C.W., Nielsen, A., 2016. Accounting for correlated observations in
 an age-based state-space stock assessment model. ICES J Mar Sci 73,
 1788--1797. \url{https://doi.org/10.1093/icesjms/fsw046}
+
+\leavevmode\hypertarget{ref-brett1971Energetic}{}%
+Brett, J.R., 1971. Energetic responses of salmon to temperature. A study
+of some thermal relations in the physiology and freshwater ecology of
+sockeye salmon (\emph{Oncorhynchus} \emph{Nerka}). Am Zool 11, 99--113.
+\url{https://doi.org/10.1093/icb/11.1.99}
 
 \leavevmode\hypertarget{ref-brooks2016Retrospective}{}%
 Brooks, E.N., Legault, C.M., 2016. Retrospective forecasting evaluating
@@ -1178,16 +1225,16 @@ Oceanography 88, 1--27.
 Sullivan, P.J., 1992. A Kalman filter approach to catch-at-length
 analysis. Biometrics 48, 237--257.
 
+\leavevmode\hypertarget{ref-thompson1936Confidence}{}%
+Thompson, W.R., 1936. On Confidence Ranges for the Median and Other
+Expectation Distributions for Populations of Unknown Distribution Form.
+Ann. Math. Statist. 7, 122--128.
+\url{https://doi.org/10.1214/aoms/1177732502}
+
 \leavevmode\hypertarget{ref-thorson2019Perspective}{}%
 Thorson, J.T., 2019. Perspective: Let's simplify stock assessment by
 replacing tuning algorithms with statistics. Fisheries Research 217,
 133--139. \url{https://doi.org/10.1016/j.fishres.2018.02.005}
-
-\leavevmode\hypertarget{ref-thorson2016Implementing}{}%
-Thorson, J.T., Kristensen, K., 2016. Implementing a generic method for
-bias correction in statistical models using random effects, with spatial
-and population dynamics examples. Fisheries Research 175, 66--74.
-\url{https://doi.org/10.1016/j.fishres.2015.11.016}
 
 \leavevmode\hypertarget{ref-walters1988Research}{}%
 Walters, C.J., Collie, J.S., 1988. Is Research on Environmental Factors
