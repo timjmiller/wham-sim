@@ -29,7 +29,7 @@
 }
 \usepackage{hyperref}
 \hypersetup{
-            pdftitle={The Woods Hole Assessment Model (WHAM): a general state-space assessment framework that incorporates time- and age-varying processes via random effects and environmental covariates},
+            pdftitle={The Woods Hole Assessment Model (WHAM): a general state-space assessment framework that incorporates time- and age-varying processes via random effects and links to environmental covariates},
             pdfauthor={Brian C. Stock1, Timothy J. Miller 1},
             pdfborder={0 0 0},
             breaklinks=true}
@@ -88,7 +88,7 @@
 
 \title{The Woods Hole Assessment Model (WHAM): a general state-space assessment
 framework that incorporates time- and age-varying processes via random
-effects and environmental covariates}
+effects and links to environmental covariates}
 \author{Brian C. Stock\textsuperscript{1}, Timothy J. Miller \textsuperscript{1}}
 \date{}
 
@@ -139,34 +139,33 @@ One approach to account for changing productivity is to explicitly link
 population processes to environmental covariates in single-species stock
 assessments, i.e.~the mechanistic approach \emph{sensu} Punt et al.
 (2014). Traditional single-species assessments are based on internal
-population dynamics and the effect of fishing mortality (\(F\)), and
-effects of the environment or interactions with other species are
-considered contextually rather than explicitly, even though fisheries
-scientists have long known that these are important drivers of
-time-varying population processes, e.g.~recruitment, mortality, growth,
-and movement (Garstang, 1900; Hjort, 1914). (\emph{TJM: However,
-temporal variation in weight at age, maturity at age can affect
-reference points in an empirical fasion in the NEUS}) Despite how
-counterintuitive this may seem to ecologists and oceanographers who
-study such relationships, the evidence for direct linkages to specific
-environmental covariates is often weak and can break down over time
-(McClatchie et al., 2010; Myers, 1998). Additionally, the primary goal
-of most assessments is to provide management advice on near-term
-sustainable harvest levels---not to explain ecological relationships.
-Even if an environmental covariate directly affects fish productivity,
-including the effect in an assessment may not improve management advice
-if the effect is weak (De Oliveira and Butterworth, 2005). Worse,
-including environmental effects in an assessment or management system
-has been shown to actually provide worse management in some cases (De
-Oliveira and Butterworth, 2005; Punt et al., 2014; Walters and Collie,
-1988). This can be true even in cases of relatively well-understood
-mechanistic links between oceanic conditions and fish populations, as in
-the case of sea surface temperature and Pacific sardine (Hill et al.,
-2018; Zwolinski and Demer, 2012). Still, incorporating mechanistic
-environment-productivity links does have the potential to reduce
-uncertainty in reference points and improve projections of stock status
-(Miller et al., 2016) (\emph{TJM: I think we showed large uncertainty
-when using projected temperature, right?}).
+population dynamics and the effect of fishing mortality (\(F\)), even
+though fisheries scientists have long known that these are important
+drivers of time-varying population processes, e.g.~recruitment,
+mortality, growth, and movement (Garstang, 1900; Hjort, 1914). Effects
+of the environment or interactions with other species can be considered
+contextually, rather than explicitly as estimated parameters (although
+temporal variation in empirical weight and maturity at age can affect
+reference points). Despite how counterintuitive this may seem to
+ecologists and oceanographers who study such relationships, the evidence
+for direct linkages to specific environmental covariates is often weak
+and can break down over time (McClatchie et al., 2010; Myers, 1998).
+Additionally, the primary goal of most assessments is to provide
+management advice on near-term sustainable harvest levels---not to
+explain ecological relationships. Even if an environmental covariate
+directly affects fish productivity, including the effect in an
+assessment may not improve management advice if the effect is weak (De
+Oliveira and Butterworth, 2005). Worse, including environmental effects
+in an assessment or management system has been shown to actually provide
+worse management in some cases (De Oliveira and Butterworth, 2005; Punt
+et al., 2014; Walters and Collie, 1988). This can be true even in cases
+of relatively well-understood mechanistic links between oceanic
+conditions and fish populations, as in the case of sea surface
+temperature and Pacific sardine (Hill et al., 2018; Zwolinski and Demer,
+2012). Still, incorporating mechanistic environment-productivity links
+in assessments does have the potential to reduce residual variance,
+particularly in periods when few demographic data exist (Miller et al.,
+2016; Shotwell et al., 2014).
 
 An alternative approach is to allow biological parameters to vary
 stochastically over time, i.e.~the empirical approach \emph{sensu} Punt
@@ -199,21 +198,26 @@ In addition to the key advantage of objectively estimating variance, or
 unobserved states, and therefore handle missing data and short-term
 projections in a straightforward way (ICES, 2020). In comparisons with
 SCAA models, state-space models have been shown to have larger, more
-realistic, uncertainty (Miller and Hyun, 2018).
+realistic, uncertainty and lower retrospective bias (Miller and Hyun,
+2018; Stock et al., n.d.). \emph{BCS: open to suggestions here\ldots{} I
+added the retrospective bias bit back in since it links to the next
+paragraph. I know you wrote the lower rho was `negligible' in the
+redfish paper, but we did show this in the 2D AR1 survival paper
+comparing Base to NAA-2. Others?}
 
 Retrospective bias can occur when changing environmental conditions lead
 to changes in productivity that are unaccounted for in stock
 assessments, and this is a concern commen to several groundfish stocks
-on the Northeast U.S. Shelf (Brooks and Legault, 2016). The Northeast
-U.S. Shelf ecosystem is rapidly changing, and this has motivated
-managers to make the ``continue{[}d{]} development of stock assessment
-models that include environmental terms'' a top priority (Hare et al.,
-2016). In addition to providing short-term (1-3 years) catch advice with
-reduced retrospective bias, it is hoped that environment-linked
-assessments will help create realistic rebuilding plans in the
-medium-term (3-10 years) for stocks that have not rebounded in response
-to dramatic decreases in \(F\). For example, Miller et al. (2016)
-developed a state-space model for yellowtail flounder with an
+on the Northeast U.S. Shelf (Brooks and Legault, 2016; Tableau et al.,
+2018). The Northeast U.S. Shelf ecosystem is rapidly changing, and this
+has motivated managers to make the ``continue{[}d{]} development of
+stock assessment models that include environmental terms'' a top
+priority (Hare et al., 2016). In addition to providing short-term (1-3
+years) catch advice with reduced retrospective bias, it is hoped that
+environment-linked assessments will help create realistic rebuilding
+plans in the medium-term (3-10 years) for stocks that have not rebounded
+in response to dramatic decreases in \(F\). For example, Miller et al.
+(2016) developed a state-space model for yellowtail flounder with an
 environmental effect on recruitment, which reduced retrospective
 patterns and residual variance. Additional applications using a similar
 state-space framework that include environmental effects on growth,
@@ -1205,6 +1209,13 @@ D.E., 2006. Fishing under low productivity conditions is further
 delaying recovery of Northwest Atlantic cod (Gadus morhua). Can. J.
 Fish. Aquat. Sci. 63, 235--238. \url{https://doi.org/10.1139/f05-253}
 
+\leavevmode\hypertarget{ref-shotwell2014Biophysical}{}%
+Shotwell, S.K., Hanselman, D.H., Belkin, I.M., 2014. Toward biophysical
+synergy: Investigating advection along the Polar Front to identify
+factors influencing Alaska sablefish recruitment. Deep Sea Research Part
+II: Topical Studies in Oceanography 107, 40--53.
+\url{https://doi.org/10.1016/j.dsr2.2012.08.024}
+
 \leavevmode\hypertarget{ref-stockthisissueImplementing}{}%
 Stock, B.C., Xu, H., Miller, T.J., Thorson, J.T., Nye, J.A., n.d.
 Implementing a 2-dimensional smoother on either survival or natural
@@ -1224,6 +1235,12 @@ Oceanography 88, 1--27.
 \leavevmode\hypertarget{ref-sullivan1992Kalman}{}%
 Sullivan, P.J., 1992. A Kalman filter approach to catch-at-length
 analysis. Biometrics 48, 237--257.
+
+\leavevmode\hypertarget{ref-tableau2018Decadal}{}%
+Tableau, A., Collie, J.S., Bell, R.J., Minto, C., 2018. Decadal changes
+in the productivity of New England fish populations. Can. J. Fish.
+Aquat. Sci. 76, 1528--1540.
+\url{https://doi.org/10.1139/cjfas-2018-0255}
 
 \leavevmode\hypertarget{ref-thompson1936Confidence}{}%
 Thompson, W.R., 1936. On Confidence Ranges for the Median and Other
