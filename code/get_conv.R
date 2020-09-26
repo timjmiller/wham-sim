@@ -1,7 +1,9 @@
 # convergence rates + % selected by AIC
 #   identical for NAA and M
 
-# id="SNEMAYT_NAA"; bc.type=2; sim.types=1:2
+# stock.id="SNEMAYT"; re="Ecov2"; bc.type=2; sim.types=1:2
+# stock.id="butterfish"; re="NAA"; bc.type=2; sim.types=1:2
+# # stock.id="GBhaddock"; re="sel"; bc.type=2; sim.types=1:2
 # res_dir=file.path(getwd(),"results")
 # simdata_dir=file.path(getwd(),"data","simdata")
 # plots_dir=file.path(getwd(),"plots")
@@ -29,21 +31,25 @@ get_conv <- function(stock.id, re, bc.type=2, sim.types=1:2,
   res.list <- lapply(res.files, readRDS)
   types <- c("OE","OEPE")
 
-  n.mods <- sqrt(length(res.list))
+  # n.mods <- sqrt(length(res.list))
+  flatten.nested.list <- function(X) if(is.list(X)) Reduce(c, lapply(X, flatten.nested.list)) else list(X) 
   n.sim <- length(res.list[[1]][[1]])
   df.colnames <- c("om","em","type","sim","conv")
   df <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
   colnames(df) <- df.colnames
   for(m in 1:length(res.list)){
+    results <- do.call(rbind, flatten.nested.list(res.list[[m]])) %>% as.data.frame
+    results <- sapply(results, as.numeric)
+    results <- as.data.frame(results)
     for(ty in 1:2){
       for(i in 1:n.sim){
-        tmp <- data.frame(om = ceiling(m/n.mods), em = m %% n.mods, type=ty, sim=i, conv=NA)
+        tmp <- data.frame(om = unique(results$om)[!is.na(unique(results$om))], em = unique(results$em)[!is.na(unique(results$em))], type=ty, sim=i, conv=NA)
         if(class(res.list[[m]][[ty]][[i]])[1] != 'character') tmp$conv <- 1 else tmp$conv <- 0
         df <- rbind(df, tmp)
       }
     }
   }
-  df$em[df$em == 0] = n.mods
+  # df$em[df$em == 0] = n.mods
   
   # # results as a list of data frames by type
   # res <- list()

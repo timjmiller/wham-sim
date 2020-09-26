@@ -9,15 +9,19 @@
 # library(cowplot)
 # library(simhelpers)
 # # stock.id = "SNEMAYT"
-# stock.id = "butterfish"
+# # stock.id = "butterfish"
+# stock.id = "ICEherring"
+# re="NAA"
 # bc.type = 2
-# sim.types = 2
+# ty = sim.types = 2
 # n.mods=4
 # n.sim=100
 # inv.rho.trans <- function(x) return(2/(1 + exp(-2*x)) - 1)
 # res_dir=file.path("/home/bstock/Documents/ms/wham-sim/results")
 # simdata_dir=file.path("/home/bstock/Documents/ms/wham-sim/data/simdata")
 # plots_dir=file.path("/home/bstock/Documents/ms/wham-sim/plots")
+# source("/home/bstock/Documents/ms/wham-sim/code/get_results.R")
+# results <- get_results(stock.id, re, bc.type)
 
 # plot_NAA(stock.id=stock.id, bc.type=bc.type, sim.types=sim.types, n.mods=4, n.sim=100, multipanel=FALSE, plot.eps=FALSE)
 

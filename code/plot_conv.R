@@ -5,7 +5,17 @@ plot_conv <- function(df.conv, plots_dir){
     for(re in 1:length(re.lab)){
       df.plot <- df[df$re == re.lab[re],]
       n.mods <- length(unique(df.plot$om))
-      
+
+      if(re.lab[re] == "Ecov2" & n.mods == 5){
+        mlabs = c("m1: RW-none","m2: RW-linear","m3: RW-poly","m4: AR1-linear","m5: AR1-poly")
+        mlabs_expr = c(expression(paste("m1:")~paste("RW-none")), 
+                       expression(paste("m2:")~paste("RW-linear")),
+                       expression(paste("m3:")~paste("RW-poly")),
+                       expression(paste("m4:")~paste("AR1-linear")),
+                       expression(paste("m5:")~paste("AR1-poly")))
+        mlabs_short <- mlabs
+        names(mlabs_short) = paste0("m",1:n.mods)
+      }     
       if(re.lab[re] == "NAA" & n.mods == 4){
         mlabs = c("m1: SCAA (IID)","m2: SCAA (AR1_y)","m3: NAA (IID)","m4: NAA (2D AR1)")
         mlabs_expr = c(expression(paste("m1:")~paste("SCAA")~paste("(IID)")), 
@@ -15,7 +25,7 @@ plot_conv <- function(df.conv, plots_dir){
         mlabs_short <- mlabs
         names(mlabs_short) = paste0("m",1:4)
       }
-      if(re.lab[re] == "M" & n.mods == 3){
+      if(n.mods == 3){ # M or Sel
         mlabs = c("m1: none","m2: IID","m3: 2D AR1")
         mlabs_expr = c(expression(paste("m1:")~paste("none")), 
                        expression(paste("m2:")~paste("IID")), 

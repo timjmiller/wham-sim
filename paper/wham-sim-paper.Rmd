@@ -243,64 +243,57 @@ We fit all models using the open-source statistical software R [@rcoreteam2020La
 
 ## Simulation tests
 
-After fitting each model to the original datasets, we used the simulation feature of TMB to conduct self- and cross-tests [*sensu* @deroba2015Simulation]. For each model, we generated 100 sets of new data and random effects, keeping the fixed effect parameters constant at values estimated in original fits. We then re-fit all models to datasets simulated under each as an operating model. We calculated the relative error in parameters constraining random effects (Table \ref{tab:model-descriptions}) and quantities of interest, such as spawning stock biomass (SSB), $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$. We calculated relative error as $\frac{\hat{\theta_i}}{\theta}-1$, where $\theta$ is the true value used to simulate data and $\theta_i$ is the value estimated in simulation *i*. To estimate bias of each estimation model for a given operating model, we calculated 95\% confidence intervals of the median relative error using the binomial distribution [@thompson1936Confidence]. Finally, for each operating model we calculated the proportion of simulations in which each estimation model converged and had the lowest AIC, aggregated across stocks.
+After fitting each model to the original datasets, we used the simulation feature of TMB to conduct self- and cross-tests [*sensu* @deroba2015Simulation]. For each model, we generated 100 sets of new data and random effects, keeping the fixed effect parameters constant at values estimated in original fits. We then re-fit all models to datasets simulated under each as an operating model. We calculated the relative error in parameters constraining random effects (Table \ref{tab:model-descriptions}) and quantities of interest, such as spawning stock biomass (SSB), $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$. We calculated relative error as $\frac{\hat{\theta_i}}{\theta}-1$, where $\theta$ is the true value used to simulate data and $\theta_i$ is the value estimated in simulation *i*. To estimate bias of each estimation model for a given operating model, we calculated 95\% confidence intervals of the median relative error using the binomial distribution [@thompson1936Confidence]. To summarize the bias across simulations and years for each model, we calculated the median quantity across years and took the mean of the medians across simulations. Finally, for each operating model we calculated the proportion of simulations in which each estimation model converged and had the lowest AIC, aggregated across stocks.
 
 # Results
 
 ## Original datasets
 
-2D AR1 structure performed well across processes and stocks (Fig. \ref{fig:daic}).
+The 2D AR1 covariance structure for random effects on *NAA*, *M*, and selectivity performed well across stocks and processes, evidenced by lower AIC than the IID random effects models (Fig. \ref{fig:daic}). This AIC difference was larger for selectivity than *NAA* or *M*, but the differences for *NAA* and *M* were also non-trivial, ranging from 11.1–53.2.
 
-### Numbers-at-age
+### Numbers-at-age (*NAA*)
 
-Fig. \ref{fig:devs-ICEherring-naa}.
+Treating all ages as random effects was strongly supported by AIC, compared to treating only recruitment deviations as random effects (Fig. \ref{fig:daic}). Including autoregressive NAA random effects was also generally supported by AIC, either the AR1 when only recruitment deviations were random effects or the 2D AR1 when all ages were random effects. The estimated AR and IID random effects were similar, with the AR random effects slightly smoothed compared to the IID random effects (e.g. for Icelandic herring in Fig. \ref{fig:devs-ICEherring-naa}).
 
-### Natural mortality
+### Natural mortality (*M*)
 
-Fig. \ref{fig:devs-butterfish-m}.
+As for the NAA models, including random effect deviations on *M* was supported by AIC (Fig. \ref{fig:daic}). Although the 2D AR1 *M* model did not converge for North Sea cod, it had the lowest AIC for butterfish and SNEMA yellowtail flounder. In contrast to the NAA models, the patterns in estimated 2D AR1 and IID *M* random effects differed noticeably (e.g. for butterfish in Fig. \ref{fig:devs-butterfish-m}). The butterfish IID *M* model estimated elevated *M* for age 5+ fish early and late in the time-series, with lower *M* in intervening years. The butterfish 2D AR1 *M* model estimated a similar, but much exaggerated, pattern for age 5+ fish and reduced *M* for ages 1 and 4. Since $\mu_M$ was held constant, the *M* random effects models had to decrease *M* in some ages and years in order to increase *M* in others.
 
-### Selectivity
+### Selectivity (*s*)
 
-Fig. \ref{fig:devs-GBhaddock-sel}.
+For Georges Bank haddock, including 2D AR1 random effect deviations on selectivity was strongly supported by AIC (Fig. \ref{fig:daic}). The 2D AR1 *s* model estimated similar patterns in selectivity compared to the IID *s* model, except with smoother variations by age and year (Fig. \ref{fig:devs-GBhaddock-sel}). Compared to the model with constant selectivity, the IID and 2D AR1 models estimated lower *s* for age 3 in recent years and higher *s* for age 3 before 1990. They also estimated higher *s* for age 2 before 1990, especially from 1973 to 1976.
 
-### Ecov-Recruitment
+### Environmental covariate effect on recruitment (*Ecov*)
 
-Fig. \ref{fig:devs-SNEMAYT-ecov}.
+As in previous analyses [@miller2016Statespace; @xu2018Evaluating], including an effect of the CPI on recruitment for SNEMA yellowtail flounder was clearly supported by AIC ($\Delta \text{AIC}$ of 20.3-33.0 between m1 and m2-m4, Fig. \ref{fig:daic}). The AR1-linear model (m4) had the lowest AIC—fitting the CPI using an AR1 model was preferred over the random walk ($\Delta \text{AIC}$ of 12.7 between m2 and m4), and the quadratic term, $\beta_2$ was deemed unnecessary ($\Delta \text{AIC}$ of 1.3 between m5 and m4). As expected, the AR1 process model estimated higher uncertainty in years with higher observation error (e.g. 1982–1992) and missing observations (2017, Fig. \ref{fig:devs-SNEMAYT-ecov}A). The CPI negatively influenced recruitment, i.e. $\hat{R}$ was higher following years with lower CPI (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C). Including the CPI-recruitment link noticeably changed the estimates of SSB and *R* in some years (compare locations of points between Fig. \ref{fig:devs-SNEMAYT-ecov}B-C).
 
 ## Simulation tests
 
-Not all models converged. Fig. \ref{fig:aic-cross}.
+Several findings were consistent across processes and stocks. When the estimation and operating model were consistent, bias of SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, $R$, and the variance and correlation parameters controlling random effects was generally small and not significant based on confidence intervals. Bias was also generally small when more complex models were fitted to less complicated operating model simulations. In contrast, the bias was often non-trivial when the estimation model was less complex than the operating model, especially when models without random effects were fit to data simulated from models with random effects. Bias in SSB and $F$ were always opposite; when SSB was biased high, $F$ was biased low, and vice-versa. Predicted catch was never biased. Bias of variance parameters was either negligible or negative, as expected. Restricted maximum likelihood (REML) should be used if more accurate estimation of these parameters is a priority.
 
-Bias is usually so tiny and not significant based on confidence intervals when the estimation and operating model are consistent. Bias is also often small when more complex models are fitted to less complicated operating model simulations. Bias of variance parameters is as expected (negative). REML should be used if more accurate estimation of these is a priority.
-
-[@miller2018Temporal]
-The biased maximum likelihood estimation of the autoregres-
-sive process parameters we found in the simulation study was
-expected (Wilson 1989). The reduction in bias for most of these
-parameters using REML estimation was also expected (Cheang
-and Reinsel 2000), but substantial bias still remained,
+In cross-tests, the percentage of simulations in which AIC selected the correct model varied between 62–99\% by process, stock, and operating model (Fig. \ref{fig:aic-cross}). Estimation models more complex than the operating model were more likely to be chosen for *NAA* models than for *M* or selectivity.
 
 ### Numbers-at-age
 
-Fig. \ref{fig:estpar-naa}.
+For four of the five stocks, $\sigma^2_R$ was estimated without bias in self-tests (Fig. \ref{fig:estpar-naa}). The exception was butterfish, for which $\sigma^2_R$ was negatively biased in m1, m2, and m4 (but not m3). In contrast, both m3 and m4 estimated $\sigma^2_a$ with negative bias for all five stocks. There was no consistent pattern in bias for the correlation parameters $\rho_a$ and $\rho_y$.
 
-Fig. \ref{fig:rel-error-ICEherring-naa}.
+Across the five stocks, all *NAA* models estimated SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$ with very minimal bias in self-tests. An exception was the estimation of $F$ for Icelandic herring, particularly for the SCAA models (median relative error with 95\% CI for m1: -0.060 (-0.073, -0.047), m2: -0.060 (-0.073, -0.047), m3: 0.015 (-0.004, 0.034), and m4: 0.049 (0.017, 0.080); Fig. \ref{fig:rel-error-ICEherring-naa}). The convergence rate for most models and stocks was above 95\%, again with the exception of the SCAA models for Icelandic herring (ref supp figure). In cross-tests, SCAA models exhibited non-trivial bias when estimating data simulated from models that treated numbers at all ages as random effects. The degree of bias varied by quantity and stock between -25\% and 25% (ref supp figures). The more complex NAA models estimated all quantities without bias regardless of operating model.
 
 ### Natural mortality
 
-Fig. \ref{fig:estpar-m}.
+As for the NAA models, $\sigma^2_R$ was estimated without bias in the *M* model self-tests (Fig. \ref{fig:estpar-m}). $\sigma^2_M$ was biased low, $\varphi_y$ had no bias, and the direction of bias in $\varphi_a$ was inconsistent.
 
-Fig. \ref{fig:rel-error-butterfish-m}.
+SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$ were estimated without significant bias in self-tests, although m1 and m2 exhibited bias in SSB and $\frac{F}{F_{40\%}}$ when fit to data simulated from m3 (e.g. for butterfish, Fig. \ref{fig:rel-error-butterfish-m}).
 
 ### Selectivity
 
-Fig. \ref{fig:estpar-sel}.
+For Georges Bank haddock, the variance and correlation parameters $\sigma^2_a$, $\sigma^2_s$, $\phi_y$, and $\phi_a$ were all estimated with slight negative bias in self-tests of models with *s* random effects (Fig. \ref{fig:estpar-sel}).
 
-Fig. \ref{fig:rel-error-GBhaddock-sel}.
+Models with IID or 2D AR1 *s* random effects estimated SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$ with little to no bias across operating models (Fig. \ref{fig:rel-error-GBhaddock-sel}). The model without *s* random effects showed substantial bias when fit to data simulated from m2 or m3.
 
 ### Ecov-Recruitment
 
-Fig. \ref{fig:estpar-ecov}.
+The random walk CPI models estimated $\sigma^2_X$ with less bias than the AR1 CPI models (Fig. \ref{fig:estpar-ecov}). $\beta_0$ was biased high in all models, although this was not significant for the model with lowest AIC (m4, AR1-linear). All models estimated the parameters $\phi_X$, $\alpha$, $\beta_1$, and $\beta_2$ without significant bias.
 
 # Discussion
 
@@ -309,8 +302,16 @@ Fig. \ref{fig:estpar-ecov}.
 Our results suggest that the WHAM package can be a useful tool for stock assessment when environmental effects on recruitment or natural mortality, variation in selectivity or natural mortality, or stochastic changes in the numbers at age are of interest. The simulation tests showed negligible or no bias in estimation of important assessment outputs (SSB, F, stock and harvest status).
 
 
-We described WHAM. Sim tests showed no bias in self-tests (when estimation model matched operating model). Some bias in cross-tests.
+We described WHAM. Sim tests showed no bias in self-tests (when estimation model matched operating model). Some bias in cross-tests. Bias in SSB and F opposite such that no bias in predicted catch, Deroba 2015.
 
+
+
+[@miller2018Temporal]
+The biased maximum likelihood estimation of the autoregres-
+sive process parameters we found in the simulation study was
+expected (Wilson 1989). The reduction in bias for most of these
+parameters using REML estimation was also expected (Cheang
+and Reinsel 2000), but substantial bias still remained,
 
 
 Contrast mechanistic vs. empirical approaches. Empirical approaches allows time-varying productivity and with AR1 can propagate effect of changing productivity in short-term projections [@stockthisissueImplementing]. However, the empirical approach cannot predict values beyond extremes in observed time-series (*TJM: This is always true? I suspect certain types of time series models might predict outside of time series. E.g., if there is an increase with the last observation being the greatest, some higher order AR models might predict the next few observations higher than the last*). This is an issue because many ecosystems are changing to such extent that conditions in the near future have never been observed. E.g. last time it was close to this warm on the U.S. Northeast Shelf was the 1940s, and few fisheries or oceanographic time-series stretch back that far. Thus, longer term projections likely require mechanistic approach. Think about other sources of data? Fish catch, not just surveys + age data? Continuous Plankton Recorder (other side of Atlantic, but correlated?). 1951 was almost as warm (annual mean), but warm in winter instead of summer (diff seasonal change).
