@@ -260,10 +260,10 @@ It is in many respects similar to the Age-Structured Assessment Program
 (ASAP, Legault and Restrepo, 1998; Miller and Legault, 2015) and can be
 configured to fit statistical catch-at-age models nearly identically.
 There is functionality built into WHAM to migrate ASAP input files to R
-inputs needed for WHAM and many of the same types of data inputs, such
-as empirical weight-at-age, so that existing assessments in the U.S.
-Northeast can be easily replicated and tested against models with
-state-space and environmental effects in a single framework.
+inputs needed for WHAM, and WHAM uses many of the same types of data
+inputs, such as empirical weight-at-age, so that existing assessments in
+the U.S. Northeast can be easily replicated and tested against models
+with state-space and environmental effects in a single framework.
 
 \emph{Either put core model equations here or in supplement}
 
@@ -576,15 +576,19 @@ Like ASAP, there are observation likelihood components for aggregate
 catch and abundance index for each fleet and index, and age composition
 for each fleet and index.
 
-\hypertarget{aggreate-catch-and-indices}{%
-\paragraph{Aggreate catch and
-indices}\label{aggreate-catch-and-indices}}
+\hypertarget{aggregate-catch-and-indices}{%
+\paragraph{Aggregate catch and
+indices}\label{aggregate-catch-and-indices}}
 
 The predicted catch at age for fleet \(i\), \(\hat{C}_{a,y,i}\), is a
 function of \(N_{a,y}\), \(M_{a,y}\), \(F_{y,i}\), \(s_{a,y,i}\), and
-empirical weight at age, \(W_{a,y,i}\) \[
+empirical weight at age, \(W_{a,y,i}\):
+
+\[
 \hat{C}_{a,y,i} = N_{a,y} W_{a,y,i}\left(1- e^{-Z_{a,y}}\right)\frac{F_{a,y,i}}{Z_{a,y}}.
-\] The log-aggregate catch \(\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}\)
+\]
+
+The log-aggregate catch \(\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}\)
 observation is assumed to have a normal distribution \begin{equation}
 \label{eq:catch}
   \begin{array}{ccc}
@@ -624,18 +628,18 @@ The default settings for short-term projections follow common practice
 for stock assessments in the U.S. Northeast: the population is projected
 three years using the average selectivity, maturity, weight, and natural
 mortality at age from the last five model years to calculate reference
-points. WHAM implements similar options as ASAP for specifying \(F_y\)
-in the projection years: terminal year \(F_y\), average \(F\) over
-specified years, \(F_{X\%}\) (\(F\) at X\% SPR, where X is specified and
-40 by default), \emph{should we quickly include an option for projecting
-\(F_{MSY}\)}, user-specified \(F_y\), or \(F\) derived from
-user-specified catch. For all options expect the user-specified fishing
-mortality, the uncertainty the F that is projected is propogated into
-uncertainty of the projected population attributes. For models with
-random effects on \emph{NAA}, \emph{M}, or \emph{Ecov}, the default is
-to continue the stochastic process into the projection years. WHAM does
-not currently do this for selectivity because, like \(F\), it is a
-function of management. Selectivity is taken as the average of recent
+points (NEFSC, 2020a). WHAM implements similar options as ASAP for
+specifying \(F_y\) in the projection years: terminal year \(F_y\),
+average \(F\) over specified years, \(F_{X\%}\) (\(F\) at X\% SPR, where
+X is specified and 40 by default), \emph{should we quickly include an
+option for projecting \(F_{MSY}\)}, user-specified \(F_y\), or \(F\)
+derived from user-specified catch. For all options except user-specified
+\(F_y\), the uncertainty in projected F is propogated into the
+uncertainty of projected population attributes. For models with random
+effects on \emph{NAA}, \emph{M}, or \emph{Ecov}, the default is to
+continue the stochastic process into the projection years. WHAM does not
+currently do this for selectivity because, like \(F\), it is a function
+of management. Instead, selectivity is taken as the average of recent
 model years.
 
 If the \emph{Ecov} data extend beyond the population model years, WHAM
@@ -644,7 +648,7 @@ estimated \(X_y\) in projections. This may often be the case because
 lags can exist in both the physical-biological mechanism and the
 assessment process. As an example, a model with an \emph{Ecov} effect on
 recruitment may link physical conditions in year \(t\) to recruitment in
-year \(t+1\), and the assessment may be conducted in year \(t\) using
+year \(t+1\), and the assessment conducted in year \(t\) may only use
 population data through year \(t-1\). In this case, 3-year population
 projections only need the \emph{Ecov} model to be projected one year.
 While the default handling of \emph{Ecov} projections is to continue the
@@ -657,32 +661,34 @@ projections may affect the stock.
 \subsection{Fits to original datasets}\label{fits-to-original-datasets}}
 
 We fit the models described above to data from five stocks with a broad
-range of life history and status: Southern New England-Mid Atlantic
-(SNEMA) yellowtail flounder, butterfish, North Sea cod, Icelandic
-herring, and Georges Bank haddock (Tables \ref{tab:model-descriptions}
-and \ref{tab:stock-list}). We fit the \emph{NAA} random effects models
-to all five stocks since these represent core WHAM functionality. We
-chose to highlight one stock each for the \emph{M}, \emph{s}, and
-\emph{Ecov} processes because all models did not converge for all stocks
-and processes: butterfish (\emph{M}), Georges Bank haddock (\emph{s}),
-and SNEMA yellowtail flounder (\emph{Ecov}). None of the original
-assessments estimated \emph{M}. Except for the haddock \emph{s}
-demonstration, we used the same selectivity parameterization and time
-blocks as in the original assessments. We used the m3 \emph{NAA} model
-(all NAA deviations are IID random effects) in the \emph{s} and
-\emph{Ecov} demonstrations, but the m1 \emph{NAA} model (only
-recruitment deviations are IID random effects) for the \emph{M}
-demonstrations, because the NAA transitions can be interpreted as
-survival and including random effect deviations on both NAA and \emph{M}
-can lead to model non-convergence (Stock et al., n.d.). Within each
-process, we compared the performance of the different random effects
-models using AIC.
+range of life history, status, and model dimension (number of ages and
+years): Southern New England-Mid Atlantic (SNEMA) yellowtail flounder,
+butterfish, North Sea cod, Icelandic herring, and Georges Bank (GB)
+haddock (Tables \ref{tab:model-descriptions} and \ref{tab:stock-list}).
+We fit the \emph{NAA} random effects models to all five stocks since
+these represent core WHAM functionality. We chose to highlight one stock
+each for the \emph{M}, \emph{s}, and \emph{Ecov} processes because all
+models did not converge for all stocks and processes: butterfish
+(\emph{M}), GB haddock (\emph{s}), and SNEMA yellowtail flounder
+(\emph{Ecov}). We fixed \(\mu_{M_a}\) at the values used or estimated in
+the original assessments. Except for the GB haddock \emph{s} models, we
+used the same selectivity parameterization and time blocks as in the
+original assessments. We used the m3 \emph{NAA} model (all NAA
+deviations are IID random effects) in the \emph{s} and \emph{Ecov}
+demonstrations, but the m1 \emph{NAA} model (only recruitment deviations
+are IID random effects) for the \emph{M} demonstrations, because the NAA
+transitions can be interpreted as survival and including random effect
+deviations on both NAA and \emph{M} can lead to model non-convergence
+(Stock et al., n.d.). Within each process, we compared the performance
+of the different random effects models using AIC.
 
 We fit all models using the open-source statistical software R (R Core
 Team, 2020) and TMB (Kristensen et al., 2016), as implemented in the R
 package WHAM (Miller and Stock, 2020). Documentation and tutorials for
 how to specify additional random effect structures in WHAM are available
-at \url{https://timjmiller.github.io/wham/}.
+at \url{https://timjmiller.github.io/wham/}. Code and data files to run
+the analysis are available at
+\url{https://github.com/brianstock-NOAA/wham-sim}.
 
 \hypertarget{simulation-tests}{%
 \subsection{Simulation tests}\label{simulation-tests}}
@@ -967,46 +973,63 @@ deviations in natural mortality as autoregressive processes like NCAM
 as state-space processes and include their effects (nonlinearly) in
 various ways on recruitment or natural mortality.
 
-Like SS, ASAP, BAM, WHAM treats aggregate and composition observations
+Different assessment frameworks provide a range of methods to allow for
+time-varying selectivity, and a study comparing these would be useful.
+For instance, WHAM assumes separability in \(F_{a,y}\), i.e.
+\(F_{a,y} = F_y s_a\), as do most assessments in the U.S (e.g.~ASAP,
+Stock Synthesis, an Assessment Model for Alaska, and the Beaufort
+Assessment Model) because oftentimes we want to specify \(F\) in
+projections to calculate a reference point, as opposed to continuing a
+\(F\) time-series process. Estimating selectivity in time blocks is
+common practice in these frameworks. In contrast, SAM estimates
+\(F_{a,y}\) directly as a multivariate stochastic process (Nielsen and
+Berg, 2014). The approach in WHAM of estimating \(F_y\), \(\sigma_s\),
+\(\phi_y\), and \(\phi_p\) as fixed effect parameters and allowing 2D
+AR1 random effects on the selectivity parameters should allow for
+similar selectivity patterns. The method in Stock Synthesisis is also
+similar but different: allow 2D AR1 random effects on \(s_{a,y}\)
+instead of the parameters, and then estimate \(\sigma_s\) by an
+iterative tuning algorithm (Xu et al., 2019). It is unclear whether
+estimating time-varying selectivity as random effects produces different
+results or an improvement over using time blocks, or if there are
+advantages to using one of the three approaches to estimate time-varying
+selectivity used by WHAM, SAM, or Stock Synthesis.
+
+Likewise, WHAM and SAM also make different separability assumptions for
+the catch and index observations (aggregate total + age comps vs.
+\(C_{a,t}\) directly). Should be similar (?) but could test. Like SS,
+ASAP, and BAM, WHAM treats aggregate and composition observations
 separately for fisheries and indices. This differs from SAM where
 observations of numbers at age are treated as multivariate log-normal.
-
-Most assessments in the U.S. assume separability in \(F_{a,t}\),
-estimate \(F_t\) and \(Sel_a\). WHAM does this. SAM estimates
-\(F_{a,t}\) directly. WHAM and SAM also make different separability
-assumptions for the catch/index data (aggregate total + age comps vs.
-\(C_{a,t}\) directly). Should be similar (?) but could test.
-
-To move from traditional SCAA models to state-space models with random
-effects in the Northeast US, WHAM can be configured to fit models very
-similar to ASAP and therefore bridge between these frameworks. Goal is
-to replicate ASAP assessments in the U.S. Northeast. Can easily turn
-on/off random effects.
+WHAM and SAM also make different separability assumptions for the
+catch/index data (aggregate total + age comps vs. \(C_{a,t}\) directly).
+Should be similar (?) but could test.
 
 Observation model is natural for landings data that are measured as
 total weight plus age composition sampling. Age composition sampling
 often done separately with survey data.
 
-Treating \(F\) and \(Sel\) separately can be useful for projections.
-Oftentimes we want to specify \(F\) in projections to calculate a
-reference point, as opposed to continuing a \(F\) time-series process.
-
 \hypertarget{future-work}{%
 \subsection{Future work}\label{future-work}}
 
-WHAM will be used in upcoming research track assessments. Could
-transition to operational. Potential to improve several NEFSC
-assessments.
+The productivity of several groundfish stocks in the U.S. Northeast has
+declined in recent decades, and using WHAM to include time-varying
+processes in assessments via random effects or environment-productivity
+links could be useful in reducing retrospective bias (Perretti et al.,
+2017; Stock et al., n.d.; Tableau et al., 2018). WHAM can be configured
+to fit SCAA models very similar to ASAP and therefore bridge between
+these frameworks. Including random effects or environmental covariates
+in an assessment model is a large structural change, and simulation
+cross-tests such as we have demonstrated here should be conducted
+through the research track process (Lynch et al., 2018). If comparisons
+against status quo SCAA models prove favorable, WHAM could transition to
+being used in operational assessments. However, because the details of
+how to include time-varying processes, as well as the effect on the
+assessment output, will vary by stock, this likely needs to be done on a
+stock-by-stock basis.
 
 \begin{itemize}
 \tightlist
-\item
-  2D AR(1) selectivity. Most assessments in the U.S. assume separability
-  in \(F_{a,t}\), i.e.~estimate \(F_t\) and \(Sel_a\). WHAM does this.
-  SAM estimates \(F_{a,t}\) directly. WHAM and SAM make different
-  separability assumptions for the catch/index data as well (aggregate
-  total + age comps vs. \(C_{a,t}\) directly). Should be similar (?) but
-  could test.
 \item
   How many time/age-varying random effects can be estimated
   simultaneously? Stock et al. (n.d.) estimated random effect deviations
@@ -1177,9 +1200,18 @@ des Réunions du Conseil Permanent International Pour L'Exploration de la
 Mer 20, 1--228.
 
 \leavevmode\hypertarget{ref-ices2020Workshop}{}%
-ICES, 2020. Workshop on the Review and Future of State Space Stock
-Assessment Models in ICES (WKRFSAM). ICES Scientific Reports 2, 23p.
+ICES, 2020. Workshop on the review and future of state space stock
+assessment models in ICES (WKRFSAM). ICES Scientific Reports 2, 23p.
 \url{https://doi.org/10.17895/ices.pub.6004}
+
+\leavevmode\hypertarget{ref-ices2017Report}{}%
+ICES, 2017a. Report of the working group on assessment of demersal
+stocks in the North Sea and Skagerrak (2017). ICES CM 2017/ACOM:21, 26
+April-5 May 2017, ICES HQ.
+
+\leavevmode\hypertarget{ref-ices2017Reporta}{}%
+ICES, 2017b. Report of the North Western Working Group (NWWG). ICES CM
+2017/ACOM:08, 27 April-4 May 2017, Copenhagen, Denmark.
 
 \leavevmode\hypertarget{ref-iles1998Stock}{}%
 Iles, T.C., Beverton, R.J.H., 1998. Stock, recruitment and moderating
@@ -1270,6 +1302,15 @@ Miller, T.J., Stock, B.C., 2020. The Woods Hole Assessment Model (WHAM).
 Myers, R.A., 1998. When do environment-recruitment correlations work?
 Reviews in Fish Biology and Fisheries 8, 285--305.
 
+\leavevmode\hypertarget{ref-nefsc2020Operational}{}%
+NEFSC, 2020a. Operational assessment of 14 Northeast groundfish stocks,
+updated through 2018. U.S. Dept. Commer., NOAA, NMFS, NEFSC, Woods Hole,
+MA.
+
+\leavevmode\hypertarget{ref-nefsc2020Butterfish}{}%
+NEFSC, 2020b. Butterfish 2020 assessment update report. U.S. Dept.
+Commer., NOAA, NMFS, NEFSC, Woods Hole, MA.
+
 \leavevmode\hypertarget{ref-nielsen2014Estimation}{}%
 Nielsen, A., Berg, C.W., 2014. Estimation of time-varying selectivity in
 stock assessments using state-space models. Fisheries Research 158,
@@ -1287,6 +1328,13 @@ J. Fish. Aquat. Sci. 76, 1275--1294.
 Patrick, W.S., Link, J.S., 2015. Myths that Continue to Impede Progress
 in Ecosystem-Based Fisheries Management. Fisheries 40, 155--160.
 \url{https://doi.org/10.1080/03632415.2015.1024308}
+
+\leavevmode\hypertarget{ref-perretti2017Regime}{}%
+Perretti, C.T., Fogarty, M.J., Friedland, K.D., Hare, J.A., Lucey, S.M.,
+McBride, R.S., Miller, T.J., Morse, R.E., O'Brien, L., Pereira, J.J.,
+Smith, L.A., Wuenschel, M.J., 2017. Regime shifts in fish recruitment on
+the Northeast US Continental Shelf. Marine Ecology Progress Series 574,
+1--11. \url{https://doi.org/10.3354/meps12183}
 
 \leavevmode\hypertarget{ref-pershing2015Slow}{}%
 Pershing, A.J., Alexander, M.A., Hernandez, C.M., Kerr, L.A., Bris,
@@ -1431,24 +1479,26 @@ Model & Description & Estimated parameters\\
 
 \pagebreak
 
+\begin{landscape}
 \begin{table}
 
 \caption{\label{tab:stock-list}Stocks used in simulation tests.}
 \centering
-\begin{tabular}[t]{lllllrrlrrr}
+\begin{tabular}[t]{lllllrrlrrrl}
 \toprule
 \multicolumn{1}{c}{ } & \multicolumn{4}{c}{Modules tested} & \multicolumn{2}{c}{Model dim} & \multicolumn{2}{c}{Biol. par.} & \multicolumn{2}{c}{Stock status} \\
 \cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){8-9} \cmidrule(l{3pt}r{3pt}){10-11}
-Stock & NAA & M & Sel & Ecov & \# Ages & \# Years & $M$ & $\sigma_R$ & $\frac{B}{B_{40}}$ & $\frac{F}{F_{40}}$\\
+Stock & NAA & M & Sel & Ecov & \# Ages & \# Years & $M$ & $\sigma_R$ & $\frac{B}{B_{40}}$ & $\frac{F}{F_{40}}$ & Source\\
 \midrule
-SNEMA yellowtail flounder & x & x &  & x & 6 & 49 & 0.2-0.4 & 1.67 & 0.01 & 0.44\\
-Butterfish & x & x &  &  & 5 & 31 & 1.3 & 0.23 & 2.57 & 0.03\\
-North Sea cod & x & x &  &  & 6 & 54 & 0.2-1.2 & 0.87 & 0.14 & 2.00\\
-Icelandic herring & x &  &  &  & 11 & 30 & 0.1 & 0.55 & 0.40 & 1.81\\
-Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12\\
+SNEMA yellowtail flounder & x & x &  & x & 6 & 49 & 0.2-0.4 & 1.67 & 0.01 & 0.44 & NEFSC (2020a)\\
+Butterfish & x & x &  &  & 5 & 31 & 1.3 & 0.23 & 2.57 & 0.03 & NEFSC (2020b)\\
+North Sea cod & x & x &  &  & 6 & 54 & 0.2-1.2 & 0.87 & 0.14 & 2.00 & ICES (2017a)\\
+Icelandic herring & x &  &  &  & 11 & 30 & 0.1 & 0.55 & 0.40 & 1.81 & ICES (2017b)\\
+Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (2020a)\\
 \bottomrule
 \end{tabular}
 \end{table}
+\end{landscape}
 
 \pagebreak
 

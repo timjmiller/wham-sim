@@ -11,6 +11,8 @@ output:
       in_header: options.sty
 csl: fisheries-research.csl
 bibliography: wham-sim.bib
+nocite: |
+  @nefsc2020Operational, @nefsc2020Butterfish, @ices2017Report, @ices2017Reporta
 ---
 
 ```{r setup, include=FALSE, echo=FALSE}
@@ -67,7 +69,7 @@ Throughout, we describe how the above are implemented using the open-source WHAM
 
 ## Model description
 
-WHAM is a generalization and extension of @miller2016Statespace in TMB. It is in many respects similar to the Age-Structured Assessment Program [ASAP, @legault1998Flexible; @miller2015Technical] and can be configured to fit statistical catch-at-age models nearly identically. There is functionality built into WHAM to migrate ASAP input files to R inputs needed for WHAM and many of the same types of data inputs, such as empirical weight-at-age, so that existing assessments in the U.S. Northeast can be easily replicated and tested against models with state-space and environmental effects in a single framework.
+WHAM is a generalization and extension of @miller2016Statespace in TMB. It is in many respects similar to the Age-Structured Assessment Program [ASAP, @legault1998Flexible; @miller2015Technical] and can be configured to fit statistical catch-at-age models nearly identically. There is functionality built into WHAM to migrate ASAP input files to R inputs needed for WHAM, and WHAM uses many of the same types of data inputs, such as empirical weight-at-age, so that existing assessments in the U.S. Northeast can be easily replicated and tested against models with state-space and environmental effects in a single framework.
 
 *Either put core model equations here or in supplement*
 
@@ -208,12 +210,14 @@ m1 treats $X_y$ as a random walk ($\phi_X = 1$) but does not include an effect o
 
 Like ASAP, there are observation likelihood components for aggregate catch and abundance index for each fleet and index, and age composition for each fleet and index.
 
-#### Aggreate catch and indices
+#### Aggregate catch and indices
 
-The predicted catch at age for fleet $i$, $\hat{C}_{a,y,i}$, is a function of $N_{a,y}$, $M_{a,y}$, $F_{y,i}$, $s_{a,y,i}$, and empirical weight at age, $W_{a,y,i}$
+The predicted catch at age for fleet $i$, $\hat{C}_{a,y,i}$, is a function of $N_{a,y}$, $M_{a,y}$, $F_{y,i}$, $s_{a,y,i}$, and empirical weight at age, $W_{a,y,i}$:
+
 $$
 \hat{C}_{a,y,i} = N_{a,y} W_{a,y,i}\left(1- e^{-Z_{a,y}}\right)\frac{F_{a,y,i}}{Z_{a,y}}.
 $$
+
 The log-aggregate catch $\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}$ observation is assumed to have a normal distribution
 \begin{equation}
 \label{eq:catch}
@@ -237,15 +241,15 @@ WHAM includes several options for the catch and index age compositions including
 
 ### Projections
 
-The default settings for short-term projections follow common practice for stock assessments in the U.S. Northeast: the population is projected three years using the average selectivity, maturity, weight, and natural mortality at age from the last five model years to calculate reference points. WHAM implements similar options as ASAP for specifying $F_y$ in the projection years: terminal year $F_y$, average $F$ over specified years, $F_{X\%}$ ($F$ at X% SPR, where X is specified and 40 by default), *should we quickly include an option for projecting $F_{MSY}$*, user-specified $F_y$, or $F$ derived from user-specified catch. For all options expect the user-specified fishing mortality, the uncertainty the F that is projected is propogated into uncertainty of the projected population attributes. For models with random effects on *NAA*, *M*, or *Ecov*, the default is to continue the stochastic process into the projection years. WHAM does not currently do this for selectivity because, like $F$, it is a function of management. Selectivity is taken as the average of recent model years. 
+The default settings for short-term projections follow common practice for stock assessments in the U.S. Northeast: the population is projected three years using the average selectivity, maturity, weight, and natural mortality at age from the last five model years to calculate reference points [@nefsc2020Operational]. WHAM implements similar options as ASAP for specifying $F_y$ in the projection years: terminal year $F_y$, average $F$ over specified years, $F_{X\%}$ ($F$ at X% SPR, where X is specified and 40 by default), *should we quickly include an option for projecting $F_{MSY}$*, user-specified $F_y$, or $F$ derived from user-specified catch. For all options except user-specified $F_y$, the uncertainty in projected F is propogated into the uncertainty of projected population attributes. For models with random effects on *NAA*, *M*, or *Ecov*, the default is to continue the stochastic process into the projection years. WHAM does not currently do this for selectivity because, like $F$, it is a function of management. Instead, selectivity is taken as the average of recent model years. 
 
-If the *Ecov* data extend beyond the population model years, WHAM will fit the *Ecov* model to all available data and use the estimated $X_y$ in projections. This may often be the case because lags can exist in both the physical-biological mechanism and the assessment process. As an example, a model with an *Ecov* effect on recruitment may link physical conditions in year $t$ to recruitment in year $t+1$, and the assessment may be conducted in year $t$ using population data through year $t-1$. In this case, 3-year population projections only need the *Ecov* model to be projected one year. While the default handling of *Ecov* projections is to continue the stochastic process, WHAM includes options to use terminal year $x_y$, $x_y$ averaged over specified years, or specified $x_y$. The option to specify $x_y$ allows users to investigate how alternative climate projections may affect the stock.
+If the *Ecov* data extend beyond the population model years, WHAM will fit the *Ecov* model to all available data and use the estimated $X_y$ in projections. This may often be the case because lags can exist in both the physical-biological mechanism and the assessment process. As an example, a model with an *Ecov* effect on recruitment may link physical conditions in year $t$ to recruitment in year $t+1$, and the assessment conducted in year $t$ may only use population data through year $t-1$. In this case, 3-year population projections only need the *Ecov* model to be projected one year. While the default handling of *Ecov* projections is to continue the stochastic process, WHAM includes options to use terminal year $x_y$, $x_y$ averaged over specified years, or specified $x_y$. The option to specify $x_y$ allows users to investigate how alternative climate projections may affect the stock.
 
 ## Fits to original datasets
 
-We fit the models described above to data from five stocks with a broad range of life history and status: Southern New England-Mid Atlantic (SNEMA) yellowtail flounder, butterfish, North Sea cod, Icelandic herring, and Georges Bank haddock (Tables \ref{tab:model-descriptions} and \ref{tab:stock-list}). We fit the *NAA* random effects models to all five stocks since these represent core WHAM functionality. We chose to highlight one stock each for the *M*, *s*, and *Ecov* processes because all models did not converge for all stocks and processes: butterfish (*M*), Georges Bank haddock (*s*), and SNEMA yellowtail flounder (*Ecov*). None of the original assessments estimated *M*. Except for the haddock *s* demonstration, we used the same selectivity parameterization and time blocks as in the original assessments. We used the m3 *NAA* model (all NAA deviations are IID random effects) in the *s* and *Ecov* demonstrations, but the m1 *NAA* model (only recruitment deviations are IID random effects) for the *M* demonstrations, because the NAA transitions can be interpreted as survival and including random effect deviations on both NAA and *M* can lead to model non-convergence [@stockthisissueImplementing]. Within each process, we compared the performance of the different random effects models using AIC.
+We fit the models described above to data from five stocks with a broad range of life history, status, and model dimension (number of ages and years): Southern New England-Mid Atlantic (SNEMA) yellowtail flounder, butterfish, North Sea cod, Icelandic herring, and Georges Bank (GB) haddock (Tables \ref{tab:model-descriptions} and \ref{tab:stock-list}). We fit the *NAA* random effects models to all five stocks since these represent core WHAM functionality. We chose to highlight one stock each for the *M*, *s*, and *Ecov* processes because all models did not converge for all stocks and processes: butterfish (*M*), GB haddock (*s*), and SNEMA yellowtail flounder (*Ecov*). We fixed $\mu_{M_a}$ at the values used or estimated in the original assessments. Except for the GB haddock *s* models, we used the same selectivity parameterization and time blocks as in the original assessments. We used the m3 *NAA* model (all NAA deviations are IID random effects) in the *s* and *Ecov* demonstrations, but the m1 *NAA* model (only recruitment deviations are IID random effects) for the *M* demonstrations, because the NAA transitions can be interpreted as survival and including random effect deviations on both NAA and *M* can lead to model non-convergence [@stockthisissueImplementing]. Within each process, we compared the performance of the different random effects models using AIC.
 
-We fit all models using the open-source statistical software R [@rcoreteam2020Language] and TMB [@kristensen2016TMB], as implemented in the R package WHAM [@miller2020Woods]. Documentation and tutorials for how to specify additional random effect structures in WHAM are available at https://timjmiller.github.io/wham/. 
+We fit all models using the open-source statistical software R [@rcoreteam2020Language] and TMB [@kristensen2016TMB], as implemented in the R package WHAM [@miller2020Woods]. Documentation and tutorials for how to specify additional random effect structures in WHAM are available at https://timjmiller.github.io/wham/. Code and data files to run the analysis are available at https://github.com/brianstock-NOAA/wham-sim.
 
 ## Simulation tests
 
@@ -337,28 +341,18 @@ Reducing uncertainty may be just as valuable as improving accuracy / reducing bi
 
 ## Differences from other assessment model frameworks
 
-<!--How is WHAM different from SAM?
-
-*Not sure where to put this... some could be in Intro or Discussion. Definitely will be a question in readers' minds so may be good to introduce early?* 
--->
-
 WHAM estimates annual full F as fixed effects and selectivity of surveys or fisheries as constant or time-varying random effects with various autoregressive assumptions possible. SAM estimates FAA as a multivariate log-normal random walk. WHAM can estimate interannual transitions as random walk processes like SAM or as a function of autoregressive deviations. Alternatively (or simultaneously) WHAM can estimate deviations in natural mortality as autoregressive processes like NCAM [@cadigan2016Statespace]. Uniquely, WHAM can model multiple covariate time series as state-space processes and include their effects (nonlinearly) in various ways on recruitment or natural mortality.
 
-Like SS, ASAP, BAM, WHAM treats aggregate and composition observations separately for fisheries and indices. This differs from SAM where observations of numbers at age are treated as multivariate log-normal.
+Different assessment frameworks provide a range of methods to allow for time-varying selectivity, and a study comparing these would be useful. For instance, WHAM assumes separability in $F_{a,y}$, i.e. $F_{a,y} = F_y s_a$, as do most assessments in the U.S (e.g. ASAP, Stock Synthesis, an Assessment Model for Alaska, and the Beaufort Assessment Model) because oftentimes we want to specify $F$ in projections to calculate a reference point, as opposed to continuing a $F$ time-series process. Estimating selectivity in time blocks is common practice in these frameworks. In contrast, SAM estimates $F_{a,y}$ directly as a multivariate stochastic process [@nielsen2014Estimation]. The approach in WHAM of estimating $F_y$, $\sigma_s$, $\phi_y$, and $\phi_p$ as fixed effect parameters and allowing 2D AR1 random effects on the selectivity parameters should allow for similar selectivity patterns. The method in Stock Synthesisis is also similar but different: allow 2D AR1 random effects on $s_{a,y}$ instead of the parameters, and then estimate $\sigma_s$ by an iterative tuning algorithm [@xu2019New]. It is unclear whether estimating time-varying selectivity as random effects produces different results or an improvement over using time blocks, or if there are advantages to using one of the three approaches to estimate time-varying selectivity used by WHAM, SAM, or Stock Synthesis.
 
-Most assessments in the U.S. assume separability in $F_{a,t}$, estimate $F_t$ and $Sel_a$. WHAM does this. SAM estimates $F_{a,t}$ directly. WHAM and SAM also make different separability assumptions for the catch/index data (aggregate total + age comps vs. $C_{a,t}$ directly). Should be similar (?) but could test.
-
-To move from traditional SCAA models to state-space models with random effects in the Northeast US, WHAM can be configured to fit models very similar to ASAP and therefore bridge between these frameworks. Goal is to replicate ASAP assessments in the U.S. Northeast. Can easily turn on/off random effects.
+Likewise, WHAM and SAM also make different separability assumptions for the catch and index observations (aggregate total + age comps vs. $C_{a,t}$ directly). Should be similar (?) but could test. Like SS, ASAP, and BAM, WHAM treats aggregate and composition observations separately for fisheries and indices. This differs from SAM where observations of numbers at age are treated as multivariate log-normal. WHAM and SAM also make different separability assumptions for the catch/index data (aggregate total + age comps vs. $C_{a,t}$ directly). Should be similar (?) but could test.
 
 Observation model is natural for landings data that are measured as total weight plus age composition sampling. Age composition sampling often done separately with survey data.
 
-Treating $F$ and $Sel$ separately can be useful for projections. Oftentimes we want to specify $F$ in projections to calculate a reference point, as opposed to continuing a $F$ time-series process.
-
 ## Future work
 
-WHAM will be used in upcoming research track assessments. Could transition to operational. Potential to improve several NEFSC assessments.
+The productivity of several groundfish stocks in the U.S. Northeast has declined in recent decades, and using WHAM to include time-varying processes in assessments via random effects or environment-productivity links could be useful in reducing retrospective bias [@perretti2017Regime; @tableau2018Decadal; @stockthisissueImplementing]. WHAM can be configured to fit SCAA models very similar to ASAP and therefore bridge between these frameworks. Including random effects or environmental covariates in an assessment model is a large structural change, and simulation cross-tests such as we have demonstrated here should be conducted through the research track process [@lynch2018Implementing]. If comparisons against status quo SCAA models prove favorable, WHAM could transition to being used in operational assessments. However, because the details of how to include time-varying processes, as well as the effect on the assessment output, will vary by stock, this likely needs to be done on a stock-by-stock basis.
 
-- 2D AR(1) selectivity. Most assessments in the U.S. assume separability in $F_{a,t}$, i.e. estimate $F_t$ and $Sel_a$. WHAM does this. SAM estimates $F_{a,t}$ directly. WHAM and SAM make different separability assumptions for the catch/index data as well (aggregate total + age comps vs. $C_{a,t}$ directly). Should be similar (?) but could test.
 - How many time/age-varying random effects can be estimated simultaneously? @stockthisissueImplementing estimated random effect deviations in abundance at age and $M$, as well as an environmental covariate effect on recruitment.
 - Ecov-Recruitment simulation study. How much information does Ecov need to have to be useful?
 
@@ -418,6 +412,7 @@ dat %>% dplyr::rename("Estimated parameters"="Pars") %>%
 
 \pagebreak
 
+\begin{landscape}
 ```{r stock-list, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
 # # get biological par estimates from base models
 # relB <- relF <- sigR <- rep(NA, 5)
@@ -470,12 +465,14 @@ dat %>% dplyr::rename("Estimated parameters"="Pars") %>%
 
 # saveRDS(dat, file.path("paper","table1_dat.rds"))
 dat <- readRDS(file.path("paper","table1_dat.rds"))
+dat$Source = c("NEFSC (2020a)", "NEFSC (2020b)","ICES (2017a)","ICES (2017b)","NEFSC (2020a)")
 
 dat %>% dplyr::rename("$\\sigma_R$"="sig_R", "\\# Ages"='n.ages', "\\# Years"='n.years', "$M$"='NatMort', "$\\frac{B}{B_{40}}$"='relB', "$\\frac{F}{F_{40}}$"='relF') %>%
   kable("latex", booktabs = T, escape=F, caption="Stocks used in simulation tests.") %>%
   kable_styling(latex_options=c("basic")) %>%
   add_header_above(c(" "=1, "Modules tested"=4, "Model dim"=2, "Biol. par."=2, "Stock status"=2))
 ```
+\end{landscape}
 
 \pagebreak
 
