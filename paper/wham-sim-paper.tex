@@ -199,11 +199,7 @@ unobserved states, and therefore handle missing data and short-term
 projections in a straightforward way (ICES, 2020). In comparisons with
 SCAA models, state-space models have been shown to have larger, more
 realistic, uncertainty and lower retrospective bias (Miller and Hyun,
-2018; Stock et al., n.d.). \emph{BCS: open to suggestions here\ldots{} I
-added the retrospective bias bit back in since it links to the next
-paragraph. I know you wrote the lower rho was `negligible' in the
-redfish paper, but we did show this in the 2D AR1 survival paper
-comparing Base to NAA-2. Others?}
+2018; Stock et al., n.d.).
 
 Retrospective bias can occur when changing environmental conditions lead
 to changes in productivity that are unaccounted for in stock
@@ -259,13 +255,15 @@ open-source WHAM software package (Miller and Stock, 2020).
 \hypertarget{model-description}{%
 \subsection{Model description}\label{model-description}}
 
-WHAM is a generalization and extension of Miller et al. (2016), which is
-in part a re-coding of the Age-Structured Assessment Program (ASAP,
-Legault and Restrepo, 1998; Miller and Legault, 2015) in TMB. WHAM
-retains characteristics of ASAP, such as its input file structure and
-reliance on empirical weight-at-age data, so that existing assessments
-in the U.S. Northeast can be easily replicated and tested against models
-with state-space and environmental effects in a single framework.
+WHAM is a generalization and extension of Miller et al. (2016) in TMB.
+It is in many respects similar to the Age-Structured Assessment Program
+(ASAP, Legault and Restrepo, 1998; Miller and Legault, 2015) and can be
+configured to fit statistical catch-at-age models nearly identically.
+There is functionality built into WHAM to migrate ASAP input files to R
+inputs needed for WHAM and many of the same types of data inputs, such
+as empirical weight-at-age, so that existing assessments in the U.S.
+Northeast can be easily replicated and tested against models with
+state-space and environmental effects in a single framework.
 
 \emph{Either put core model equations here or in supplement}
 
@@ -409,7 +407,7 @@ for \emph{M} deviations.
 \paragraph{\texorpdfstring{Selectivity
 (\emph{s})}{Selectivity (s)}}\label{selectivity-s}}
 
-As in ASAP and most other SCAA assessment frameworks, WHAM assumes
+As in ASAP and many other SCAA assessment frameworks, WHAM assumes
 separability in the fishing mortality rate by age and year, e.g.
 \(F_{a,y} = F_y s_a\), where \(F_y\) is the ``fully selected'' fishing
 mortality rate in year \emph{y} and \(s_a\) is the selectivity at age.
@@ -574,45 +572,50 @@ m4 and m5 estimate \(X_y\) as an AR1 process, and m4 estimates
 \subsubsection{Population observation
 model}\label{population-observation-model}}
 
-The population observation likelihood components are the same as in
-ASAP: aggregate catch and abundance index for each fleet and survey, and
-age composition for each fleet and survey.
+Like ASAP, there are observation likelihood components for aggregate
+catch and abundance index for each fleet and index, and age composition
+for each fleet and index.
 
-\hypertarget{catch}{%
-\paragraph{Catch}\label{catch}}
+\hypertarget{aggreate-catch-and-indices}{%
+\paragraph{Aggreate catch and
+indices}\label{aggreate-catch-and-indices}}
 
 The predicted catch at age for fleet \(i\), \(\hat{C}_{a,y,i}\), is a
 function of \(N_{a,y}\), \(M_{a,y}\), \(F_{y,i}\), \(s_{a,y,i}\), and
-empirical weight at age, \(W_{a,y,i}\). Then,
-
-\begin{equation}
+empirical weight at age, \(W_{a,y,i}\) \[
+\hat{C}_{a,y,i} = N_{a,y} W_{a,y,i}\left(1- e^{-Z_{a,y}}\right)\frac{F_{a,y,i}}{Z_{a,y}}.
+\] The log-aggregate catch \(\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}\)
+observation is assumed to have a normal distribution \begin{equation}
 \label{eq:catch}
   \begin{array}{ccc}
-    \hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i} \\
-    \sigma^2_{C_{y,i}} = e^{\eta_i} \sqrt{\text{log}(\text{CV}^2_{y,i} + 1)} \\  
-    \text{log}(C_{y,i}) \sim \mathcal{N}\left( \text{log}(\hat{C}_{y,i}) - \frac{\sigma^2_{C_{y,i}}}{2}, \sigma^2_{C_{y,i}}\right)
+    \text{log}(C_{y,i}) \sim \mathcal{N}\left( \text{log}(\hat{C}_{y,i}) - \frac{\sigma^2_{C_{y,i}}}{2}, \sigma^2_{C_{y,i}}\right).
   \end{array}
-\end{equation}
+\end{equation} where the standard devation \[
+\sigma_{C_{y,i}} = e^{\eta_i}\sigma_{\tilde{C}_{y,i}}
+\] is a function of an input standard deviation
+\(\sigma_{\tilde{C}_{y,i}}\) and a fleet-specific parameter \(\eta_i\)
+that is fixed at 0 by default, but may be estimated. The bias correction
+term, \(- \frac{\sigma^2_{C_{y,i}}}{2}\), is included by default based
+on Aldrin et al. (2020) but can be turned off.
 
-where \(\eta_i\) are fleet-specific estimated parameters and
-\(\text{CV}^2_{y,i}\) are user-specified. The bias correction term,
-\(- \frac{\sigma^2_{C_{y,i}}}{2}\), is included by default based on
-Aldrin et al. (2020) but can be turned off.
+Observations of aggregate indices of abundance are handled identically
+to the aggregate catch as in Eqn. \ref{eq:catch} except that for index
+\(i\) the predicted index at age is
+\[\hat{I}_{a,y,i} = q_i s_{a,y,i} N_{a,y}W_{a,y,i} e^{-Z_{a,y}f_{y,i}}\]
+where \(q_i\) is the catchability and \(f_{y,i}\) is the fraction of the
+annual time step elapsed when the index is observed. There are options
+for indices to be in terms of abundance (numbers) or biomass and
+\(W_{a,y,i} = 1\) for the former.
 
-WHAM includes seven options for the catch and index age compositions:
-multinomial, Dirichlet, Dirichlet-multinomial, logistic normal treating
-zero observations as missing, logistic normal pooling zero observations
-with adjacent age classes, and two types of zero-one inflated logistic
-normal.
+\hypertarget{catch-and-index-age-composition}{%
+\paragraph{Catch and index age
+composition}\label{catch-and-index-age-composition}}
 
-\hypertarget{indices}{%
-\paragraph{Indices}\label{indices}}
-
-The survey indices of abundance are handled identically to the aggregate
-catch as in Eqn. \ref{eq:catch} and catch age compositions, except that
-the predicted index biomass at age \(i\), \(\hat{I}_{a,y,i}\) is a
-function of \(N_{a,y}\), \(Z_{a,y}\), \(s_{a,y,i}\), \(W_{a,y,i}\), and
-catchability, \(q_i\).
+WHAM includes several options for the catch and index age compositions
+including multinomial (default), Dirichlet, Dirichlet-multinomial,
+logistic normal and a zero-one inflated logistic normal. In all of the
+applications and simulation studies here, we assumed age composition
+observations were nultinomial distributed.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -621,15 +624,19 @@ The default settings for short-term projections follow common practice
 for stock assessments in the U.S. Northeast: the population is projected
 three years using the average selectivity, maturity, weight, and natural
 mortality at age from the last five model years to calculate reference
-points. WHAM implements the same options as ASAP4 for specifying \(F_y\)
-in the projection years: apply terminal year \(F_y\), apply \(F\)
-averaged over specified years, apply \(F_{X\%}\) (\(F\) at X\% SPR,
-where X is specified), user-specified \(F_y\), or user-specified catch.
-For models with random effects on \emph{NAA}, \emph{M}, or \emph{Ecov},
-the default is to continue the stochastic process into the projection
-years. WHAM does not do this for selectivity because it is a function of
-management; instead, selectivity is taken as the average of recent model
-years.
+points. WHAM implements similar options as ASAP for specifying \(F_y\)
+in the projection years: terminal year \(F_y\), average \(F\) over
+specified years, \(F_{X\%}\) (\(F\) at X\% SPR, where X is specified and
+40 by default), \emph{should we quickly include an option for projecting
+\(F_{MSY}\)}, user-specified \(F_y\), or \(F\) derived from
+user-specified catch. For all options expect the user-specified fishing
+mortality, the uncertainty the F that is projected is propogated into
+uncertainty of the projected population attributes. For models with
+random effects on \emph{NAA}, \emph{M}, or \emph{Ecov}, the default is
+to continue the stochastic process into the projection years. WHAM does
+not currently do this for selectivity because, like \(F\), it is a
+function of management. Selectivity is taken as the average of recent
+model years.
 
 If the \emph{Ecov} data extend beyond the population model years, WHAM
 will fit the \emph{Ecov} model to all available data and use the
@@ -690,17 +697,17 @@ error in parameters constraining random effects (Table
 \ref{tab:model-descriptions}) and quantities of interest, such as
 spawning stock biomass (SSB), \(F\),
 \(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\).
-We calculated relative error as \(\frac{\hat{\theta_i}}{\theta}-1\),
-where \(\theta\) is the true value used to simulate data and
-\(\theta_i\) is the value estimated in simulation \emph{i}. To estimate
-bias of each estimation model for a given operating model, we calculated
-95\% confidence intervals of the median relative error using the
-binomial distribution (Thompson, 1936). To summarize the bias across
-simulations and years for each model, we calculated the median quantity
-across years and took the mean of the medians across simulations.
-Finally, for each operating model we calculated the proportion of
-simulations in which each estimation model converged and had the lowest
-AIC, aggregated across stocks.
+We calculated relative error as \(\frac{\hat{\theta_i}}{\theta_i}-1\),
+where \(\theta_i\) is the true value for simulated data set \(i\) and
+\(\hat{\theta}_i\) is the value estimated from fitting the model to the
+simulated data. To estimate bias of each estimation model for a given
+operating model, we calculated 95\% confidence intervals of the median
+relative error using the binomial distribution (Thompson, 1936). To
+summarize the bias across simulations and years for each model, we
+calculated the median quantity across years and took the mean of the
+medians across simulations. Finally, for each operating model we
+calculated the proportion of simulations in which each estimation model
+converged and had the lowest AIC, aggregated across stocks.
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -948,12 +955,6 @@ reducing bias.
 \hypertarget{differences-from-other-assessment-model-frameworks}{%
 \subsection{Differences from other assessment model
 frameworks}\label{differences-from-other-assessment-model-frameworks}}
-
-How is WHAM different from SAM?
-
-\emph{Not sure where to put this\ldots{} some could be in Intro or
-Discussion. Definitely will be a question in readers' minds so may be
-good to introduce early?}
 
 WHAM estimates annual full F as fixed effects and selectivity of surveys
 or fisheries as constant or time-varying random effects with various
