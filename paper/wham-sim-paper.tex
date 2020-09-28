@@ -800,19 +800,22 @@ SSB and \emph{R} in some years (compare locations of points between Fig.
 
 Several findings were consistent across processes and stocks. When the
 estimation and operating model were consistent, bias of SSB, \(F\),
-\(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), \(R\), and
+\(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\)
+was generally small and not significant based on confidence intervals
+(Figs.
+\ref{fig:rel-error-ICEherring-naa}--\ref{fig:rel-error-GBhaddock-sel}
+and S1--S6). Bias was also generally small when more complex models were
+fitted to less complicated operating model simulations. In contrast, the
+bias was often non-trivial when the estimation model was less complex
+than the operating model, especially when models without random effects
+were fit to data simulated from models with random effects. Bias in SSB
+and \(F\) were always opposite, i.e.~when SSB was biased high, \(F\) was
+biased low, and vice-versa. Predicted catch was never biased. Bias of
 the variance and correlation parameters controlling random effects was
-generally small and not significant based on confidence intervals. Bias
-was also generally small when more complex models were fitted to less
-complicated operating model simulations. In contrast, the bias was often
-non-trivial when the estimation model was less complex than the
-operating model, especially when models without random effects were fit
-to data simulated from models with random effects. Bias in SSB and \(F\)
-were always opposite; when SSB was biased high, \(F\) was biased low,
-and vice-versa. Predicted catch was never biased. Bias of variance
-parameters was either negligible or negative, as expected. Restricted
-maximum likelihood (REML) should be used if more accurate estimation of
-these parameters is a priority.
+generally negligible or negative, as expected (Figs.
+\ref{fig:estpar-naa}--\ref{fig:estpar-ecov}). Restricted maximum
+likelihood (REML) should be used if more accurate estimation of these
+parameters is a priority.
 
 In cross-tests, the percentage of simulations in which AIC selected the
 correct model varied between 62--99\% by process, stock, and operating
@@ -823,6 +826,22 @@ than for \emph{M} or selectivity.
 \hypertarget{numbers-at-age}{%
 \subsubsection{Numbers-at-age}\label{numbers-at-age}}
 
+Across the five stocks, all \emph{NAA} models estimated SSB, \(F\),
+\(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\)
+with very minimal bias in self-tests. An exception was the estimation of
+\(F\) for Icelandic herring, particularly for the SCAA models (median
+relative error with 95\% CI for m1: -0.060 (-0.073, -0.047), m2: -0.060
+(-0.073, -0.047), m3: 0.015 (-0.004, 0.034), and m4: 0.049 (0.017,
+0.080); Figs. \ref{fig:rel-error-ICEherring-naa} and S7--S9). The
+convergence rate for most models and stocks was above 95\%, again with
+the exception of the SCAA models for Icelandic herring (Fig. S10a). In
+cross-tests, SCAA models exhibited non-trivial bias when estimating data
+simulated from models that treated numbers at all ages as random
+effects. The degree of bias varied by quantity and stock between -25\%
+and 25\% (Figs. \ref{fig:rel-error-ICEherring-naa} and S1--S4). The more
+complex NAA models estimated all quantities without bias regardless of
+operating model.
+
 For four of the five stocks, \(\sigma^2_R\) was estimated without bias
 in self-tests (Fig. \ref{fig:estpar-naa}). The exception was butterfish,
 for which \(\sigma^2_R\) was negatively biased in m1, m2, and m4 (but
@@ -830,42 +849,22 @@ not m3). In contrast, both m3 and m4 estimated \(\sigma^2_a\) with
 negative bias for all five stocks. There was no consistent pattern in
 bias for the correlation parameters \(\rho_a\) and \(\rho_y\).
 
-Across the five stocks, all \emph{NAA} models estimated SSB, \(F\),
-\(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\)
-with very minimal bias in self-tests. An exception was the estimation of
-\(F\) for Icelandic herring, particularly for the SCAA models (median
-relative error with 95\% CI for m1: -0.060 (-0.073, -0.047), m2: -0.060
-(-0.073, -0.047), m3: 0.015 (-0.004, 0.034), and m4: 0.049 (0.017,
-0.080); Fig. \ref{fig:rel-error-ICEherring-naa}). The convergence rate
-for most models and stocks was above 95\%, again with the exception of
-the SCAA models for Icelandic herring (ref supp figure). In cross-tests,
-SCAA models exhibited non-trivial bias when estimating data simulated
-from models that treated numbers at all ages as random effects. The
-degree of bias varied by quantity and stock between -25\% and 25\% (ref
-supp figures). The more complex NAA models estimated all quantities
-without bias regardless of operating model.
-
 \hypertarget{natural-mortality}{%
 \subsubsection{Natural mortality}\label{natural-mortality}}
+
+SSB, \(F\), \(\frac{\text{B}}{\text{B}_{40\%}}\),
+\(\frac{F}{F_{40\%}}\), and \(R\) were estimated without significant
+bias in self-tests, although m1 and m2 exhibited bias in SSB and
+\(\frac{F}{F_{40\%}}\) when fit to data simulated from m3 (Figs.
+\ref{fig:rel-error-butterfish-m} and S5--S6).
 
 As for the NAA models, \(\sigma^2_R\) was estimated without bias in the
 \emph{M} model self-tests (Fig. \ref{fig:estpar-m}). \(\sigma^2_M\) was
 biased low, \(\varphi_y\) had no bias, and the direction of bias in
 \(\varphi_a\) was inconsistent.
 
-SSB, \(F\), \(\frac{\text{B}}{\text{B}_{40\%}}\),
-\(\frac{F}{F_{40\%}}\), and \(R\) were estimated without significant
-bias in self-tests, although m1 and m2 exhibited bias in SSB and
-\(\frac{F}{F_{40\%}}\) when fit to data simulated from m3 (e.g.~for
-butterfish, Fig. \ref{fig:rel-error-butterfish-m}).
-
 \hypertarget{selectivity}{%
 \subsubsection{Selectivity}\label{selectivity}}
-
-For Georges Bank haddock, the variance and correlation parameters
-\(\sigma^2_a\), \(\sigma^2_s\), \(\phi_y\), and \(\phi_a\) were all
-estimated with slight negative bias in self-tests of models with
-\emph{s} random effects (Fig. \ref{fig:estpar-sel}).
 
 Models with IID or 2D AR1 \emph{s} random effects estimated SSB, \(F\),
 \(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\)
@@ -873,6 +872,11 @@ with little to no bias across operating models (Fig.
 \ref{fig:rel-error-GBhaddock-sel}). The model without \emph{s} random
 effects showed substantial bias when fit to data simulated from m2 or
 m3.
+
+For Georges Bank haddock, the variance and correlation parameters
+\(\sigma^2_a\), \(\sigma^2_s\), \(\phi_y\), and \(\phi_a\) were all
+estimated with slight negative bias in self-tests of models with
+\emph{s} random effects (Fig. \ref{fig:estpar-sel}).
 
 \hypertarget{ecov-recruitment}{%
 \subsubsection{Ecov-Recruitment}\label{ecov-recruitment}}
@@ -1037,14 +1041,6 @@ framework.
 
 This research was performed while BCS held an NRC Research Associateship
 award at the NEFSC. NOAA Fish \& Climate grant number ??.
-
-\pagebreak
-
-\hypertarget{supplementary-material}{%
-\subsection*{Supplementary material}\label{supplementary-material}}
-\addcontentsline{toc}{subsection}{Supplementary material}
-
-More figures.
 
 \pagebreak
 
@@ -1579,44 +1575,11 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
-
-}
-
-\caption{Proportion of simulations in which each model had the lowest AIC. A) Numbers-at-age (NAA), aggregated across all five stocks. B) Natural mortality (\textit{M}), aggregated over two stocks (SNEMAYT and NScod). C) Selectivity (GBhaddock). Not all estimation models converged for each simulation, even when the operating model matched.}\label{fig:aic-cross}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}
-
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
-
-}
-
-\caption{Relative error of parameters constraining numbers-at-age (NAA) random effects. Four models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-naa}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}
-
 {\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
 
 }
 
 \caption{Relative error of key quantities estimated for Icelandic herring using four models of numbers-at-age (NAA) random effects. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1).}\label{fig:rel-error-ICEherring-naa}
-\end{figure}
-
-\pagebreak
-
-\begin{figure}
-
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
-
-}
-
-\caption{Relative error of parameters constraining natural mortality (\textit{M}) random effects. Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations were independent and identically distributed (IID). m3 = \textit{M} deviations were correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT) and North Sea cod (NScod, m3 did not converge).}\label{fig:estpar-m}
 \end{figure}
 
 \pagebreak
@@ -1634,22 +1597,44 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
 
 }
 
-\caption{Relative error of parameters constraining selectivity random effects for Georges Bank haddock (GBhaddock). Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects (constant selectivity). m2 = selectivity deviations were independent and identically distributed (IID). m3 = selectivity deviations were correlated by parameter and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-sel}
+\caption{Relative error of key quantities estimated for Georges Bank haddock using three models of selectivity random effects. m1 = no random effects (constant logistic selectivity). m2 = selectivity deviations are independent and identically distributed (IID). m3 = selectivity deviations are correlated by parameter and year (2D AR1).}\label{fig:rel-error-GBhaddock-sel}
 \end{figure}
 
 \pagebreak
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
 
 }
 
-\caption{Relative error of key quantities estimated for Georges Bank haddock using three models of selectivity random effects. m1 = no random effects (constant logistic selectivity). m2 = selectivity deviations are independent and identically distributed (IID). m3 = selectivity deviations are correlated by parameter and year (2D AR1).}\label{fig:rel-error-GBhaddock-sel}
+\caption{Relative error of parameters constraining numbers-at-age (NAA) random effects. Four models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = only recruitment deviations are random effects (most similar to traditional statistical catch-at-age, SCAA), and deviations are independent and identically distributed (IID). m2 = as m1, but with autocorrelated recruitment deviations ($\text{AR1}_y$). m3 = all NAA deviations are IID random effects. m4 = as m3, but deviations are correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-naa}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining natural mortality (\textit{M}) random effects. Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects on \textit{M}. m2 = \textit{M} deviations were independent and identically distributed (IID). m3 = \textit{M} deviations were correlated by age and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI. Stock abbreviations: SNEMA yellowtail flounder (SNEMAYT) and North Sea cod (NScod, m3 did not converge).}\label{fig:estpar-m}
+\end{figure}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+
+}
+
+\caption{Relative error of parameters constraining selectivity random effects for Georges Bank haddock (GBhaddock). Three models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. m1 = no random effects (constant selectivity). m2 = selectivity deviations were independent and identically distributed (IID). m3 = selectivity deviations were correlated by parameter and year (2D AR1). Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-sel}
 \end{figure}
 
 \pagebreak
@@ -1664,5 +1649,16 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \caption{Relative error of parameters constraining variation in recruitment for Southern New England-Mid Atlantic yellowtail flounder (SNEMAYT). Five models were used to simulate 100 datasets keeping fixed effect parameters constant, and then re-fit to each simulated dataset. All models estimated recruitment using the Beverton-Holt function and included CPI effects on $\beta$: $\hat{R}_{t+1} = \frac{\alpha S_{t}}{1 + e^{\beta_0 + \beta_1 x_{t} + \beta_2 x^2_{t}} S_t}$. m1 = Cold Pool Index (CPI) modeled as a random walk (RW) with no effect on recruitment ($\beta_1 = \beta_2 = 0$). m2 = CPI as RW, linear effect on $\beta$. m3 = CPI as RW, 2nd order polynomial effect on $\beta$. m4 = CPI as AR1, linear effect. m5 = CPI as AR1, polynomial effect. Relative error was calculated as $\frac{\hat{\theta_i}}{\theta} - 1$, where $\hat{\theta_i}$ was the estimate in simulation $i$ for parameter $\theta$, and $\theta$ was the true value (estimate from original dataset). Red points and lines show median relative error with 95\% CI.}\label{fig:estpar-ecov}
 \end{figure}
 \end{landscape}
+
+\pagebreak
+
+\begin{figure}
+
+{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+
+}
+
+\caption{Proportion of simulations in which each model had the lowest AIC. A) Numbers-at-age (NAA), aggregated across all five stocks. B) Natural mortality (\textit{M}), aggregated over two stocks (SNEMAYT and NScod). C) Selectivity (GBhaddock). Not all estimation models converged for each simulation, even when the operating model matched.}\label{fig:aic-cross}
+\end{figure}
 
 \end{document}
