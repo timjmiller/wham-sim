@@ -210,15 +210,10 @@ has motivated managers to make the ``continue{[}d{]} development of
 stock assessment models that include environmental terms'' a top
 priority (Hare et al., 2016). In addition to providing short-term (1-3
 years) catch advice with reduced retrospective bias, it is hoped that
-environment-linked assessments will help create realistic rebuilding
-plans in the medium-term (3-10 years) for stocks that have not rebounded
-in response to dramatic decreases in \(F\). For example, Miller et al.
-(2016) developed a state-space model for yellowtail flounder with an
-environmental effect on recruitment, which reduced retrospective
-patterns and residual variance. Additional applications using a similar
-state-space framework that include environmental effects on growth,
-\(M\), and maturity have also proven promising (Miller and Hyun, 2018;
-Miller et al., 2018; O'Leary et al., 2019; Xu et al., 2018).
+environment-linked assessments will help create realistic evaluation of
+sustainable stock and harvest levels in the medium-term (3-10 years) for
+stocks that have not rebounded in response to dramatic decreases in
+\(F\).
 
 To address the needs of fisheries management in a changing climate, we
 seek an assessment framework that combines both the empirical and
@@ -892,7 +887,8 @@ bias.
 
 Our results suggest that the WHAM package can be a useful tool for stock
 assessment when environmental effects on recruitment or natural
-mortality, variation in selectivity or natural mortality, or stochastic
+mortality\emph{(TJM: I don't think we can say this about M)}, or
+temporal variation in selectivity, natural mortality, or stochastic
 changes in the numbers at age are of interest. The simulation tests
 showed negligible or no bias in estimation of important assessment
 outputs (SSB, \emph{F}, stock and harvest status) when the operating and
@@ -904,49 +900,52 @@ models with IID or 2D AR1 random effect deviations performed well across
 stocks and processes, which suggests that they warrant consideration in
 future stock-specific studies.
 
-\hypertarget{differences-from-other-assessment-model-frameworks}{%
-\subsection{Differences from other assessment model
-frameworks}\label{differences-from-other-assessment-model-frameworks}}
-
-WHAM can estimate interannual transitions in NAA as random walk
-processes like SAM, or as a function of autoregressive deviations.
-Alternatively (or simultaneously, Stock et al., n.d.) WHAM can estimate
-deviations in natural mortality as autoregressive processes like NCAM
-(Cadigan, 2016). Uniquely, WHAM can model multiple environmental
-covariate time series as state-space processes and include their effects
-(nonlinearly) in various ways on recruitment or natural mortality.
+\hypertarget{relationships-to-other-existing-assessment-model-frameworks}{%
+\subsection{Relationships to other existing assessment model
+frameworks}\label{relationships-to-other-existing-assessment-model-frameworks}}
 
 WHAM assumes separability in \(F_{a,y}\), i.e. \(F_{a,y} = F_y s_a\),
 and estimates annual full \(F_y\) as fixed effects and selectivity of
 surveys or fisheries as constant or time-varying random effects with
 various autoregressive assumptions possible. Most other assessment
-frameworks in the U.S, e.g.~ASAP, Stock Synthesis (SS), an Assessment
-Model for Alaska (AMAK), and the Beaufort Assessment Model (BAM), make
-this same separability assumption because oftentimes we want to specify
-\(F\) in projections to calculate a reference point, as opposed to
-continuing a \(F\) time-series process. Estimating selectivity in time
-blocks is common practice in these frameworks. In contrast, SAM
-estimates \(F_{a,y}\) directly as a multivariate stochastic process
-(Nielsen and Berg, 2014). The approach in WHAM of estimating \(F_y\),
-\(\sigma_s\), \(\phi_y\), and \(\phi_p\) as fixed effect parameters and
-allowing 2D AR1 random effects on the selectivity parameters should
-allow for similar selectivity patterns as in SAM. The method in Stock
-Synthesisis is similar: allow 2D AR1 random effects on \(s_{a,y}\)
-instead of the parameters, and then estimate \(\sigma_s\) by an
-iterative tuning algorithm (Xu et al., 2019). It is unclear whether
-estimating time-varying selectivity as random effects produces different
-results or an improvement over using time blocks, or if there are
-advantages to using any of the three approaches for estimating
-time-varying selectivity used by WHAM, SAM, or Stock Synthesis.
+frameworks in the U.S, e.g.~ASAP, Stock Synthesis (SS; Methot and
+Wetzel, 2013), an Assessment Model for Alaska (AMAK; Anon., 2015), and
+the Beaufort Assessment Model (BAM; Williams and Shertzer, 2015), make
+this same separability assumption which is useful for specifying a
+fully-selected \(F\) in projections to calculate reference points or
+generating catch advice. Estimating selectivity in time blocks is common
+practice in these frameworks. In contrast, SAM estimates \(F_{a,y}\)
+directly as a multivariate random walk process (Nielsen and Berg, 2014).
+The autoregressive models for selectivity parameters under certain
+configurations of WHAM should allow for similar \(F\) at age patterns as
+in SAM. Stock Synthesisis allows 2D AR1 random effects on \(s_{a,y}\)
+instead of the parameters, and then the variance parameter is estimated
+by an iterative tuning algorithm (Xu et al., 2019). It is unclear
+whether estimating time-varying selectivity as random effects produces
+better results than assuming time blocks, or if there are advantages to
+using any of the three approaches for estimating time-varying
+selectivity used by WHAM, SAM, or SS.
 
-Likewise, WHAM and SAM also make different separability assumptions for
-the catch and index observations. WHAM treats aggregate and composition
-observations separately for fisheries and indices, as do ASAP, SS, AMAK,
-and BAM. This observation model is natural for landings data that are
-measured as total weight plus age composition sampling, with survey age
-composition sampling often done separately. This differs from SAM where
-\(C_{a,y}\) and \(I_{a,y}\) observations are treated directly as
-multivariate log-normal.
+Likewise, WHAM and the other U.S.-based assessment models treat catch,
+index, and composition observations differently than SAM. The U.S-based
+assessment models treat aggregate and composition observations
+separately for fisheries and indices whereas SAM treats observations of
+catch and indices at age \(C_{a,y}\) and \(I_{a,y}\) as multivariate
+log-normal. Separate observation models for aggregate and composition
+observations is natural when sampling for total catch differs from that
+for length and age composition.
+
+Like SAM, WHAM can estimate interannual transitions in NAA as a random
+walk processes, but WHAM can also be configured to treat these
+deviations as stationary autoregressive processes. Alternatively (or
+simultaneously, Stock et al., n.d.) WHAM can estimate deviations in
+natural mortality as autoregressive processes like NCAM (Cadigan, 2016).
+Uniquely, WHAM can model multiple environmental covariate time series as
+state-space processes and include their effects, possibly nonlinearly,
+in various ways on recruitment or natural mortality. Although most
+applications thusfar investigate effects of physical processes on
+demographic parameters, indices of predation might also be considered
+(Marshall et al., 2019).
 
 \hypertarget{future-use-of-wham}{%
 \subsection{Future use of WHAM}\label{future-use-of-wham}}
@@ -965,28 +964,29 @@ demonstrated here should be conducted through the research track process
 prove favorable, WHAM could transition to being used in operational
 assessments. However, because the details of how to include time-varying
 processes, as well as the effect on the assessment output, will vary by
-stock, this evaluation likely needs to be conducted on a stock-by-stock
+stock, this evaluation may need to be conducted on a stock-by-stock
 basis.
 
 Random effects allow for changing productivity and, if they are
 considered as an autoregressive process, can propagate the effect of
 these changes on assessment output in short-term projections (Stock et
-al., n.d.). However, the AR1 process demonstrated here reverts to the
+al., n.d.). However, the AR1 process demonstrated here trends to the
 mean in projections and will not predict values beyond extremes in
 observed time-series. This is an issue worth examining because many
 marine ecosystems are changing to such extent that recent conditions are
-time-series extremes, and conditions in the near future may have never
-been observed (e.g., sea surface temperatures over the U.S. Northeast
-Shelf in the last decade; Chen et al., 2020). More complex nonstationary
-time-series models such as autoregressive integrated moving average
-(ARIMA) that can forecast beyond observed values could be implemented.
-Nonlinear (e.g.~splines) or double linear integration (Di Lorenzo and
-Ohman, 2013) techniques could also be worth pursuing, as well as
-time-delay embedding methods (Munch et al., 2018, 2017), which not only
-allow for nonstationary dynamics but also do not require a specified
-functional form. Still, stochastic projections of productivity responses
-to environmental conditions that are rapidly changing and at time-series
-extremes should be done with care.
+time-series extremes, and conditions in the near future may continue to
+expand the range of observations (e.g., sea surface temperatures over
+the U.S. Northeast Shelf in the last decade; Chen et al., 2020). More
+complex nonstationary time-series models such as autoregressive
+integrated moving average (ARIMA) that can forecast beyond observed
+values could be implemented. Nonlinear (e.g.~splines) or double linear
+integration (Di Lorenzo and Ohman, 2013) techniques could also be worth
+pursuing, as well as time-delay embedding methods (Munch et al., 2018,
+2017), which not only allow for nonstationary dynamics but also do not
+require a specified functional form. The best approach to making
+stochastic projections of productivity responses to environmental
+conditions that are rapidly changing and at time-series extremes merits
+further research.
 
 In addition to the empirical (i.e.~random effects) approach, it is worth
 considering the mechanistic approach (i.e.~explicitly modeled links to
@@ -1005,31 +1005,36 @@ stronger signals (wider ranges of observed stock status and
 environmental conditions) (Free et al., 2019; Haltuch et al., 2019;
 Haltuch and Punt, 2011; Marshall et al., 2019).
 
-Although including external drivers of productivity may increase model
-uncertainty without improving accuracy, stock assessments that do not
-allow for time-varying productivity underestimate model uncertainty and
-implicitly assume that conditions will return to average in forecasts.
-In lieu of operationalizing an environment-linked WHAM model to set
-catch advice, WHAM can still be useful in two main ways. First, WHAM can
-serve as an operating model to simulate realistic environmentally-driven
-changes in recruitment or \emph{M} in order to estimate the sensitivity
-of status quo models. Second, WHAM could account for uncertainty in
-environment-productivity relationships by constructing ensembles of
-alternative states of nature (Anderson et al., 2017; Möllmann et al.,
-2014).
+The perception of precision in model output such as projected population
+biomass or catch advice is affected by whether productivity componenents
+are treated as either constant or as autoregressive processes, much like
+whether certain parameters are either fixed or estimated in traditional
+assessment models. Modeling frameworks such as WHAM allow the
+performance of these alternative models to be compared and when allowing
+temporal variation in productivity components is justified, the greater
+uncertainty in the assessment output is more realistic. Moreover, model
+uncertainty could be included in our preception of output uncertainty by
+fitting ensembles of WHAM models that represent alternative states of
+nature (Anderson et al., 2017; Möllmann et al., 2014). Finally, the
+simulation capabilities of WHAM can also be useful in situations where
+variation in productivity is hypothesized, but information to estimate
+this variation is unavialable. WHAM can be configured as an operating
+model to simulate plausible environmentally-driven changes in
+recruitment or \emph{M} or plausible empirical variation in order to
+estimate the sensitivity of status quo models.
 
 \hypertarget{conclusion}{%
 \subsection{Conclusion}\label{conclusion}}
 
 A major present-day challenge in fisheries is to assess and manage
 stocks in a changing environment. We forsee environment-linked stock
-assessments increasingly becoming feasible as fisheries and
-oceanographic time-series lengthen and our ecological understanding
+assessments becoming increasingly feasible and realistic as fisheries
+and oceanographic time-series lengthen and our ecological understanding
 deepens. We have developed WHAM with this in mind. Finally, we note that
 the development of TMB has been a critical advance for fisheries
-assessment models such as WHAM, allowing us to treat population and
-environmental processes as time-varying random effects in a state-space
-framework.
+assessment modeling frameworks such as WHAM, allowing us to rapidly fit
+models that treat population and environmental processes as time-varying
+random effects in a state-space framework.
 
 \hypertarget{acknowledgements}{%
 \subsection*{Acknowledgements}\label{acknowledgements}}
@@ -1076,6 +1081,10 @@ C., Osio, G.C., Ovando, D., Mosqueira, I., Rosenberg, A.A., Selig, E.R.,
 2017. Improving estimates of population status and trend with
 superensemble models. Fish and Fisheries 18, 732--741.
 \url{https://doi.org/10.1111/faf.12200}
+
+\leavevmode\hypertarget{ref-anon2015AMAK}{}%
+Anon., 2015. Assessment Model for Alaska Description of GUI and
+Instructions.
 
 \leavevmode\hypertarget{ref-berg2016Accounting}{}%
 Berg, C.W., Nielsen, A., 2016. Accounting for correlated observations in
@@ -1328,14 +1337,6 @@ Nielsen, A., Berg, C.W., 2014. Estimation of time-varying selectivity in
 stock assessments using state-space models. Fisheries Research 158,
 96--101. \url{https://doi.org/10.1016/j.fishres.2014.01.014}
 
-\leavevmode\hypertarget{ref-oleary2019Understanding}{}%
-O'Leary, C.A., Miller, T.J., Thorson, J.T., Nye, J.A., 2019.
-Understanding historical summer flounder ( \emph{Paralichthys}
-\emph{Dentatus} ) abundance patterns through the incorporation of
-oceanography-dependent vital rates in Bayesian hierarchical models. Can.
-J. Fish. Aquat. Sci. 76, 1275--1294.
-\url{https://doi.org/10.1139/cjfas-2018-0092}
-
 \leavevmode\hypertarget{ref-patrick2015Myths}{}%
 Patrick, W.S., Link, J.S., 2015. Myths that Continue to Impede Progress
 in Ecosystem-Based Fisheries Management. Fisheries 40, 155--160.
@@ -1424,6 +1425,10 @@ replacing tuning algorithms with statistics. Fisheries Research 217,
 Walters, C.J., Collie, J.S., 1988. Is Research on Environmental Factors
 Useful to Fisheries Management? Can. J. Fish. Aquat. Sci. 45,
 1848--1854. \url{https://doi.org/10.1139/f88-217}
+
+\leavevmode\hypertarget{ref-williams2015BAM}{}%
+Williams, Eric H., Shertzer, K.W., 2015. Technical documentation of the
+Beaufort Assessment Model (BAM).
 
 \leavevmode\hypertarget{ref-winemiller1992Patterns}{}%
 Winemiller, K.O., Rose, K.A., 1992. Patterns of Life-History
@@ -1523,7 +1528,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
+{\centering \includegraphics[width=8in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/daic} 
 
 }
 
@@ -1535,7 +1540,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
 
 }
 
@@ -1546,7 +1551,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M} 
 
 }
 
@@ -1557,7 +1562,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
 
 }
 
@@ -1568,7 +1573,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
 
 }
 
@@ -1579,7 +1584,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+{\centering \includegraphics[width=3.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel} 
 
 }
 
@@ -1590,7 +1595,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE} 
 
 }
 
@@ -1601,7 +1606,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
 
 }
 
@@ -1612,7 +1617,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE} 
 
 }
 
@@ -1623,7 +1628,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
 
 }
 
@@ -1634,7 +1639,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE} 
 
 }
 
@@ -1645,7 +1650,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
 
 }
 
@@ -1657,7 +1662,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
+{\centering \includegraphics[width=9in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE} 
 
 }
 
