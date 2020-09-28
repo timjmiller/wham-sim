@@ -106,7 +106,46 @@ Northeast Fisheries Science Center, National Marine Fisheries Service,
 \subsection*{Abstract}\label{abstract}}
 \addcontentsline{toc}{subsection}{Abstract}
 
-WHAM is great.
+The rapid changes observed in many marine ecosystems that support
+fisheries pose a challenge to stock assessment and management predicated
+on time-invariant productivity and considering species in isolation. In
+single-species assessments, two main approaches have been used to
+account for productivity changes: allowing biological parameters to vary
+stochastically over time (empirical), or explicitly linking population
+processes such as recruitment (\emph{R}) or natural mortality (\emph{M})
+to environmental covariates (mechanistic). Here, we describe the Woods
+Hole Assessment Model (WHAM) framework and software package, which
+combines these two approaches. WHAM can estimate time- and age-varying
+random effects on annual transitions in numbers at age (NAA), \emph{M},
+and selectivity, as well as fit environmental time-series with process
+and observation errors, missing data, and nonlinear links to \emph{R}
+and \emph{M}. WHAM can also be configured as a traditional statistical
+catch-at-age (SCAA) model in order to easily replicate status quo models
+and test them against models with state-space and environmental effects
+in a single framework.
+
+We fit models with and without (independent or autocorrelated) random
+effects on NAA, \emph{M}, and selectivity to data from five stocks with
+a broad range of life history, status, number of ages, and time-series
+length. Models that included random effects performed well across stocks
+and processes, especially random effects models with a two dimensional
+(2D) first-order autoregressive (AR1) covariance structure over age and
+year. We conducted simulation tests and found negligible or no bias in
+estimation of important assessment outputs (SSB, \emph{F}, stock status,
+and catch) when the operating and estimation models matched. However,
+bias in SSB and \emph{F} was often non-trivial when the estimation model
+was less complex than the operating model, especially when models
+without random effects were fit to data simulated from models with
+random effects. Bias of the variance and correlation parameters
+controlling random effects was also negligible or slightly negative as
+expected. Our results suggest that WHAM can be a useful tool for stock
+assessment when environmental effects on \emph{R} or \emph{M}, or
+stochastic variation in NAA transitions, \emph{M}, or selectivity are of
+interest. In the U.S. Northeast, where the productivity of several
+groundfish stocks has declined, conducting assessments in WHAM with
+time-varying processes via random effects or environment-productivity
+links may account for these trends and potentially reduce retrospective
+bias.
 
 \hypertarget{keywords}{%
 \subsubsection*{Keywords}\label{keywords}}
@@ -203,7 +242,7 @@ realistic, uncertainty and lower retrospective bias (Miller and Hyun,
 
 Retrospective bias can occur when changing environmental conditions lead
 to changes in productivity that are unaccounted for in stock
-assessments, and this is a concern commen to several groundfish stocks
+assessments, and this is a concern common to several groundfish stocks
 on the Northeast U.S. Shelf (Brooks and Legault, 2016; Tableau et al.,
 2018). The Northeast U.S. Shelf ecosystem is rapidly changing, and this
 has motivated managers to make the ``continue{[}d{]} development of
@@ -594,7 +633,7 @@ observation is assumed to have a normal distribution \begin{equation}
   \begin{array}{ccc}
     \text{log}(C_{y,i}) \sim \mathcal{N}\left( \text{log}(\hat{C}_{y,i}) - \frac{\sigma^2_{C_{y,i}}}{2}, \sigma^2_{C_{y,i}}\right).
   \end{array}
-\end{equation} where the standard devation \[
+\end{equation} where the standard deviation \[
 \sigma_{C_{y,i}} = e^{\eta_i}\sigma_{\tilde{C}_{y,i}}
 \] is a function of an input standard deviation
 \(\sigma_{\tilde{C}_{y,i}}\) and a fleet-specific parameter \(\eta_i\)
@@ -619,7 +658,7 @@ WHAM includes several options for the catch and index age compositions
 including multinomial (default), Dirichlet, Dirichlet-multinomial,
 logistic normal and a zero-one inflated logistic normal. In all of the
 applications and simulation studies here, we assumed age composition
-observations were nultinomial distributed.
+observations were multinational distributed.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -634,7 +673,7 @@ average \(F\) over specified years, \(F_{X\%}\) (\(F\) at X\% SPR, where
 X is specified and 40 by default), \emph{should we quickly include an
 option for projecting \(F_{MSY}\)}, user-specified \(F_y\), or \(F\)
 derived from user-specified catch. For all options except user-specified
-\(F_y\), the uncertainty in projected F is propogated into the
+\(F_y\), the uncertainty in projected F is propagated into the
 uncertainty of projected population attributes. For models with random
 effects on \emph{NAA}, \emph{M}, or \emph{Ecov}, the default is to
 continue the stochastic process into the projection years. WHAM does not
@@ -810,7 +849,7 @@ bias was often non-trivial when the estimation model was less complex
 than the operating model, especially when models without random effects
 were fit to data simulated from models with random effects. Bias in SSB
 and \(F\) were always opposite, i.e.~when SSB was biased high, \(F\) was
-biased low, and vice-versa. Predicted catch was never biased. Bias of
+biased low, and vice versa. Predicted catch was never biased. Bias of
 the variance and correlation parameters controlling random effects was
 generally negligible or negative, as expected (Figs.
 \ref{fig:estpar-naa}--\ref{fig:estpar-ecov}). Restricted maximum
@@ -935,13 +974,13 @@ estimates \(F_{a,y}\) directly as a multivariate stochastic process
 \(\sigma_s\), \(\phi_y\), and \(\phi_p\) as fixed effect parameters and
 allowing 2D AR1 random effects on the selectivity parameters should
 allow for similar selectivity patterns as in SAM. The method in Stock
-Synthesisis is similar: allow 2D AR1 random effects on \(s_{a,y}\)
-instead of the parameters, and then estimate \(\sigma_s\) by an
-iterative tuning algorithm (Xu et al., 2019). It is unclear whether
-estimating time-varying selectivity as random effects produces different
-results or an improvement over using time blocks, or if there are
-advantages to using any of the three approaches for estimating
-time-varying selectivity used by WHAM, SAM, or Stock Synthesis.
+Synthesis is similar: allow 2D AR1 random effects on \(s_{a,y}\) instead
+of the parameters, and then estimate \(\sigma_s\) by an iterative tuning
+algorithm (Xu et al., 2019). It is unclear whether estimating
+time-varying selectivity as random effects produces different results or
+an improvement over using time blocks, or if there are advantages to
+using any of the three approaches for estimating time-varying
+selectivity used by WHAM, SAM, or Stock Synthesis.
 
 Likewise, WHAM and SAM also make different separability assumptions for
 the catch and index observations. WHAM treats aggregate and composition
@@ -1026,7 +1065,7 @@ alternative states of nature (Anderson et al., 2017; Möllmann et al.,
 \subsection{Conclusion}\label{conclusion}}
 
 A major present-day challenge in fisheries is to assess and manage
-stocks in a changing environment. We forsee environment-linked stock
+stocks in a changing environment. We foresee environment-linked stock
 assessments increasingly becoming feasible as fisheries and
 oceanographic time-series lengthen and our ecological understanding
 deepens. We have developed WHAM with this in mind. Finally, we note that
