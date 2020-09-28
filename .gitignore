@@ -1,5 +1,5 @@
 results
 test-cmd
 data/simdata
-paper/*.pdf
-paper/*.log
+paper/wham-sim-paper.pdf
+*.log
