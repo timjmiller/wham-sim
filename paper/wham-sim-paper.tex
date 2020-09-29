@@ -653,8 +653,8 @@ composition}\label{catch-and-index-age-composition}}
 WHAM includes several options for the catch and index age compositions
 including multinomial (default), Dirichlet, Dirichlet-multinomial,
 logistic normal and a zero-one inflated logistic normal. In all of the
-applications and simulation studies here, we assumed age composition
-observations were multinational distributed.
+applications and simulation studies here, we assumed a logistic normal
+distribution for age composition observations.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -699,10 +699,15 @@ range of life history, status, and model dimension (number of ages and
 years): Southern New England-Mid Atlantic (SNEMA) yellowtail flounder,
 butterfish, North Sea cod, Icelandic herring, and Georges Bank (GB)
 haddock (Tables \ref{tab:model-descriptions} and \ref{tab:stock-list}).
-We fit the \emph{NAA} random effects models to all five stocks since
-these represent core WHAM functionality. We chose to highlight one stock
-each for the \emph{M}, \emph{s}, and \emph{Ecov} processes because all
-models did not converge for all stocks and processes: butterfish
+We assumed the same form of logistic normal for SNEMA yellowtail
+flounder age composition observations as Miller et al. (2016) where
+unobserved ages are pooled with adjascent ages, but for other stocks
+unobserved ages are treated as missing. The variance parameters
+associated with the logistic normal distributions were estimated for all
+stocks. We fit the \emph{NAA} random effects models to all five stocks
+since these represent core WHAM functionality. We chose to highlight one
+stock each for the \emph{M}, \emph{s}, and \emph{Ecov} processes because
+all models did not converge for all stocks and processes: butterfish
 (\emph{M}), GB haddock (\emph{s}), and SNEMA yellowtail flounder
 (\emph{Ecov}). We fixed \(\mu_{M_a}\) at the values used or estimated in
 the original assessments. Except for the GB haddock \emph{s} models, we
@@ -826,7 +831,7 @@ observation error (e.g.~1982--1992) and missing observations (2017, Fig.
 recruitment, i.e. \(\hat{R}\) was higher following years with lower CPI
 (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C).
 Including the CPI-recruitment link noticeably changed the estimates of
-SSB and \emph{R} in some years (compare locations of points between Fig.
+\emph{R} in some years (compare locations of points between Fig.
 \ref{fig:devs-SNEMAYT-ecov}B-C).
 
 \hypertarget{simulation-tests-1}{%
