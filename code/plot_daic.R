@@ -9,8 +9,10 @@ library(tidyverse)
 plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe"), 
                       res_dir=file.path(getwd(),"results"),
                       simdata_dir=file.path(getwd(),"data","simdata")){ 
-  ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","GBhaddock","SNEMAYT")
-  re = c(rep("NAA",5), rep("M",2),"sel","Ecov2")
+  ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","NScod","butterfish","GBhaddock","SNEMAYT")
+  re = c(rep("NAA",5), rep("M",3),"sel","Ecov2")
+  # ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","GBhaddock","SNEMAYT")
+  # re = c(rep("NAA",5), rep("M",2),"sel","Ecov2")
   id <- paste0(ids,"_",re)
   if(bc.type == 1){
     bc <- "bias_correct_oe"
@@ -23,6 +25,7 @@ plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
   res_dir <- file.path(res_dir, bc, id)
   simdata_dir <- file.path(simdata_dir, bc, id)
   n.mods <- c(4,3,3,5)[match(re,c("NAA","M","sel","Ecov2"))]
+  n.mods[7] = 2 # only 2 M models for NScod
   mod.files <- lapply(seq_along(res_dir), function(i) file.path(res_dir[i], paste0("m",1:n.mods[i],".rds")))
   mods <- lapply(mod.files, function(x) lapply(x, readRDS))
 
@@ -40,6 +43,8 @@ plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
                    daic = unlist(daic),
                    Stock = rep(ids, n.mods),
                    re = rep(re, n.mods))
+  saveRDS(df, file.path(plots_dir, "daic.rds"))
+  
   df$m[df$re %in% c("M","sel")] = df$m[df$re %in% c("M","sel")] + 4
   df$m[df$re == "Ecov2"] = df$m[df$re == "Ecov2"] + 7
   # mlabs_expr = c(expression(paste("m1:")~paste("SCAA")~paste("(IID)")), 

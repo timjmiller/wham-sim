@@ -21,6 +21,7 @@ library(tidyverse)
 library(ggplotFL)
 library(ggsci)
 library(cowplot)
+library(data.table)
 inv.rho.trans <- function(x) return(2/(1 + exp(-2*x)) - 1)
 rho_trans <- function(x) return(2/(1 + exp(-2*x)) - 1)
 source("/home/bstock/Documents/ms/wham-sim/code/plot_rel_err.R")
@@ -32,6 +33,7 @@ source("/home/bstock/Documents/ms/wham-sim/code/get_results.R")
 source("/home/bstock/Documents/ms/wham-sim/code/get_aic.R")
 source("/home/bstock/Documents/ms/wham-sim/code/plot_aic_cross.R")
 source("/home/bstock/Documents/ms/wham-sim/code/plot_daic.R")
+source("/home/bstock/Documents/ms/wham-sim/code/plot_3panel_SSB_F_R_trends.R")
 
 # ---------------------------------------------------------
 # Relative error plots
@@ -61,8 +63,9 @@ plot_conv(df.conv, plots_dir = file.path(getwd(),"plots",c("bias_correct_oe","bi
 # re = c(rep("NAA",5), rep("M",2),"Ecov","sel") # remove NScod M bc only 2/3 models fit
 # ids = c("GBhaddock")
 # re = c("sel")
-ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","GBhaddock","SNEMAYT")
-re = c(rep("NAA",5), rep("M",2),"sel","Ecov2") # remove NScod M bc only 2/3 models fit
+ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","NScod","butterfish","GBhaddock","SNEMAYT")
+re = c(rep("NAA",5), rep("M",3),"sel","Ecov2")
+plot_3panel_SSB_F_R_trends(ids, re)
 
 # df.colnames <- c("om","em","sim","aic","id","bc.type","sim.type","re")
 # df.aic <- as.data.frame(matrix(NA, ncol = length(df.colnames), nrow = 0))
