@@ -120,28 +120,28 @@ random effects on annual transitions in numbers at age (NAA), \emph{M},
 and selectivity, as well as fit environmental time-series with process
 and observation errors, missing data, and nonlinear links to \emph{R}
 and \emph{M}. WHAM can also be configured as a traditional statistical
-catch-at-age (SCAA) model in order to easily replicate status quo models
-and test them against models with state-space and environmental effects
-in a single framework.
+catch-at-age (SCAA) model in order to easily bridge from status quo
+models and test them against models with state-space and environmental
+effects in a single framework.
 
 We fit models with and without (independent or autocorrelated) random
 effects on NAA, \emph{M}, and selectivity to data from five stocks with
-a broad range of life history, status, number of ages, and time-series
-length. Models that included random effects performed well across stocks
-and processes, especially random effects models with a two dimensional
-(2D) first-order autoregressive (AR1) covariance structure over age and
-year. We conducted simulation tests and found negligible or no bias in
-estimation of important assessment outputs (SSB, \emph{F}, stock status,
-and catch) when the operating and estimation models matched. However,
-bias in SSB and \emph{F} was often non-trivial when the estimation model
-was less complex than the operating model, especially when models
-without random effects were fit to data simulated from models with
-random effects. Bias of the variance and correlation parameters
-controlling random effects was also negligible or slightly negative as
-expected. Our results suggest that WHAM can be a useful tool for stock
-assessment when environmental effects on \emph{R} or \emph{M}, or
-stochastic variation in NAA transitions, \emph{M}, or selectivity are of
-interest. In the U.S. Northeast, where the productivity of several
+a broad range of life history, fishing pressure, number of ages, and
+time-series length. Models that included random effects performed well
+across stocks and processes, especially random effects models with a two
+dimensional (2D) first-order autoregressive (AR1) covariance structure
+over age and year. We conducted simulation tests and found negligible or
+no bias in estimation of important assessment outputs (SSB, \emph{F},
+stock status, and catch) when the operating and estimation models
+matched. However, bias in SSB and \emph{F} was often non-trivial when
+the estimation model was less complex than the operating model,
+especially when models without random effects were fit to data simulated
+from models with random effects. Bias of the variance and correlation
+parameters controlling random effects was also negligible or slightly
+negative as expected. Our results suggest that WHAM can be a useful tool
+for stock assessment when environmental effects on \emph{R} or \emph{M},
+or stochastic variation in NAA transitions, \emph{M}, or selectivity are
+of interest. In the U.S. Northeast, where the productivity of several
 groundfish stocks has declined, conducting assessments in WHAM with
 time-varying processes via random effects or environment-productivity
 links may account for these trends and potentially reduce retrospective
@@ -653,8 +653,8 @@ composition}\label{catch-and-index-age-composition}}
 WHAM includes several options for the catch and index age compositions
 including multinomial (default), Dirichlet, Dirichlet-multinomial,
 logistic normal and a zero-one inflated logistic normal. In all of the
-applications and simulation studies here, we assumed age composition
-observations were multinational distributed.
+applications and simulation studies here, we assumed a logistic normal
+distribution for age composition observations.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -699,10 +699,15 @@ range of life history, status, and model dimension (number of ages and
 years): Southern New England-Mid Atlantic (SNEMA) yellowtail flounder,
 butterfish, North Sea cod, Icelandic herring, and Georges Bank (GB)
 haddock (Tables \ref{tab:model-descriptions} and \ref{tab:stock-list}).
-We fit the \emph{NAA} random effects models to all five stocks since
-these represent core WHAM functionality. We chose to highlight one stock
-each for the \emph{M}, \emph{s}, and \emph{Ecov} processes because all
-models did not converge for all stocks and processes: butterfish
+We assumed the same form of logistic normal for SNEMA yellowtail
+flounder age composition observations as Miller et al. (2016) where
+unobserved ages are pooled with adjascent ages, but for other stocks
+unobserved ages are treated as missing. The variance parameters
+associated with the logistic normal distributions were estimated for all
+stocks. We fit the \emph{NAA} random effects models to all five stocks
+since these represent core WHAM functionality. We chose to highlight one
+stock each for the \emph{M}, \emph{s}, and \emph{Ecov} processes because
+all models did not converge for all stocks and processes: butterfish
 (\emph{M}), GB haddock (\emph{s}), and SNEMA yellowtail flounder
 (\emph{Ecov}). We fixed \(\mu_{M_a}\) at the values used or estimated in
 the original assessments. Except for the GB haddock \emph{s} models, we
@@ -789,9 +794,9 @@ differed noticeably (e.g.~for butterfish in Fig.
 estimated elevated \emph{M} for age 5+ fish early and late in the
 time-series, with lower \emph{M} in intervening years. The butterfish 2D
 AR1 \emph{M} model estimated a similar, but much exaggerated, pattern
-for age 5+ fish and reduced \emph{M} for ages 1 and 4. Since \(\mu_M\)
-was held constant, the \emph{M} random effects models had to decrease
-\emph{M} in some ages and years in order to increase \emph{M} in others.
+for age 5+ fish and reduced \emph{M} for ages 1 and 4. With \(\mu_M\)
+was held constant, optimal \emph{M} random effects resulted in lower
+\emph{M} in some ages and years and higher \emph{M} in others.
 
 \hypertarget{selectivity-s-1}{%
 \subsubsection{\texorpdfstring{Selectivity
@@ -826,7 +831,7 @@ observation error (e.g.~1982--1992) and missing observations (2017, Fig.
 recruitment, i.e. \(\hat{R}\) was higher following years with lower CPI
 (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C).
 Including the CPI-recruitment link noticeably changed the estimates of
-SSB and \emph{R} in some years (compare locations of points between Fig.
+\emph{R} in some years (compare locations of points between Fig.
 \ref{fig:devs-SNEMAYT-ecov}B-C).
 
 \hypertarget{simulation-tests-1}{%
@@ -905,9 +910,7 @@ Models with IID or 2D AR1 \emph{s} random effects estimated SSB, \(F\),
 with little to no bias across operating models (Fig.
 \ref{fig:rel-error-GBhaddock-sel}). The model without \emph{s} random
 effects showed substantial bias when fit to data simulated from m2 or
-m3.
-
-For Georges Bank haddock, the variance and correlation parameters
+m3. For Georges Bank haddock, the variance and correlation parameters
 \(\sigma^2_a\), \(\sigma^2_s\), \(\phi_y\), and \(\phi_a\) were all
 estimated with slight negative bias in self-tests of models with
 \emph{s} random effects (Fig. \ref{fig:estpar-sel}).
@@ -1572,7 +1575,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
+{\centering \includegraphics[width=8in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/daic} 
 
 }
 
@@ -1584,7 +1587,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
 
 }
 
@@ -1595,7 +1598,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M} 
 
 }
 
@@ -1606,7 +1609,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
 
 }
 
@@ -1617,7 +1620,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
 
 }
 
@@ -1628,7 +1631,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
 
 }
 
@@ -1639,7 +1642,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
 
 }
 
@@ -1650,7 +1653,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
 
 }
 
@@ -1661,7 +1664,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE} 
 
 }
 
@@ -1672,7 +1675,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
+{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE} 
 
 }
 
@@ -1683,7 +1686,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE} 
 
 }
 
@@ -1695,7 +1698,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
+{\centering \includegraphics[width=9in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE} 
 
 }
 
@@ -1707,7 +1710,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
+{\centering \includegraphics[width=3.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel} 
 
 }
 
