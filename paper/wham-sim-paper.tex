@@ -718,8 +718,12 @@ demonstrations, but the m1 \emph{NAA} model (only recruitment deviations
 are IID random effects) for the \emph{M} demonstrations, because the NAA
 transitions can be interpreted as survival and including random effect
 deviations on both NAA and \emph{M} can lead to model non-convergence
-(Stock et al., n.d.). Within each process, we compared the performance
-of the different random effects models using AIC.
+(Stock et al., n.d.). For the SNEMA yellowtail flounder \emph{Ecov}
+models, we used the Cold Pool Index (CPI) as calculated in (Miller et
+al., 2016). We updated the CPI through 2018, except that the 2017
+observation was missing because the NEFSC fall bottom trawl survey was
+not completed in the SNEMA region. Within each process, we compared the
+performance of the different random effects models using AIC.
 
 We fit all models using the open-source statistical software R (R Core
 Team, 2020) and TMB (Kristensen et al., 2016), as implemented in the R
@@ -765,7 +769,12 @@ The 2D AR1 covariance structure for random effects on \emph{NAA},
 evidenced by lower AIC than the IID random effects models (Fig.
 \ref{fig:daic}). This AIC difference was larger for selectivity than
 \emph{NAA} or \emph{M}, but the differences for \emph{NAA} and \emph{M}
-were also non-trivial, ranging from 11.1--53.2.
+were also non-trivial, ranging from 11.1--53.2. Incorporating random
+effects on \emph{NAA}, \emph{M} or selectivity did not have consistently
+positive or negative effects on key assessment model output (SSB,
+\emph{F}, or recruitment); these effects differed by stock and process
+(Figs. S1--S10). Models with random effects did have consistently wider
+confidence intervals in SSB, \emph{F}, and recruitment (Figs. S1--S10).
 
 \hypertarget{numbers-at-age-naa-1}{%
 \subsubsection{\texorpdfstring{Numbers-at-age
@@ -831,7 +840,7 @@ observation error (e.g.~1982--1992) and missing observations (2017, Fig.
 recruitment, i.e. \(\hat{R}\) was higher following years with lower CPI
 (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C).
 Including the CPI-recruitment link noticeably changed the estimates of
-\emph{R} in some years (compare locations of points between Fig.
+\emph{R} in some years (compare locations of points in Fig.
 \ref{fig:devs-SNEMAYT-ecov}B-C).
 
 \hypertarget{simulation-tests-1}{%
@@ -843,18 +852,18 @@ estimation and operating model were consistent, bias of SSB, \(F\),
 was generally small and not significant based on confidence intervals
 (Figs.
 \ref{fig:rel-error-ICEherring-naa}--\ref{fig:rel-error-GBhaddock-sel}
-and S1--S6). Bias was also generally small when more complex models were
-fitted to less complicated operating model simulations. In contrast, the
-bias was often non-trivial when the estimation model was less complex
-than the operating model, especially when models without random effects
-were fit to data simulated from models with random effects. Bias in SSB
-and \(F\) were always opposite, i.e.~when SSB was biased high, \(F\) was
-biased low, and vice versa. Predicted catch was never biased. Bias of
-the variance and correlation parameters controlling random effects was
-generally negligible or negative, as expected (Figs.
-\ref{fig:estpar-naa}--\ref{fig:estpar-ecov}). Restricted maximum
-likelihood (REML) should be used if more accurate estimation of these
-parameters is a priority.
+and S11--S16). Bias was also generally small when more complex models
+were fitted to less complicated operating model simulations. In
+contrast, the bias was often non-trivial when the estimation model was
+less complex than the operating model, especially when models without
+random effects were fit to data simulated from models with random
+effects. Bias in SSB and \(F\) were always opposite, i.e.~when SSB was
+biased high, \(F\) was biased low, and vice versa. Predicted catch was
+never biased. Bias of the variance and correlation parameters
+controlling random effects was generally negligible or negative, as
+expected (Figs. \ref{fig:estpar-naa}--\ref{fig:estpar-ecov}). Restricted
+maximum likelihood (REML) should be used if more accurate estimation of
+these parameters is a priority.
 
 In cross-tests, the percentage of simulations in which AIC selected the
 correct model varied between 62--99\% by process, stock, and operating
@@ -871,15 +880,15 @@ with very minimal bias in self-tests. An exception was the estimation of
 \(F\) for Icelandic herring, particularly for the SCAA models (median
 relative error with 95\% CI for m1: -0.060 (-0.073, -0.047), m2: -0.060
 (-0.073, -0.047), m3: 0.015 (-0.004, 0.034), and m4: 0.049 (0.017,
-0.080); Figs. \ref{fig:rel-error-ICEherring-naa} and S7--S9). The
+0.080); Figs. \ref{fig:rel-error-ICEherring-naa} and S17--S19). The
 convergence rate for most models and stocks was above 95\%, again with
-the exception of the SCAA models for Icelandic herring (Fig. S10a). In
+the exception of the SCAA models for Icelandic herring (Fig. S20). In
 cross-tests, SCAA models exhibited non-trivial bias when estimating data
 simulated from models that treated numbers at all ages as random
 effects. The degree of bias varied by quantity and stock between -25\%
-and 25\% (Figs. \ref{fig:rel-error-ICEherring-naa} and S1--S4). The more
-complex NAA models estimated all quantities without bias regardless of
-operating model.
+and 25\% (Figs. \ref{fig:rel-error-ICEherring-naa} and S11--S14). The
+more complex NAA models estimated all quantities without bias regardless
+of operating model.
 
 For four of the five stocks, \(\sigma^2_R\) was estimated without bias
 in self-tests (Fig. \ref{fig:estpar-naa}). The exception was butterfish,
@@ -895,7 +904,7 @@ SSB, \(F\), \(\frac{\text{B}}{\text{B}_{40\%}}\),
 \(\frac{F}{F_{40\%}}\), and \(R\) were estimated without significant
 bias in self-tests, although m1 and m2 exhibited bias in SSB and
 \(\frac{F}{F_{40\%}}\) when fit to data simulated from m3 (Figs.
-\ref{fig:rel-error-butterfish-m} and S5--S6).
+\ref{fig:rel-error-butterfish-m} and S15--S16).
 
 As for the NAA models, \(\sigma^2_R\) was estimated without bias in the
 \emph{M} model self-tests (Fig. \ref{fig:estpar-m}). \(\sigma^2_M\) was
@@ -1054,7 +1063,8 @@ The perception of precision in model output such as projected population
 biomass or catch advice is affected by whether productivity componenents
 are treated as either constant or as autoregressive processes, much like
 whether certain parameters are either fixed or estimated in traditional
-assessment models. Modeling frameworks such as WHAM allow the
+assessment models (models with random effects have consistently larger
+CIs in Figs. S1--S10). Modeling frameworks such as WHAM allow the
 performance of these alternative models to be compared and when allowing
 temporal variation in productivity components is justified, the greater
 uncertainty in the assessment output is more realistic. Moreover, model
@@ -1575,7 +1585,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=8in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/daic} 
+{\centering \includegraphics[width=8in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/daic} 
 
 }
 
@@ -1587,7 +1597,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_ICEherring_NAA} 
 
 }
 
@@ -1598,7 +1608,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_butterfish_M} 
+{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_butterfish_M} 
 
 }
 
@@ -1609,7 +1619,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_REdevs_GBhaddock_sel} 
 
 }
 
@@ -1620,7 +1630,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
 
 }
 
@@ -1631,7 +1641,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_ICEherring_NAA_medianCI_OEPE} 
 
 }
 
@@ -1642,7 +1652,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_butterfish_M_medianCI_OEPE} 
 
 }
 
@@ -1653,7 +1663,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
+{\centering \includegraphics[width=5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/0_GBhaddock_sel_medianCI_OEPE} 
 
 }
 
@@ -1664,7 +1674,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_NAA_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_NAA_OEPE} 
 
 }
 
@@ -1675,7 +1685,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_M_4par_OEPE} 
+{\centering \includegraphics[width=6in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_M_4par_OEPE} 
 
 }
 
@@ -1686,7 +1696,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_sel_OEPE} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_sel_OEPE} 
 
 }
 
@@ -1698,7 +1708,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 \begin{landscape}
 \begin{figure}
 
-{\centering \includegraphics[width=9in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/estpar_Ecov2_OEPE} 
+{\centering \includegraphics[width=9in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/estpar_Ecov2_OEPE} 
 
 }
 
@@ -1710,7 +1720,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=3.5in]{/home/tmiller2/work/wham/wham_sim/plots/into_paper/aic_cross_multipanel} 
+{\centering \includegraphics[width=3.5in]{/home/bstock/Documents/ms/wham-sim/plots/into_paper/aic_cross_multipanel} 
 
 }
 
