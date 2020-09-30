@@ -139,11 +139,11 @@ std = summary(mod$sdrep)
 ssb.ind = which(rownames(std) == "log_SSB")
 years = mod$years
 nyrs = length(years)
-R <- mod$rep$NAA[,1]
+R <- mod$rep$NAA[age.recruit +1:(nyrs-age.recruit),1]
 
 # predR_t is function of SSB_t, a, b_t
-ssb <- exp(std[ssb.ind,1])
-cpi <- mod$rep$Ecov_out[,1] # modeled CPI in year t-1
+ssb <- exp(std[ssb.ind,1])[1:(nyrs-age.recruit)] # need to lag ssb
+cpi <- mod$rep$Ecov_out[1:(nyrs-age.recruit),1] # modeled CPI in year t-1 affects R in year t (Ecov_out is lagged)
 log_a <- mod$rep$log_SR_a # constant
 log_b <- mod$rep$log_SR_b # varies by year according to CPI
 
@@ -152,7 +152,7 @@ lR.fn = function(la, lb, S) la  + log(S) - log(1 + exp(lb)*S)
 cnames <- c("Year","CPI","SSB.seq","R.seq")
 predR <- as.data.frame(matrix(NA, ncol = length(cnames), nrow = 0))
 colnames(predR) <- cnames
-for(y in 1:nyrs){
+for(y in 1:(nyrs-age.recruit)){
   tmp <- as.data.frame(matrix(NA, ncol = length(cnames), nrow = length(seq.ssb)))
   colnames(tmp) <- cnames
   tmp$SSB.seq = seq.ssb
@@ -166,7 +166,8 @@ scale.ssb = 1000
 scale.recruits = 1000
 df4 <- data.frame(SSB=ssb/scale.ssb, Recruitment=R/scale.recruits)
 
-ymax = max(df3$pred.R, predR$R.seq/scale.recruits)
+# ymax = max(df3$pred.R, predR$R.seq/scale.recruits)
+ymax = max(df3$pred.R.high)*1.02
 xmax = max(df3$pred.ssb, predR$SSB.seq/scale.ssb)
 p2 <- ggplot(df3, aes(x=pred.ssb, y=pred.R)) +
   geom_ribbon(data=df3, aes(x=pred.ssb, ymin=pred.R.low, ymax=pred.R.high), alpha=.2) +
@@ -179,7 +180,7 @@ p2 <- ggplot(df3, aes(x=pred.ssb, y=pred.R)) +
   xlab(expression("SSB"~"(x"~10^3~"mt)")) +
   theme_bw()
 p3 <- ggplot(predR, aes(x=SSB.seq/scale.ssb, y=R.seq/scale.recruits, color=CPI, group=Year)) +
-  geom_line(size=0.6) +
+  geom_line(size=0.7) +
   geom_point(data=df4, aes(x=SSB, y=Recruitment), inherit.aes = F) +
   scale_x_continuous(expand=c(0.01,0), limits=c(0,xmax)) +
   scale_y_continuous(expand=c(0.01,0), limits=c(0,ymax)) +
