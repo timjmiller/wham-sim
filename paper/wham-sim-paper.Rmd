@@ -9,8 +9,14 @@ output:
     number_sections: true
     includes:
       in_header: options.sty
-csl: fisheries-research.csl
+#    citation_package: natbib
+#csl: fisheries-research.csl
+#csl: fish-and-fisheries.csl
+#csl: fisheries.csl
+csl: canadian-journal-of-fisheries-and-aquatic-sciences.csl
 bibliography: wham-sim.bib
+#natbiboptions: round
+#biblio-style: cjfas2
 nocite: |
   @nefsc2020Operational, @nefsc2020Butterfish, @ices2017Report, @ices2017Reporta
 ---
