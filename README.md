@@ -3,6 +3,7 @@
 *The Woods Hole Assessment Model (WHAM): a general state-space assessment framework that incorporates time- and age-varying processes via random effects and links to environmental covariates*
 
 Brian C. Stock and Timothy J. Miller
+
 Population Dynamics Branch, NEFSC, NOAA Fisheries
 
 ### Abstract
