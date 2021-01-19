@@ -1,5 +1,6 @@
 results
 test-cmd
 data/simdata
+reviews
 # paper/wham-sim-paper.pdf
 *.log

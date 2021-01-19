@@ -68,8 +68,9 @@ Retrospective bias can occur when changing environmental conditions lead to chan
 To address the needs of fisheries management in a changing climate, we seek an assessment framework that combines both the empirical and mechanistic approaches. Namely, it should be able to 1) estimate time-varying parameters as random effects (i.e. a state-space model), and 2) include environmental effects directly on biological parameters. The framework should also allow for easy testing against status quo SCAA models to ease gradual adoption through the "research track" or "benchmark" assessment process [@lynch2018Implementing]. The objectives of this manuscript are to introduce the Woods Hole Assessment Model (WHAM) framework and demonstrate its ability to:
 
 1. estimate time- and age-varying random effects on annual changes in abundance at age, $M$, and selectivity;
-2. fit environmental time-series with process and observation error, missing data, and a link to a population process; and
-3. simulate new data and random effects to conduct self- and cross-tests [*sensu* @deroba2015Simulation] to estimate bias in parameters and derived quantities.
+2. fit environmental time-series with process and observation error, missing data, and a link to a population process; 
+3. project processes treated as random effects in short-term population forecasts; and
+4. simulate new data and random effects to conduct self- and cross-tests [*sensu* @deroba2015Simulation] to estimate bias in parameters and derived quantities.
 
 Throughout, we describe how the above are implemented using the open-source WHAM software package [@miller2020Woods].
 

@@ -1,14 +1,14 @@
 setwd("/home/bstock/Documents/ms/wham-sim")
 bc.type=2; sim.types=2
-plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
+plots_dir = file.path(getwd(),"plots","v2")
 res_dir=file.path(getwd(),"results")
 simdata_dir=file.path(getwd(),"data","simdata")
 library(wham)
 library(tidyverse)
 
-plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe"), 
-                      res_dir=file.path(getwd(),"results"),
-                      simdata_dir=file.path(getwd(),"data","simdata")){ 
+# plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe"), 
+#                       res_dir=file.path(getwd(),"results"),
+#                       simdata_dir=file.path(getwd(),"data","simdata")){ 
   ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","NScod","butterfish","GBhaddock","SNEMAYT")
   re = c(rep("NAA",5), rep("M",3),"sel","Ecov2")
   # ids = c("SNEMAYT","butterfish","NScod","GBhaddock","ICEherring", "SNEMAYT","butterfish","GBhaddock","SNEMAYT")
@@ -44,9 +44,12 @@ plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
                    Stock = rep(ids, n.mods),
                    re = rep(re, n.mods))
   saveRDS(df, file.path(plots_dir, "daic.rds"))
+  # df <- readRDS("/home/bstock/Documents/ms/wham-sim/plots/old/bias_correct_oepe/daic.rds")
   
-  df$m[df$re %in% c("M","sel")] = df$m[df$re %in% c("M","sel")] + 4
-  df$m[df$re == "Ecov2"] = df$m[df$re == "Ecov2"] + 7
+  df$re2 <- factor(df$re, levels=c("NAA","M","sel","Ecov2"), labels=c("NAA","M","Sel","Ecov"))
+  df$Model <- paste0(df$re2,"-",df$m)
+  # df$m[df$re %in% c("M","sel")] = df$m[df$re %in% c("M","sel")] + 4
+  # df$m[df$re == "Ecov2"] = df$m[df$re == "Ecov2"] + 7
   # mlabs_expr = c(expression(paste("m1:")~paste("SCAA")~paste("(IID)")), 
   #                     expression(paste("m2:")~paste("SCAA (")*AR1[y]*paste(")")), 
   #                     expression(paste("m3:")~paste("NAA")~paste("(IID)")), 
@@ -54,18 +57,18 @@ plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
   #                   expression(paste("m1:")~paste("none")), 
   #                     expression(paste("m2:")~paste("IID")), 
   #                     expression(paste("m3:")~paste("2D")~paste("AR1")))
-  mlabs_expr2 = c(expression(atop("SCAA","IID")),
-                 expression(atop("SCAA",AR1[y])),
-                 expression(atop("NAA","IID")),
-                 expression(atop("NAA",paste("2D AR1"))),
-                 expression("none"),
-                 expression("IID"),
-                 expression(paste("2D")~paste("AR1")),
-                 expression(atop("RW","none")),
-                 expression(atop("RW","linear")),
-                 expression(atop("RW","poly")),
-                 expression(atop("AR1","linear")),
-                 expression(atop("AR1","poly")))
+  # mlabs_expr2 = c(expression(atop("SCAA","IID")),
+  #                expression(atop("SCAA",AR1[y])),
+  #                expression(atop("NAA","IID")),
+  #                expression(atop("NAA",paste("2D AR1"))),
+  #                expression("none"),
+  #                expression("IID"),
+  #                expression(paste("2D")~paste("AR1")),
+  #                expression(atop("RW","none")),
+  #                expression(atop("RW","linear")),
+  #                expression(atop("RW","poly")),
+  #                expression(atop("AR1","linear")),
+  #                expression(atop("AR1","poly")))
   # mlabs_expr2 = c(expression(atop("SCAA","IID")), 
   #                 expression(atop("SCAA",AR1[y])), 
   #                 expression(atop("NAA","IID")), 
@@ -85,26 +88,26 @@ plot_daic <- function(plots_dir = file.path(getwd(),"plots","bias_correct_oepe")
   #                 expression("none"), 
   #                 expression("IID"), 
   #                 expression(paste("2D")~paste("AR1")))
-  df$m <- factor(df$m, levels=1:length(mlabs_expr2), labels=paste0("m",1:length(mlabs_expr2)))
+  # df$m <- factor(df$m, levels=1:length(mlabs_expr2), labels=paste0("m",1:length(mlabs_expr2)))
   # df$Model <- factor(df$m, levels=levels(df$m), labels=mlabs_expr)
-  df$Model <- factor(df$m, levels=levels(df$m), labels=mlabs_expr2)
+  # df$Model <- factor(df$m, levels=levels(df$m), labels=mlabs_expr2)
   # df$Model <- factor(df$m, levels=levels(df$m), labels=mlabs_expr3)
-  df$relab <- factor(df$re, levels=c("NAA","M","sel","Ecov2"), labels=c("NAA","M","Selectivity","CPI-Recruitment"))
+  df$relab <- factor(df$re, levels=c("NAA","M","sel","Ecov2"), labels=c("Numbers at age","Natural mortality","Selectivity","Ecov (CPI-Recruitment)"))
 
-  png(file.path(plots_dir, "daic.png"), width=8, height=3, res=300, units='in')
+  png(file.path(plots_dir, "daic.png"), width=9, height=3, res=300, units='in')
   print(ggplot(df, aes(x=Model, y=daic, shape=Stock)) +
           geom_point(size=3) +
           ylab(expression(Delta*phantom()*AIC)) +
           # scale_y_continuous(expand=c(0.02,0.02)) +
-          scale_x_discrete(labels=function(l) parse(text=l)) +
-          facet_wrap(vars(relab), nrow=1, scale='free_x') +
+          # scale_x_discrete(labels=function(l) parse(text=l)) +
+          facet_wrap(vars(relab), nrow=1, scales='free') +
           theme_bw() +
           # theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
           #       strip.text.x = element_text(size = 10)))
-        theme(strip.text.x = element_text(size = 10), axis.text.x = element_text(size = 8), 
-              axis.title.x = element_text(margin=margin(-10,0,0,0))))
+        theme(strip.text.x = element_text(size = 10), axis.text.x = element_text(size = 8,angle = 45, vjust = 1, hjust=1), 
+              axis.title.x = element_text(margin=margin(-5,0,0,0))))
   dev.off()
-}
+# }
 
 #      m  daic      Stock    re                        Model           relab
 # 1   m1 252.6    SNEMAYT   NAA          atop("SCAA", "IID")             NAA

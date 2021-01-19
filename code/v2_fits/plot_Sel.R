@@ -9,7 +9,7 @@
 #     reps_omXX_emYY.rds
 #   assume they are copied to /home/bstock/Documents/ms/wham-sim/results/SNEMAYT/NAA
 
-# source("/home/bstock/Documents/ms/wham-sim/code/bias_correct_oepe/GBhaddock_sel_oepe/5_plot_REdevs_GBhaddock_sel.R")
+# source("/home/bstock/Documents/ms/wham-sim/code/v2_fits/plot_Sel.R")
 
 # install.packages("ggplotFL", repos="http://flr-project.org/R")
 # devtools::install_github("timjmiller/wham", dependencies=TRUE)
@@ -23,7 +23,7 @@ library(viridis)
 # get results into data frame
 n.mods = 3
 res_dir <- here("results","bias_correct_oepe","GBhaddock_sel_oepe")
-plots_dir <- here("plots","bias_correct_oepe","GBhaddock_sel")
+plots_dir <- here("plots","v2")
 mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
 mods <- lapply(mod.list, readRDS)
 selAA <- lapply(mods, function(x) x$rep$selAA[[1]])
@@ -53,7 +53,7 @@ df.plot <- df.selAA %>% pivot_longer(-c(Year,Model),
 				values_to = "Selectivity")
 df.plot$mlabs <- factor(df.plot$Model, levels=1:n.mods, labels=mlabs_expr)
 
-png(file.path(plots_dir,"8_REdevs_GBhaddock_sel.png"), width=7, height=5, units='in', res=300)
+png(file.path(plots_dir,"Sel_GBhaddock.png"), width=7, height=5, units='in', res=300)
 print(ggplot(df.plot, ggplot2::aes(x=Year, y=Age, fill=Selectivity)) +
       geom_tile() +
       scale_x_continuous(expand=c(0,0), breaks=seq(1935, 2015, by=10)) +
