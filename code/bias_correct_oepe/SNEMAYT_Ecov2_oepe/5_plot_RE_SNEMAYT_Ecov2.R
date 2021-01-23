@@ -24,7 +24,8 @@ library(gridGraphics)
 # get results into data frame
 n.mods = 5
 res_dir <- here("results","bias_correct_oepe","SNEMAYT_Ecov2_oepe")
-plots_dir <- here("plots","bias_correct_oepe","SNEMAYT_Ecov2")
+# plots_dir <- here("plots","bias_correct_oepe","SNEMAYT_Ecov2")
+plots_dir <- here("plots","v2")
 mod.list <- file.path(res_dir,paste0("m",1:n.mods,".rds"))
 mods <- lapply(mod.list, readRDS)
 df.mods <- data.frame(Model = 1:n.mods, stringsAsFactors=FALSE)
@@ -164,7 +165,8 @@ for(y in 1:(nyrs-age.recruit)){
 
 scale.ssb = 1000
 scale.recruits = 1000
-df4 <- data.frame(SSB=ssb/scale.ssb, Recruitment=R/scale.recruits)
+df4 <- data.frame(SSB=ssb/scale.ssb, Recruitment=R/scale.recruits, CPI=cpi)
+df4 <- df4[seq(dim(df4)[1],1),]
 
 # ymax = max(df3$pred.R, predR$R.seq/scale.recruits)
 ymax = max(df3$pred.R.high)*1.02
@@ -181,10 +183,12 @@ p2 <- ggplot(df3, aes(x=pred.ssb, y=pred.R)) +
   theme_bw()
 p3 <- ggplot(predR, aes(x=SSB.seq/scale.ssb, y=R.seq/scale.recruits, color=CPI, group=Year)) +
   geom_line(size=0.7) +
-  geom_point(data=df4, aes(x=SSB, y=Recruitment), inherit.aes = F) +
+  # geom_point(data=df4, aes(x=SSB, y=Recruitment), inherit.aes = F) +
+  geom_point(data=df4, aes(x=SSB, y=Recruitment, fill=CPI), inherit.aes = F, pch=21, size=2) +
   scale_x_continuous(expand=c(0.01,0), limits=c(0,xmax)) +
   scale_y_continuous(expand=c(0.01,0), limits=c(0,ymax)) +
   scale_color_viridis_c(name="CPI", option = "plasma") +
+  scale_fill_viridis_c(name="CPI", option = "plasma") +
   annotate("text", x=1, y=ymax*.95, label=expression(hat(R)~"="~italic(f)*phantom()*"(SSB,CPI)"), hjust=0, size = 4, parse = TRUE) +
   ylab(expression("Age-1"~"Recruits"~"(x"~10^3*phantom()*")")) +
   xlab(expression("SSB"~"(x"~10^3~"mt)")) +
@@ -195,7 +199,7 @@ p3 <- ggplot(predR, aes(x=SSB.seq/scale.ssb, y=R.seq/scale.recruits, color=CPI, 
 plots <- align_plots(p1, p2, align = 'v', axis = 'l')
 bottom_row <- plot_grid(plots[[2]], p3, labels = c('B', 'C'), label_size = 16, label_fontface = 'plain')
 
-png(file.path(plots_dir,"8_CPI_Recruit_SNEMAYT_Ecov2.png"), width=8, height=7.5, units='in', res=300)
+png(file.path(plots_dir,"CPI_Recruit_SNEMAYT.png"), width=8, height=7.5, units='in', res=300)
 print(plot_grid(plots[[1]], bottom_row, labels = c('A', ''), label_size = 16, label_fontface = 'plain', ncol = 1))
 dev.off()
 

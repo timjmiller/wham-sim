@@ -37,7 +37,7 @@ source("/home/bstock/Documents/ms/wham-sim/code/v2_fits/plot_3panel_SSB_F_R_tren
 # Relative error plots
 for(j in 1:length(ids)){
   results <- get_results(stock.id=ids[j], re=re[j], bc.type=bc.type)
-	plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=2, multipanel=TRUE)
+  plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=2, multipanel=TRUE)
 	# plot_rel_err(results, stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, multipanel=FALSE, plot.eps=FALSE)
 	# plot_rel_err_pars(stock.id=ids[j], re=re[j], bc.type=bc.type, sim.types=1:2, plot.eps=FALSE)
 }

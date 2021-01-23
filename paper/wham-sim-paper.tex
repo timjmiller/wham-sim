@@ -323,10 +323,20 @@ covariates, the processes are assumed to have a two dimensional (2D)
 first-order autoregressive (AR1) covariance structure over age and year,
 although correlation in either or both dimensions can be turned off. The
 2D AR1 structure has been widely used to model deviations by age and
-year in the parameters \(F_{a,y}\) (Nielsen and Berg 2014), \(M_{a,y}\)
-(Cadigan 2016; Stock et al. 2021), \(s_{a,y}\) (Xu et al. 2019), and
-\(N_{a,y}\) (Stock et al. 2021), as well as in the catch (\(C_{a,y}\))
-and survey index (\(I_{a,y}\)) observations (Berg and Nielsen 2016).
+year in the parameters \(F_{a,y}\) (Nielsen and Berg 2014; Kumar et al.
+2020; Perreault et al. 2020), \(M_{a,y}\) (Cadigan 2016; Stock et al.
+2021), \(s_{a,y}\) (Xu et al. 2019), and \(N_{a,y}\) (Stock et al.
+2021), as well as in the catch (\(C_{a,y}\)) and survey index
+(\(I_{a,y}\)) observations (Berg and Nielsen 2016). Although other
+covariance structures are plausible (e.g.~compound symmetry or
+unconstrained; Nielsen and Berg 2014; Berg and Nielsen 2016), the 2D AR1
+structure is a simple option which requires few parameters and allows
+for smooth deviations in time and by age; values for nearby years and
+ages are more correlated than distant ones. This is often a good null
+hypothesis for biological or fishery processes but there are also clear
+examples where change occurs abruptly, e.g.~a disease outbreak increases
+\emph{M} or changes in gear or area regulations affect selectivity (ICES
+2017a).
 
 \hypertarget{numbers-at-age-naa}{%
 \paragraph{\texorpdfstring{Numbers at age
@@ -348,14 +358,20 @@ Berg (2014):
 
 where \(N_{a,y}\) are the numbers at age \emph{a} in year \emph{y},
 \emph{Z} is the total mortality rate (\(F + M\)), \(f\) is the
-stock-recruit function, and \emph{A} represents the plus-group. In this
-analysis we consider the SCAA model, ``Base'', and then examine four
-possible models that treat the NAA deviations, \(\varepsilon_{a,y}\), as
-random effects.
+stock-recruit function, and \emph{A} represents the plus-group. The
+\(\varepsilon_{a,y}\) deviations are akin to survival, which is clearly
+related to \(M_{a,y}\), but they can also be caused by deviations in
+\(F_{a,y}\), \(W_{a,y}\), or movement into or out of the stock
+(Gudmundsson and Gunnlaugsson 2012; Stock et al. 2021). More precisely,
+they arise from inconsistencies between the data and the model predicted
+catch (i.e.~Eqn. \ref{eq:predcatch} below), and therefore are also
+related to misreported catch (Perretti et al. 2020). In this analysis we
+consider the SCAA model, ``Base'', and then examine four possible models
+that treat the \(\varepsilon_{a,y}\) deviations as random effects.
 
 Base is a SCAA model, which estimates recruitment deviations,
 \(\varepsilon_{1,y}\), in each year \(y > 1\) as unconstrained fixed
-effect parameters. The NAA deviations for ages \(a > 1\) are not
+effect parameters. The \emph{NAA} deviations for ages \(a > 1\) are not
 estimated (i.e., \(\varepsilon_{a,y} = 0\) for \(a > 1\) in Eqn
 \ref{eq:NAA}).
 
@@ -427,8 +443,8 @@ e.g.~estimate one mean \emph{M} shared across ages 3-5,
 \(M_{a,y} = \mu_M \text{W}^b_{a,y}\), as in Lorenzen (1996) and Miller
 and Hyun (2018). Regardless of whether \(\mu_{M_a}\) are fixed or
 estimated, WHAM can also be configured to estimate deviations in
-\emph{M}, \(\delta_{a,y}\), as random effects analogous to the NAA
-deviations (Cadigan 2016; Stock et al. 2021):
+\emph{M}, \(\delta_{a,y}\), as random effects analogous to the
+\emph{NAA} deviations (Cadigan 2016; Stock et al. 2021):
 
 \begin{equation}
   \begin{array}{cc}
@@ -462,10 +478,12 @@ and Berg 2014), where the \(F_{a,y}\) are estimated directly as
 multivariate random effects without the separability assumption. Three
 parametric forms are available (logistic, double-logistic, and
 decreasing-logistic), as well as a non-parametric option to estimate
-each \(s_a\) individually (``age-specific''). To allow for temporal
-changes in selectivity as in ASAP, WHAM can estimate selectivity in
-user-specified time blocks. WHAM estimates selectivity parameters on the
-logit scale to avoid boundary problems during estimation.
+each \(s_a\) individually (``age-specific''). WHAM estimates selectivity
+parameters on the logit scale to avoid boundary problems during
+estimation. To allow for abrupt temporal changes in selectivity as in
+ASAP, WHAM can estimate selectivity in user-specified time blocks. WHAM
+can also estimate smooth changes in selectivity using autoregressive
+random effects as described below.
 
 WHAM estimates annual full \(F_y\) and mean selectivity parameters as
 fixed effects. Deviations in selectivity parameters can be estimated as
@@ -599,6 +617,10 @@ covariates are common in ecology, and quadratic effects are to be
 expected in cases where intermediate values are optimal (Brett 1971;
 Agostini et al. 2008). WHAM includes a function to calculate orthogonal
 polynomials in TMB, akin to the \texttt{poly()} function in \texttt{R}.
+Orthogonal polynomials remove correlation between covariates, e.g. \(X\)
+and \(X^2\), which improves estimability and allows for straightforward
+evaluation of the significance of adding \(X^2\) to a model that
+includes \(X\).
 
 In this analysis, we compare five models with limiting effects on
 Beverton-Holt recruitment:
@@ -672,10 +694,10 @@ for indices to be in terms of abundance (numbers) or biomass and
 composition}\label{catch-and-index-age-composition}}
 
 WHAM includes several options for the catch and index age compositions
-including multinomial (default), Dirichlet, Dirichlet-multinomial,
-logistic normal and a zero-one inflated logistic normal. In all of the
-applications and simulation studies here, we assumed a logistic normal
-distribution for age composition observations.
+including multinomial (the default, as in ASAP), Dirichlet,
+Dirichlet-multinomial, logistic normal and a zero-one inflated logistic
+normal. In all of the applications and simulation studies here, we
+assumed a logistic normal distribution for age composition observations.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -696,6 +718,12 @@ continue the stochastic process into the projection years. WHAM does not
 currently do this for selectivity because, like \(F\), it is a function
 of management. Instead, selectivity is taken as the average of recent
 model years.
+
+The decision whether or not to continue autocorrelated processes into
+the projection years is important because it can substantially affect
+short-term SSB forecasts (Stock et al. 2021). This occurs because any
+non-zero \emph{NAA} or \emph{M} deviations near the end of the
+assessment are propagated into the projection period.
 
 If the \emph{Ecov} data extend beyond the population model years, WHAM
 will fit the \emph{Ecov} model to all available data and use the
@@ -729,7 +757,7 @@ associated with the logistic normal distributions were estimated for all
 stocks.
 
 Although WHAM can treat multiple processes as random effects
-simultaneously (e.g., \emph{NAA} and \emph{M}; Stock et al. 2021), here
+simultaneously (e.g. \emph{NAA} and \emph{M}; Stock et al. 2021), here
 we only fit alternate models for one process at a time for simplicity.
 We fit the \emph{NAA} random effects models to all five stocks since
 these represent core WHAM functionality. We chose to highlight one stock
@@ -799,7 +827,9 @@ were also non-trivial, ranging from 11.1--53.2. Incorporating random
 effects on \emph{NAA}, \emph{M} or selectivity did not have consistently
 positive or negative effects on key assessment model output (SSB,
 \emph{F}, or recruitment); these effects differed by stock and process
-(Figs. S1--S10).
+(Figs. S1--S10). One pair of 2D AR1 covariance parameters, \(\sigma\)
+and \(\rho_{year}\), had consistent negative correlation across all
+stocks and processes, -0.43 on average.
 
 \hypertarget{numbers-at-age-naa-1}{%
 \subsubsection{\texorpdfstring{Numbers-at-age
@@ -819,7 +849,7 @@ reduced retrospective patterns and increased uncertainty on average.
 
 The estimated AR and IID random effects were similar, with the AR random
 effects slightly smoothed compared to the IID random effects when the
-estimated correlations were positive (e.g., \(\rho_{year} = 0.73\), 95\%
+estimated correlations were positive (e.g. \(\rho_{year} = 0.73\), 95\%
 CI: 0.58-0.87, for Georges Bank haddock in Fig.
 \ref{fig:devs-GBhaddock-naa}).
 
@@ -832,7 +862,7 @@ As for the \emph{NAA} models, including random effect deviations on
 \emph{M} model did not converge for North Sea cod, it had the lowest AIC
 for butterfish and SNEMA yellowtail flounder. The M-3 model with 2D AR1
 autocorrelation estimated similar \emph{M} deviations as the M-2 model,
-with smoothing when estimated correlations were positive (e.g.,
+with smoothing when estimated correlations were positive (e.g.
 \(\varphi_{year} = 0.63\), 95\% CI: 0.31-0.94, and
 \(\varphi_{age} = 0.40\), 95\% CI: 0.09-0.70, for SNEMA yellowtail
 flounder in Fig. \ref{fig:devs-snemayt-m}). Both M-2 and M-3 estimated
@@ -885,20 +915,21 @@ influence from adding random effects on all \emph{NAA} or \emph{M}
 Several findings were consistent across processes and stocks. When the
 estimation and operating model were consistent, bias of SSB, \(F\),
 \(\frac{\text{B}}{\text{B}_{40\%}}\), \(\frac{F}{F_{40\%}}\), and \(R\)
-was generally small and not significant based on confidence intervals
-(Figs.
+was generally less than 2\% and not significant based on confidence
+intervals (Figs.
 \ref{fig:rel-error-GBhaddock-naa}--\ref{fig:rel-error-GBhaddock-sel} and
-S11--S16). Bias was also generally small when more complex models were
-fitted to less complicated operating model simulations. In contrast, the
-bias was often non-trivial when the estimation model was less complex
-than the operating model, especially when models without random effects
-were fit to data simulated from models with random effects. Bias in SSB
-and \(F\) were always opposite, i.e.~when SSB was biased high, \(F\) was
-biased low, and vice versa. Predicted catch was never biased. Bias of
-the variance and correlation parameters controlling random effects was
-generally negligible or negative, as expected (Figs. S17-S20).
-Restricted maximum likelihood (REML) should be used if more accurate
-estimation of these parameters is a priority.
+S11--S16). Bias was also generally less than 2\% when more complex
+models were fitted to less complicated operating model simulations. In
+contrast, the bias was typically greater than 5\% when the estimation
+model was less complex than the operating model, especially when models
+without random effects were fit to data simulated from models with
+random effects. Bias in SSB and \(F\) were always opposite, i.e.~when
+SSB was biased high, \(F\) was biased low, and vice versa. Predicted
+catch was never biased. Bias of the variance and correlation parameters
+controlling random effects was generally not significant or negative, as
+expected using maximum likelihood estimation (Figs. S17-S20). Restricted
+maximum likelihood (REML) should be used if more accurate estimation of
+these parameters is a priority.
 
 In cross-tests, the percentage of simulations in which AIC selected the
 correct model varied between 62--99\% by process, stock, and operating
@@ -986,27 +1017,45 @@ models did not. In these cases, bias in SSB and \emph{F} were opposite
 such that predicted catch was unbiased. WHAM models with independent or
 2D AR1 random effect deviations performed well across stocks and
 processes, which suggests that they warrant consideration in future
-stock-specific studies.
+stock-specific studies. The 2D AR1 covariance structure performed
+particularly well, generally having the lowest AIC and retrospective
+patterns (Figs. \ref{fig:daic}-\ref{fig:mohns}) and outperforming the
+model with independent random effects in cross-tests (Figs.
+\ref{fig:rel-error-GBhaddock-naa}-\ref{fig:aic-cross} and S11--S15).
+
+\hypertarget{limitations}{%
+\subsection{Limitations}\label{limitations}}
 
 For simplicity, we only demonstrated alternative models for a single
 random effect process in each of our comparisons. WHAM can, however,
-treat multiple processes as random effects simultaneously. The
-deviations in \emph{NAA} transitions are akin to survival, which is
-related to \emph{M}, but they can also be caused by deviations in
-\emph{F}, \emph{W}, or movement into or out of the stock (Gudmundsson
-and Gunnlaugsson 2012; Stock et al. 2021). More precisely, they arise
-from inconsistencies between the data and the equation for predicted
-catch, Eqn. \ref{eq:predcatch}. For SNEMA yellowtail flounder, Stock et
-al. (2021) found that models with process errors in both \emph{M} and
-\emph{NAA} converged and performed best by AIC and Mohn's \(\rho\).
-Models with 2D autocorrelation in either process were identifiable and
-estimated similar \emph{F} and SSB trends. Preliminary work on other
-stocks in the region have also shown this is possible. In general, which
-combinations of process errors are expected to work jointly is difficult
-to say without testing different combinations. The answer is very likely
-to be stock-specific as well, depending on the information content in
-the data, number of ages and years, life history, and exploitation
-history.
+treat multiple processes as random effects simultaneously. For SNEMA
+yellowtail flounder, Stock et al. (2021) found that models with process
+errors in both \emph{M} and \emph{NAA} converged and performed best by
+AIC and Mohn's \(\rho\). Models with 2D autocorrelation in either
+process were identifiable and estimated similar \emph{F} and SSB trends.
+Preliminary work on other stocks in the region have also shown this is
+possible. In general, which combinations of process errors are expected
+to work jointly is difficult to say without testing different
+combinations. The answer is very likely to be stock-specific as well,
+depending on the information content in the data, number of ages and
+years, life history, and exploitation history.
+
+Due to the number of models and stocks we tested, we did not thoroughly
+examine diagnostics, such as residual patterns, for each model fit that
+would be checked in a full assessment. It is possible that doing so
+might lead to the rejection of some model configurations for some
+stocks.
+
+Finally, some of the 2D AR1 covariance parameters were estimated with
+negative bias, particularly \(\sigma_a\) (Figs. S17-S20). This is the
+expected direction of bias using maximum likelihood, and using REML
+instead would likely reduce it (Miller et al. 2018). This is relatively
+easy to do in WHAM, or more generally in TMB, by treating all parameters
+except the 2D AR1 covariance parameters as random effects. This directs
+TMB to use the Laplace approximation to integrate over the other fixed
+effect parameters (treated as random effects) with flat priors. We did
+not do this because it requires constructing and fitting the model in
+TMB a second time for each simulation.
 
 \hypertarget{relationships-to-other-existing-assessment-model-frameworks}{%
 \subsection{Relationships to other existing assessment model
@@ -1016,23 +1065,23 @@ WHAM assumes separability in \(F_{a,y}\), i.e. \(F_{a,y} = F_y s_a\),
 and estimates annual full \(F_y\) as fixed effects and \(s_a\) as
 constant or time-varying random effects with various autoregressive
 assumptions possible. Most other assessment frameworks in the U.S,
-e.g.~ASAP, Stock Synthesis (SS; Methot and Wetzel 2013), an Assessment
-Model for Alaska (AMAK; Anon. 2015), and the Beaufort Assessment Model
-(BAM; Williams and Shertzer 2015), make this same separability
-assumption which is useful for specifying a fully-selected \(F\) in
-projections to calculate reference points or generating catch advice.
-Estimating selectivity in time blocks is common practice in these
-frameworks. In contrast, SAM estimates \(F_{a,y}\) directly as a
-multivariate random walk process (Nielsen and Berg 2014). The
-autoregressive models for selectivity parameters under certain
-configurations of WHAM should allow for similar \(F\) at age patterns as
-in SAM. Stock Synthesis allows 2D AR1 random effects on \(s_{a,y}\)
-instead of the parameters, and then the variance parameter is estimated
-by an iterative tuning algorithm (Xu et al. 2019). It is unclear whether
-estimating time-varying selectivity as random effects produces better
-results than assuming time blocks, or if there are advantages to using
-any of the three approaches for estimating time-varying selectivity used
-by WHAM, SAM, or SS.
+e.g.~ASAP, Stock Synthesis (Methot and Wetzel 2013), an Assessment Model
+for Alaska (AMAK; Anon. 2015), and the Beaufort Assessment Model (BAM;
+Williams and Shertzer 2015), make this same separability assumption
+which is useful for specifying a fully-selected \(F\) in projections to
+calculate reference points or generating catch advice. Estimating
+selectivity in time blocks is common practice in these frameworks. In
+contrast, SAM estimates \(F_{a,y}\) directly as a multivariate random
+walk process (Nielsen and Berg 2014). The autoregressive models for
+selectivity parameters under certain configurations of WHAM should allow
+for similar \(F\) at age patterns as in SAM. Stock Synthesis allows 2D
+AR1 random effects on \(s_{a,y}\) instead of the parameters, and then
+the variance parameter is estimated by an iterative tuning algorithm (Xu
+et al. 2019). It is unclear whether estimating time-varying selectivity
+as random effects produces better results than assuming time blocks, or
+if there are advantages to using any of the three approaches for
+estimating time-varying selectivity used by WHAM, SAM, or Stock
+Synthesis.
 
 Likewise, WHAM and the other U.S.-based assessment models treat catch,
 index, and composition observations differently than SAM. The U.S.-based
@@ -1054,13 +1103,6 @@ in various ways on recruitment or natural mortality. Although most
 applications thusfar investigate effects of physical processes on
 demographic parameters, indices of predation might also be considered
 (Marshall et al. 2019).
-
-\hypertarget{limitations}{%
-\subsection{Limitations}\label{limitations}}
-
-Model diagnostics that would be checked in a full assessment, such as
-residual patterns and mohn's rho, were not examined here, and doing so
-might lead to the rejection of some model configurations.
 
 \hypertarget{future-use-of-wham}{%
 \subsection{Future use of WHAM}\label{future-use-of-wham}}
@@ -1090,18 +1132,18 @@ in projections and will not predict values beyond extremes in observed
 time-series. This is an issue worth examining because many marine
 ecosystems are changing to such extent that recent conditions are
 time-series extremes, and conditions in the near future may continue to
-expand the range of observations (e.g., sea surface temperatures over
-the U.S. Northeast Shelf in the last decade; Chen et al. 2020). More
-complex nonstationary time-series models such as autoregressive
-integrated moving average (ARIMA) that can forecast beyond observed
-values could be implemented. Nonlinear (e.g.~splines) or double linear
-integration (Di Lorenzo and Ohman 2013) techniques could also be worth
-pursuing, as well as time-delay embedding methods (Munch et al. 2017,
-2018), which not only allow for nonstationary dynamics but also do not
-require a specified functional form. The best approach to making
-stochastic projections of productivity responses to environmental
-conditions that are rapidly changing and at time-series extremes merits
-further research.
+expand the range of observations (e.g.~sea surface temperatures over the
+U.S. Northeast Shelf in the last decade; Chen et al. 2020). More complex
+nonstationary time-series models such as autoregressive integrated
+moving average (ARIMA) that can forecast beyond observed values could be
+implemented. Nonlinear (e.g.~splines) or double linear integration (Di
+Lorenzo and Ohman 2013) techniques could also be worth pursuing, as well
+as time-delay embedding methods (Munch et al. 2017, 2018), which not
+only allow for nonstationary dynamics but also do not require a
+specified functional form. The best approach to making stochastic
+projections of productivity responses to environmental conditions that
+are rapidly changing and at time-series extremes merits further
+research.
 
 In addition to the empirical (i.e.~random effects) approach, it is worth
 considering the mechanistic approach (i.e.~explicitly modeled links to
@@ -1163,10 +1205,14 @@ random effects in a state-space framework.
 \subsection*{Acknowledgements}\label{acknowledgements}}
 \addcontentsline{toc}{subsection}{Acknowledgements}
 
-This research was performed while BCS held an NRC Research Associateship
-award at the NEFSC under the Northeast Groundfish and Climate
-Initiative. We thank Chris Melrose for updating the Cold Pool Index with
-data through 2018, using code originally written by Jon Hare.
+We appreciate the efforts of the organizers of the special issue and
+CAPAM workshop on next-generation stock assessment models held on
+November 4-8, 2019 in Wellington, New Zealand. We also thank Charles
+Perretti and two anonymous reviewers for helpful suggestions on the
+manuscript. This research was performed while BCS held an NRC Research
+Associateship award at the NEFSC under the Northeast Groundfish and
+Climate Initiative. We thank Chris Melrose for updating the Cold Pool
+Index with data through 2018, using code originally written by Jon Hare.
 
 \pagebreak
 
@@ -1331,16 +1377,16 @@ viewed in the light of biological research. Rapports et Procès-Verbaux
 des Réunions du Conseil Permanent International Pour L'Exploration de la
 Mer \textbf{20}: 1--228.
 
+\leavevmode\hypertarget{ref-ices2017Reporta}{}%
+ICES. 2017a. Report of the North Western Working Group (NWWG). ICES CM
+2017/ACOM:08, 27 April-4 May 2017, Copenhagen, Denmark. Available from
+\url{http://www.ices.dk/sites/pub/Publication\%20Reports/Expert\%20Group\%20Report/acom/2017/NWWG/NWWG\%202017\%20Report.pdf}.
+
 \leavevmode\hypertarget{ref-ices2017Report}{}%
-ICES. 2017a. Report of the working group on assessment of demersal
+ICES. 2017b. Report of the working group on assessment of demersal
 stocks in the North Sea and Skagerrak (2017). ICES CM 2017/ACOM:21, 26
 April-5 May 2017, ICES HQ. Available from
 \url{https://www.ices.dk/sites/pub/Publication\%20Reports/Expert\%20Group\%20Report/acom/2017/WGNSSK/01\%20WGNSSK\%20Report\%202017.pdf}.
-
-\leavevmode\hypertarget{ref-ices2017Reporta}{}%
-ICES. 2017b. Report of the North Western Working Group (NWWG). ICES CM
-2017/ACOM:08, 27 April-4 May 2017, Copenhagen, Denmark. Available from
-\url{http://www.ices.dk/sites/pub/Publication\%20Reports/Expert\%20Group\%20Report/acom/2017/NWWG/NWWG\%202017\%20Report.pdf}.
 
 \leavevmode\hypertarget{ref-ices2020Workshop}{}%
 ICES. 2020. Workshop on the review and future of state space stock
@@ -1358,6 +1404,11 @@ Kristensen, K., Nielsen, A., Berg, C., Skaug, H., and Bell, B.M. 2016.
 TMB: Automatic differentiation and Laplace approximation. Journal of
 Statistical Software \textbf{70}: 1--21.
 doi:\href{https://doi.org/10.18637/jss.v070.i05}{10.18637/jss.v070.i05}.
+
+\leavevmode\hypertarget{ref-kumar2020Statespace}{}%
+Kumar, R., Cadigan, N.G., Zheng, N., Varkey, D.A., and Morgan, M.J.
+2020. A state-space spatial survey-based stock assessment (SSURBA) model
+to inform spatial variation in relative stock trends. \textbf{77}: 21.
 
 \leavevmode\hypertarget{ref-larkin1996Concepts}{}%
 Larkin, P. 1996. Concepts and issues in marine ecosystem management.
@@ -1501,6 +1552,19 @@ Patrick, W.S., and Link, J.S. 2015. Myths that Continue to Impede
 Progress in Ecosystem-Based Fisheries Management. Fisheries
 \textbf{40}(4): 155--160.
 doi:\href{https://doi.org/10.1080/03632415.2015.1024308}{10.1080/03632415.2015.1024308}.
+
+\leavevmode\hypertarget{ref-perreault2020Estimation}{}%
+Perreault, A.M., Zheng, N., and Cadigan, N.G. 2020. Estimation of growth
+parameters based on length-stratified age samples. Can. J. Fish. Aquat.
+Sci. \textbf{77}(3): 439--450.
+doi:\href{https://doi.org/10.1139/cjfas-2019-0129}{10.1139/cjfas-2019-0129}.
+
+\leavevmode\hypertarget{ref-perretti2020Simulation}{}%
+Perretti, C.T., Deroba, J.J., and Legault, C.M. 2020. Simulation testing
+methods for estimating misreported catch in a state-space stock
+assessment model. ICES J Mar Sci \textbf{77}(3): 911--920. Oxford
+Academic.
+doi:\href{https://doi.org/10.1093/icesjms/fsaa034}{10.1093/icesjms/fsaa034}.
 
 \leavevmode\hypertarget{ref-perretti2017Regime}{}%
 Perretti, C.T., Fogarty, M.J., Friedland, K.D., Hare, J.A., Lucey, S.M.,
@@ -1784,7 +1848,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 \begin{figure}
 
-{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/v1/into_paper/8_CPI_Recruit_SNEMAYT_Ecov2} 
+{\centering \includegraphics[width=6.5in]{/home/bstock/Documents/ms/wham-sim/plots/v2/CPI_Recruit_SNEMAYT} 
 
 }
 
@@ -1799,7 +1863,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 }
 
-\caption{Relative error of key quantities estimated for Georges Bank haddock using four models of numbers-at-age (NAA) random effects. NAA-1 = only recruitment deviations are random effects (most similar to Base, a traditional statistical catch-at-age model), and deviations are independent. NAA-2 = as NAA-1, but with autocorrelated recruitment deviations. NAA-3 = all NAA deviations are independent random effects. NAA-4 = as NAA-3, but deviations are correlated by age and year.}\label{fig:rel-error-GBhaddock-naa}
+\caption{Relative error of key quantities estimated for Georges Bank haddock using four models of numbers-at-age (NAA) random effects. NAA-1 = only recruitment deviations are random effects (most similar to Base, a traditional statistical catch-at-age model), and deviations are independent. NAA-2 = as NAA-1, but with autocorrelated recruitment deviations. NAA-3 = all NAA deviations are independent random effects. NAA-4 = as NAA-3, but deviations are correlated by age and year. Points without lines indicate that 95\% CI are smaller than the points.}\label{fig:rel-error-GBhaddock-naa}
 \end{figure}
 
 \pagebreak
@@ -1810,7 +1874,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 }
 
-\caption{Relative error of key quantities estimated for Southern New England-Mid Atlantic yellowtail flounder using three models of natural mortality (\textit{M}) random effects. M-1 = no random effects on \textit{M}. M-2 = independent \textit{M} deviations. M-3 = \textit{M} deviations are correlated by age and year.}\label{fig:rel-error-snemayt-m}
+\caption{Relative error of key quantities estimated for Southern New England-Mid Atlantic yellowtail flounder using three models of natural mortality (\textit{M}) random effects. M-1 = no random effects on \textit{M}. M-2 = independent \textit{M} deviations. M-3 = \textit{M} deviations are correlated by age and year. Points without lines indicate that 95\% CI are smaller than the points.}\label{fig:rel-error-snemayt-m}
 \end{figure}
 
 \pagebreak
@@ -1821,7 +1885,7 @@ Georges Bank haddock & x &  & x &  & 9 & 86 & 0.2 & 1.65 & 5.16 & 0.12 & NEFSC (
 
 }
 
-\caption{Relative error of key quantities estimated for Georges Bank haddock using three models of selectivity random effects. Sel-1 = no random effects (constant logistic selectivity). Sel-2 = independent selectivity deviations. Sel-3 = selectivity deviations are correlated by parameter and year.}\label{fig:rel-error-GBhaddock-sel}
+\caption{Relative error of key quantities estimated for Georges Bank haddock using three models of selectivity random effects. Sel-1 = no random effects (constant logistic selectivity). Sel-2 = independent selectivity deviations. Sel-3 = selectivity deviations are correlated by parameter and year. Points without lines indicate that 95\% CI are smaller than the points.}\label{fig:rel-error-GBhaddock-sel}
 \end{figure}
 
 \pagebreak
