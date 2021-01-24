@@ -45,7 +45,7 @@ $^1$brian.stock@noaa.gov, timothy.j.miller@noaa.gov, Northeast Fisheries Science
 
 The rapid changes observed in many marine ecosystems that support fisheries pose a challenge to stock assessment and management predicated on time-invariant productivity and considering species in isolation. In single-species assessments, two main approaches have been used to account for productivity changes: allowing biological parameters to vary stochastically over time (empirical), or explicitly linking population processes such as recruitment (*R*) or natural mortality (*M*) to environmental covariates (mechanistic). Here, we describe the Woods Hole Assessment Model (WHAM) framework and software package, which combines these two approaches. WHAM can estimate time- and age-varying random effects on annual transitions in numbers at age (NAA), *M*, and selectivity, as well as fit environmental time-series with process and observation errors, missing data, and nonlinear links to *R* and *M*. WHAM can also be configured as a traditional statistical catch-at-age (SCAA) model in order to easily bridge from status quo models and test them against models with state-space and environmental effects, all within a single framework.
 
-We fit models with and without (independent or autocorrelated) random effects on NAA, *M*, and selectivity to data from five stocks with a broad range of life history, fishing pressure, number of ages, and time-series length. Models that included random effects performed well across stocks and processes, especially random effects models with a two dimensional (2D) first-order autoregressive (AR1) covariance structure over age and year. We conducted simulation tests and found negligible or no bias in estimation of important assessment outputs (SSB, *F*, stock status, and catch) when the operating and estimation models matched. However, bias in SSB and *F* was often non-trivial when the estimation model was less complex than the operating model, especially when models without random effects were fit to data simulated from models with random effects. Bias of the variance and correlation parameters controlling random effects was also negligible or slightly negative as expected. Our results suggest that WHAM can be a useful tool for stock assessment when environmental effects on *R* or *M*, or stochastic variation in NAA transitions, *M*, or selectivity are of interest. In the U.S. Northeast, where the productivity of several groundfish stocks has declined, conducting assessments in WHAM with time-varying processes via random effects or environment-productivity links may account for these trends and potentially reduce retrospective bias.
+We fit models with and without (independent or autocorrelated) random effects on NAA, *M*, and selectivity to data from five stocks with a broad range of life history, fishing pressure, number of ages, and time-series length. Models that included random effects performed well across stocks and processes, especially random effects models with a two dimensional (2D) first-order autoregressive, AR(1), covariance structure over age and year. We conducted simulation tests and found negligible or no bias in estimation of important assessment outputs (SSB, *F*, stock status, and catch) when the operating and estimation models matched. However, bias in SSB and *F* was often non-trivial when the estimation model was less complex than the operating model, especially when models without random effects were fit to data simulated from models with random effects. Bias of the variance and correlation parameters controlling random effects was also negligible or slightly negative as expected. Our results suggest that WHAM can be a useful tool for stock assessment when environmental effects on *R* or *M*, or stochastic variation in NAA transitions, *M*, or selectivity are of interest. In the U.S. Northeast, where the productivity of several groundfish stocks has declined, conducting assessments in WHAM with time-varying processes via random effects or environment-productivity links may account for these trends and potentially reduce retrospective bias.
 
 ### Keywords {-}
 
@@ -82,7 +82,7 @@ WHAM is a generalization and extension of @miller2016Statespace in TMB. It is in
 
 ### Processes with random effects
 
-WHAM primarily diverges from ASAP through the implementation of random effects on three processes: inter-annual transitions in numbers at age (*NAA*), natural mortality (*M*), and selectivity (*s*), as well as allowing effects of environmental covariates (*Ecov*) on recruitment and natural mortality [but see ASAP4; @miller2015Technical]. The environmental covariates and their observations are treated using state-space models with true, unobserved values treated as random effects and observation on them having error. Other than environmental covariates, the processes are assumed to have a two dimensional (2D) first-order autoregressive (AR1) covariance structure over age and year, although correlation in either or both dimensions can be turned off. The 2D AR1 structure has been widely used to model deviations by age and year in the parameters $F_{a,y}$ [@nielsen2014Estimation; @kumar2020Statespace; @perreault2020Estimation], $M_{a,y}$ [@cadigan2016Statespace; @stock2021Implementing], $s_{a,y}$ [@xu2019New], and $N_{a,y}$ [@stock2021Implementing], as well as in the catch ($C_{a,y}$) and survey index ($I_{a,y}$) observations [@berg2016Accounting]. Although other covariance structures are plausible [e.g. compound symmetry or unconstrained; @nielsen2014Estimation; @berg2016Accounting], the 2D AR1 structure is a simple option which requires few parameters and allows for smooth deviations in time and by age; values for nearby years and ages are more correlated than distant ones. This is often a good null hypothesis for biological or fishery processes but there are also clear examples where change occurs abruptly, e.g. a disease outbreak increases *M* or changes in gear or area regulations affect selectivity [@ices2017Reporta].
+WHAM primarily diverges from ASAP through the implementation of random effects on three processes: inter-annual transitions in numbers at age (*NAA*), natural mortality (*M*), and selectivity (*s*), as well as allowing effects of environmental covariates (*Ecov*) on recruitment and natural mortality [but see ASAP4; @miller2015Technical]. The environmental covariates and their observations are treated using state-space models with true, unobserved values treated as random effects and observation on them having error. Other than environmental covariates, the processes are assumed to have a two dimensional (2D) first-order autoregressive, AR(1), covariance structure over age and year, although correlation in either or both dimensions can be turned off. The 2D AR(1) structure has been widely used to model deviations by age and year in the parameters $F_{a,y}$ [@nielsen2014Estimation; @kumar2020Statespace; @perreault2020Estimation], $M_{a,y}$ [@cadigan2016Statespace; @stock2021Implementing], $s_{a,y}$ [@xu2019New], and $N_{a,y}$ [@stock2021Implementing], as well as in the catch ($C_{a,y}$) and survey index ($I_{a,y}$) observations [@berg2016Accounting]. Although other covariance structures are plausible [e.g. compound symmetry, unconstrained, or order-*k* autoregressive; @nielsen2014Estimation; @berg2016Accounting], the 2D AR(1) structure is a simple option which requires few parameters and allows for smooth deviations in time and by age; values for nearby years and ages are more correlated than distant ones. This is often a reasonable null hypothesis for biological or fishery processes, but there are also clear examples where change occurs abruptly, e.g. a disease outbreak increases *M* or changes in gear or area regulations affect selectivity [@ices2017Reporta].
 
 #### Numbers at age (*NAA*)
 
@@ -98,7 +98,7 @@ The stock equations in WHAM that describe the transitions between numbers at age
     \end{array}\right.
 \end{equation}
 
-where $N_{a,y}$ are the numbers at age *a* in year *y*, *Z* is the total mortality rate ($F + M$), $f$ is the stock-recruit function, and *A* represents the plus-group. The $\varepsilon_{a,y}$ deviations are akin to survival, which is clearly related to $M_{a,y}$, but they can also be caused by deviations in $F_{a,y}$, $W_{a,y}$, or movement into or out of the stock [@gudmundsson2012Selection; @stock2021Implementing]. More precisely, they arise from inconsistencies between the data and the model predicted catch (i.e. Eqn. \ref{eq:predcatch} below), and therefore are also related to misreported catch [@perretti2020Simulation]. In this analysis we consider the SCAA model, "Base", and then examine four possible models that treat the $\varepsilon_{a,y}$ deviations as random effects.
+where $N_{a,y}$ are the numbers at age *a* in year *y*, *Z* is the total mortality rate ($F + M$), $f$ is the stock-recruit function, and *A* represents the plus-group. The $\varepsilon_{a,y}$ deviations are akin to survival, which is clearly related to $M_{a,y}$, but they can also be caused by deviations in $F_{a,y}$, $W_{a,y}$, or movement into or out of the stock [@schnute1995Influence; @gudmundsson2012Selection; @stock2021Implementing]. More precisely, they arise from inconsistencies between the data and the model predicted catch (i.e. Eqn. \ref{eq:predcatch} below), and therefore are also related to misreported catch [@perretti2020Simulation]. In this analysis we consider the SCAA model, "Base", and then examine four possible models that treat the $\varepsilon_{a,y}$ deviations as random effects.
 
 Base is a SCAA model, which estimates recruitment deviations, $\varepsilon_{1,y}$, in each year $y > 1$ as unconstrained fixed effect parameters. The *NAA* deviations for ages $a > 1$ are not estimated (i.e., $\varepsilon_{a,y} = 0$ for $a > 1$ in Eqn \ref{eq:NAA}).
 
@@ -107,7 +107,7 @@ NAA-1 is most similar to Base, where only recruitment deviations, $\varepsilon_{
 $$\varepsilon_{1,y} \sim \mathcal{N}\left( - \frac{\sigma^2_R}{2}, \sigma^2_R \right),$$
 with variance $\sigma^2_R$ as an estimated parameter. The $- \frac{\sigma^2_R}{2}$ bias correction term is included by default so that the expected recruitment, $E(N_{1,y} = R_y)$ equals the expected $R_y$ from the stock-recruit function [@methot2011Adjusting; @thorson2019Perspective]. This bias correction adjustment can also be turned off.
 
-NAA-2 is the same as NAA-1, except that the recruitment deviations are stationary AR1 with autocorrelation parameter $-1<\rho_{year}<1$:
+NAA-2 is the same as NAA-1, except that the recruitment deviations are stationary AR(1) with autocorrelation parameter $-1<\rho_{year}<1$:
 
 $$\varepsilon_{1,y+1} \sim \mathcal{N}\left(\rho_{year} \varepsilon_{1,y} - \frac{\sigma^2_R}{2 (1-\rho^2_{year})}, \sigma^2_R \right)$$
 
@@ -123,14 +123,14 @@ NAA-3 is the "full state-space" model from @nielsen2014Estimation and @miller201
 
 where $\sigma^2_a$ for all ages $a > 1$ are assumed to be the same but different from age $a = 1$, i.e. recruitment. This assumption is sensible because variability of deviations between expected and realized recruitment are typically larger than deviations from expected abundance at older ages.
 
-NAA-4 treats the numbers at all ages as random effects, as in NAA-3, but the *NAA* deviations, $\varepsilon_{a,y}$, have a 2D stationary AR1 structure as in @stock2021Implementing:
+NAA-4 treats the numbers at all ages as random effects, as in NAA-3, but the *NAA* deviations, $\varepsilon_{a,y}$, have a 2D stationary AR(1) structure as in @stock2021Implementing:
 
 $$\mathbf{E} \sim \mathcal{MVN} \left( 0, \Sigma \right)$$
 
 where $\mathbf{E} = (\varepsilon_{1,1}, \ldots, \varepsilon_{1,Y-1}, \varepsilon_{2,1}, \ldots, \varepsilon_{2,Y-1}, \ldots, \varepsilon_{A,1}, \ldots, \varepsilon_{A,Y-1})'$ is a vector of all *NAA* deviations, *Y* is the total number of observation and prediction years, and $\boldsymbol{\Sigma}$ is the covariance matrix of $\mathbf{E}$ defined by:
 
 $$ \text{Cov} \left( \varepsilon_{a,y}, \varepsilon_{\tilde{a},\tilde{y}} \right) = \frac{\sigma_a \sigma_{\tilde{a}} \rho^{|a-\tilde{a}|}_{age} \rho^{|y-\tilde{y}|}_{year}}{\left(1-\rho^2_{age}\right) \left(1-\rho^2_{year}\right)}$$
-and $-1<\rho_{age}<1$ and $-1<\rho_{year}<1$ are the AR1 coefficients in age and year, respectively. As in NAA-3, $\sigma^2_a$ for all ages $a > 1$ are assumed to be the same but different from age $a = 1$, $\sigma^2_R$. The bias correction term for age $a > 1$ in NAA-4 is $- \frac{\sigma^2_a}{2 (1-\rho^2_{year})(1-\rho^2_{age})}$.
+and $-1<\rho_{age}<1$ and $-1<\rho_{year}<1$ are the AR(1) coefficients in age and year, respectively. As in NAA-3, $\sigma^2_a$ for all ages $a > 1$ are assumed to be the same but different from age $a = 1$, $\sigma^2_R$. The bias correction term for age $a > 1$ in NAA-4 is $- \frac{\sigma^2_a}{2 (1-\rho^2_{year})(1-\rho^2_{age})}$.
 
 #### Natural mortality (*M*)
 
@@ -143,9 +143,9 @@ For natural mortality, there are mean parameters for each age, $\mu_{M_a}$, each
   \end{array}
 \end{equation}
 
-where $\sigma^2_M$, $\varphi_{age}$, and $\varphi_{year}$ are the AR1 variance and correlation coefficients in age and year, respectively.
+where $\sigma^2_M$, $\varphi_{age}$, and $\varphi_{year}$ are the AR(1) variance and correlation coefficients in age and year, respectively.
 
-In this analysis, we demonstrate three alternative *M* random effects models. For simplicity, all models treat $\mu_{M_a}$ as known, as in most of the original assessments. M-1 is identical to the NAA-1 model, with no random effects on *M* ($\sigma^2_M = \varphi_{age} = \varphi_{year} = 0$ and not estimated). M-2 allows IID *M* deviations, estimating $\sigma^2_M$ but fixing $\varphi_{age} = \varphi_{year} = 0$. M-3 estimates the full 2D AR1 structure for *M* deviations.
+In this analysis, we demonstrate three alternative *M* random effects models. For simplicity, all models treat $\mu_{M_a}$ as known, as in most of the original assessments. M-1 is identical to the NAA-1 model, with no random effects on *M* ($\sigma^2_M = \varphi_{age} = \varphi_{year} = 0$ and not estimated). M-2 allows IID *M* deviations, estimating $\sigma^2_M$ but fixing $\varphi_{age} = \varphi_{year} = 0$. M-3 estimates the full 2D AR(1) structure for *M* deviations.
 
 #### Selectivity (*Sel*)
 
@@ -162,9 +162,9 @@ WHAM estimates annual full $F_y$ and mean selectivity parameters as fixed effect
   \end{array}
 \end{equation}
 
-where $\nu_1$ is the logit-scale mean $a_{50}$ parameter with lower and upper bounds $l_{a_{50}}$ and $u_{a_{50}}$, $\nu_2$ is the logit-scale mean $k$ parameter with lower and upper bounds $l_k$ and $u_k$, $\sigma^2_s$ is the AR1 variance, and $\phi_{par}$, and $\phi_{year}$ are the AR1 correlation coefficients by parameter and year.
+where $\nu_1$ is the logit-scale mean $a_{50}$ parameter with lower and upper bounds $l_{a_{50}}$ and $u_{a_{50}}$, $\nu_2$ is the logit-scale mean $k$ parameter with lower and upper bounds $l_k$ and $u_k$, $\sigma^2_s$ is the AR(1) variance, and $\phi_{par}$, and $\phi_{year}$ are the AR(1) correlation coefficients by parameter and year.
 
-Below, we demonstrate three models with random effect deviations on logistic selectivity, akin to those for *M*. Sel-1 treats all numbers at age as independent random effects (i.e. NAA-3) but with no random effects on *s* ($\sigma^2_s = \phi_{par} = \phi_{year} = 0$ and not estimated). Sel-2 allows IID *s* deviations, estimating $\sigma^2_s$ but fixing $\phi_{par} = \phi_{year} = 0$. Sel-3 estimates the full 2D AR1 structure for *s* deviations.
+Below, we demonstrate three models with random effect deviations on logistic selectivity, akin to those for *M*. Sel-1 treats all numbers at age as independent random effects (i.e. NAA-3) but with no random effects on *s* ($\sigma^2_s = \phi_{par} = \phi_{year} = 0$ and not estimated). Sel-2 allows IID *s* deviations, estimating $\sigma^2_s$ but fixing $\phi_{par} = \phi_{year} = 0$. Sel-3 estimates the full 2D AR(1) structure for *s* deviations.
 
 #### Environmental covariates (*Ecov*)
 
@@ -172,13 +172,13 @@ WHAM models environmental covariate data using state-space models with process a
 
 ##### *Ecov* process model
 
-There are currently two options in WHAM for the *Ecov* process model: a normal random walk and AR1. We model the random walk as in @miller2016Statespace:
+There are currently two options in WHAM for the *Ecov* process model: a normal random walk and AR(1). We model the random walk as in @miller2016Statespace:
 
 $$X_{y+1} | X_y \sim \mathcal{N}\left( X_y, \sigma^2_X\right)$$
 
 where $\sigma^2_X$ is the process variance and $X_1$ is estimated as a fixed effect parameter. One disadvantage of the random walk is that its variance is nonstationary. In short-term projections, $\hat{X}_y$ will be equal to the last estimate with an observation and the uncertainty of $\hat{X}_y$ will increase over time. If $\hat{X}_y$ influences reference points, this leads to increasing uncertainty in stock status over time as well [@miller2016Statespace].
 
-For this reason, we generally prefer to model $X_y$ as a stationary AR1 process as in @miller2018Temporal:
+For this reason, we generally prefer to model $X_y$ as a stationary AR(1) process as in @miller2018Temporal:
 
 \begin{equation}
   \begin{array}{cc}
@@ -187,7 +187,7 @@ For this reason, we generally prefer to model $X_y$ as a stationary AR1 process 
   \end{array}
 \end{equation}
 
-where $\mu_X$, $\sigma^2_X$, and $|\phi_X| < 1$ are the marginal mean, variance, and autocorrelation parameters. In addition to having stationary variance, another important difference between the random walk and AR1 in short-term projections is that the AR1 will gradually revert to the mean over time, unless environmental covariate observations are included in the projection period.
+where $\mu_X$, $\sigma^2_X$, and $|\phi_X| < 1$ are the marginal mean, variance, and autocorrelation parameters. In addition to having stationary variance, another important difference between the random walk and AR(1) in short-term projections is that the AR(1) will gradually revert to the mean over time, unless environmental covariate observations are included in the projection period.
 
 ##### *Ecov* observation model
 
@@ -213,7 +213,7 @@ $$\hat{R}_{y+1} = \frac{\alpha \text{SSB}_{y}}{1 + e^{\beta_0 + \beta_1 X_{y} + 
 
 where $\text{SSB}_y$ is spawning stock biomass in year *y*, $\alpha$ and $\beta_0$ are the standard parameters of the Beverton-Holt function, and $\beta_1$ and $\beta_2$ are polynomial effect terms that modify $\beta_0$ based on the value of the estimated environmental covariate, $X_y$.
 
-Ecov-1 treats $X_y$ as a random walk ($\phi_X = 1$) but does not include an effect on recruitment ($\beta_1 = \beta_2 = 0$). We include Ecov-1 in order to compare AIC of the original model to those with environmental effects on recruitment. Ecov-2 and Ecov-3 also treat $X_y$ as a random walk, but Ecov-2 estimates $\beta_1$ and Ecov-3 estimates both $\beta_1$ and $\beta_2$. Ecov-4 and Ecov-5 estimate $X_y$ as an AR1 process instead of a random walk (estimate $\phi_X$), and Ecov-4 estimates $\beta_1$ and Ecov-5 estimates both $\beta_1$ and $\beta_2$.
+Ecov-1 treats $X_y$ as a random walk ($\phi_X = 1$) but does not include an effect on recruitment ($\beta_1 = \beta_2 = 0$). We include Ecov-1 in order to compare AIC of the original model to those with environmental effects on recruitment. Ecov-2 and Ecov-3 also treat $X_y$ as a random walk, but Ecov-2 estimates $\beta_1$ and Ecov-3 estimates both $\beta_1$ and $\beta_2$. Ecov-4 and Ecov-5 estimate $X_y$ as an AR(1) process instead of a random walk (estimate $\phi_X$), and Ecov-4 estimates $\beta_1$ and Ecov-5 estimates both $\beta_1$ and $\beta_2$.
 
 ### Population observation model
 
@@ -244,12 +244,42 @@ $$
 is a function of an input standard deviation $\sigma_{\tilde{C}_{y,i}}$ and a fleet-specific parameter $\eta_i$ that is fixed at 0 by default, but may be estimated. The bias correction term, $- \frac{\sigma^2_{C_{y,i}}}{2}$, is included by default based on @aldrin2020Specification but can be turned off.
 
 Observations of aggregate indices of abundance are handled identically to the aggregate catch as in Eqn. \ref{eq:catch} except that for index $i$ the predicted index at age is 
-$$\hat{I}_{a,y,i} = q_i s_{a,y,i} N_{a,y}W_{a,y,i} e^{-Z_{a,y}f_{y,i}}$$ 
+
+\begin{equation}
+\label{eq:predindex}
+  \begin{array}{c}
+    \hat{I}_{a,y,i} = q_i s_{a,y,i} N_{a,y}W_{a,y,i} e^{-Z_{a,y}f_{y,i}}.
+  \end{array}
+\end{equation}
+
 where $q_i$ is the catchability and $f_{y,i}$ is the fraction of the annual time step elapsed when the index is observed. There are options for indices to be in terms of abundance (numbers) or biomass and $W_{a,y,i} = 1$ for the former.
 
 #### Catch and index age composition
 
-WHAM includes several options for the catch and index age compositions including multinomial (the default, as in ASAP), Dirichlet, Dirichlet-multinomial, logistic normal and a zero-one inflated logistic normal. In all of the applications and simulation studies here, we assumed a logistic normal distribution for age composition observations.
+WHAM includes several options for the catch and index age compositions including multinomial (the default, as in ASAP), Dirichlet, Dirichlet-multinomial [@thorson2019Perspective], logistic normal [@aitchison1980LogisticNormal; @schnute2007Compositional] and zero-inflated logistic normal distributions ([Appendix]). Although the multinomial has been commonly used in stock assessment, it is generally inferior to more flexible options that are self-weighting and allow for correlations, such as the Dirichlet and logistic normal [@francis2014Replacing]. Thus, we assumed a logistic normal distribution for age composition observations in all of the applications and simulation studies here.
+
+WHAM implements the logistic normal as in @miller2016Statespace. In a given year *y* and dataset (fishery or survey) *d*, the negative log-likelihood of the predicted proportion at age vector, $\hat{\mathbf{p}}_{d,y}$, and observation error variance, $\tau^2_d$, given the observed proportion at age vector, $\mathbf{p}^*_{d,y}$, is
+
+
+<!-- \begin{equation} -->
+<!--   \begin{array}{ccc} -->
+<!--     \hat{p}_{d,y,a} = \frac{\hat{C}_{a,y,d}}{\sum_{a=1}^{A} \hat{C}_{a,y,d}}\\ -->
+<!--     v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff}_{d,y}} \\ -->
+<!--     \mathrm{log}\mathcal{L}(\hat{\mathbf{p}}_{d,y},v_{d,y}|\mathbf{p}^{*}_{d,y}) = \frac{n_{d,y}-1}{2}\mathrm{log}v_{d,y} + \frac{1}{2v_{d,y}} \mathlarger{\sum}_{a=a^{*}_{d,y}}^{n_{d,y}} \left(\mathrm{log} \frac{p^{*}_{d,y,a}}{p^{*}_{d,y,A^{*}_{d,y}}} - \mathrm{log} \frac{\hat{p}_{d,y,a}}{\hat{p}_{d,y,A^{*}_{d,y}}}\right)^2 -->
+<!--   \end{array} -->
+<!-- \end{equation} -->
+
+<!-- Note: above is correct, below is simplified (removed d,y subscripts). Feel free to change back. -->
+
+\begin{equation}
+  \begin{array}{ccc}
+    \hat{p}_{d,y,a} = \frac{\hat{C}_{a,y,d}}{\sum_{a=1}^{A} \hat{C}_{a,y,d}}\\
+    v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff}_{d,y}} \\
+    -\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},v|\mathbf{p}^{*}) = \frac{n-1}{2}\mathrm{log}v + \frac{1}{2v} \mathlarger{\sum}_{a=a^{*}}^{n} \left(\mathrm{log} \frac{p^{*}_{a}}{p^{*}_{A^{*}}} - \mathrm{log} \frac{\hat{p}_{a}}{\hat{p}_{A^{*}}}\right)^2
+  \end{array}
+\end{equation}
+<!-- $n_{d,y}$, $a^{*}_{d,y}$, and $A^{*}_{d,y}$ -->
+where $n$, $a^{*}$, and $A^{*}$ are the number of non-zero age classes, and the youngest and oldest non-zero age classes in dataset *d* and year *y* (subscripts *d* and *y* dropped for simplicity). $\mathrm{Neff}_{d,y}$ is an effective sample size that can scale the estimated observation error, $\tau_d$, for dataset *d* based on changes in sampling effort in time. Zero observations can either be pooled with adjacent non-zero age classes or treated as missing.
 
 ### Projections
 
@@ -275,25 +305,25 @@ After fitting each model to the original datasets, we used the simulation featur
 
 ## Original datasets
 
-The 2D AR1 covariance structure for random effects on *NAA*, *M*, and selectivity performed well across stocks and processes, evidenced by lower AIC than the IID random effects models (Fig. \ref{fig:daic}). This AIC difference was larger for selectivity than *NAA* or *M*, but the differences for *NAA* and *M* were also non-trivial, ranging from 11.1–53.2. Incorporating random effects on *NAA*, *M* or selectivity did not have consistently positive or negative effects on key assessment model output (SSB, *F*, or recruitment); these effects differed by stock and process (Figs. S1–S10). One pair of 2D AR1 covariance parameters, $\sigma$ and $\rho_{year}$, had consistent negative correlation across all stocks and processes, -0.43 on average.
+The 2D AR(1) covariance structure for random effects on *NAA*, *M*, and selectivity performed well across stocks and processes, evidenced by lower AIC than the IID random effects models (Fig. \ref{fig:daic}). This AIC difference was larger for selectivity than *NAA* or *M*, but the differences for *NAA* and *M* were also non-trivial, ranging from 11.1–53.2. Incorporating random effects on *NAA*, *M* or selectivity did not have consistently positive or negative effects on key assessment model output (SSB, *F*, or recruitment); these effects differed by stock and process (Figs. S1–S10). One pair of 2D AR(1) covariance parameters, $\sigma$ and $\rho_{year}$, had consistent negative correlation across all stocks and processes, -0.43 on average.
 
 ### Numbers-at-age (*NAA*)
 
-Treating numbers at all ages as random effects was strongly supported by AIC, compared to treating only recruitment deviations as random effects (Fig. \ref{fig:daic}). Including autoregressive *NAA* random effects was also generally supported by AIC, either the AR1 when only recruitment deviations were random effects or the 2D AR1 when all ages were random effects. Across the five stocks, models that treated all *NAA* as random effects (i.e., full state-space models) also had reduced retrospective pattern and increased uncertainty in SSB, *F*, and recruitment (Figs. \ref{fig:mohns}-\ref{fig:cv}). Including 2D AR1 autocorrelation on *NAA* deviations further reduced retrospective patterns and increased uncertainty on average.
+Treating numbers at all ages as random effects was strongly supported by AIC, compared to treating only recruitment deviations as random effects (Fig. \ref{fig:daic}). Including autoregressive *NAA* random effects was also generally supported by AIC, either the AR(1) when only recruitment deviations were random effects or the 2D AR(1) when all ages were random effects. Across the five stocks, models that treated all *NAA* as random effects (i.e., full state-space models) also had reduced retrospective pattern and increased uncertainty in SSB, *F*, and recruitment (Figs. \ref{fig:mohns}-\ref{fig:cv}). Including 2D AR(1) autocorrelation on *NAA* deviations further reduced retrospective patterns and increased uncertainty on average.
 
 The estimated AR and IID random effects were similar, with the AR random effects slightly smoothed compared to the IID random effects when the estimated correlations were positive (e.g. $\rho_{year} = 0.73$, 95% CI: 0.58-0.87, for Georges Bank haddock in Fig. \ref{fig:devs-GBhaddock-naa}).
 
 ### Natural mortality (*M*)
 
-As for the *NAA* models, including random effect deviations on *M* was supported by AIC (Fig. \ref{fig:daic}). Although the 2D AR1 *M* model did not converge for North Sea cod, it had the lowest AIC for butterfish and SNEMA yellowtail flounder. The M-3 model with 2D AR1 autocorrelation estimated similar *M* deviations as the M-2 model, with smoothing when estimated correlations were positive (e.g. $\varphi_{year} = 0.63$, 95% CI: 0.31-0.94, and $\varphi_{age} = 0.40$, 95% CI: 0.09-0.70, for SNEMA yellowtail flounder in Fig. \ref{fig:devs-snemayt-m}). Both M-2 and M-3 estimated elevated *M* for fish aged 5-6+ and lower *M* for ages 2-3 for several years in the middle of the time-series, and then higher *M* for ages 1-3 at the end of the time-series.
+As for the *NAA* models, including random effect deviations on *M* was supported by AIC (Fig. \ref{fig:daic}). Although the 2D AR(1) *M* model did not converge for North Sea cod, it had the lowest AIC for butterfish and SNEMA yellowtail flounder. The M-3 model with 2D AR(1) autocorrelation estimated similar *M* deviations as the M-2 model, with smoothing when estimated correlations were positive (e.g. $\varphi_{year} = 0.63$, 95% CI: 0.31-0.94, and $\varphi_{age} = 0.40$, 95% CI: 0.09-0.70, for SNEMA yellowtail flounder in Fig. \ref{fig:devs-snemayt-m}). Both M-2 and M-3 estimated elevated *M* for fish aged 5-6+ and lower *M* for ages 2-3 for several years in the middle of the time-series, and then higher *M* for ages 1-3 at the end of the time-series.
 
 ### Selectivity (*Sel*)
 
-For Georges Bank haddock, including 2D AR1 random effect deviations on selectivity was strongly supported by AIC (Fig. \ref{fig:daic}). Sel-3 estimated similar patterns in selectivity compared to Sel-2, except with smoother variations by age and year (Fig. \ref{fig:devs-GBhaddock-sel}). Compared to the model with constant selectivity, Sel-2 and Sel-3 estimated lower *s* for age 3 in recent years and higher *s* for age 3 before 1990. They also estimated higher *s* for age 2 before 1990, especially from 1973 to 1976.
+For Georges Bank haddock, including 2D AR(1) random effect deviations on selectivity was strongly supported by AIC (Fig. \ref{fig:daic}). Sel-3 estimated similar patterns in selectivity compared to Sel-2, except with smoother variations by age and year (Fig. \ref{fig:devs-GBhaddock-sel}). Compared to the model with constant selectivity, Sel-2 and Sel-3 estimated lower *s* for age 3 in recent years and higher *s* for age 3 before 1990. They also estimated higher *s* for age 2 before 1990, especially from 1973 to 1976.
 
 ### Environmental covariate effect on recruitment (*Ecov*)
 
-As in previous analyses [@miller2016Statespace; @xu2018Evaluating], including an effect of the CPI on recruitment for SNEMA yellowtail flounder was clearly supported by AIC ($\Delta \text{AIC}$ of 20.3-33.0 between Ecov-1 and Ecov-2 through Ecov-5, Fig. \ref{fig:daic}). The AR1-linear model (Ecov-4) had the lowest AIC—fitting the CPI using an AR1 model was preferred over the random walk ($\Delta \text{AIC}$ of 12.7 between Ecov-2 and Ecov-4), and the quadratic term, $\beta_2$, was deemed unnecessary ($\Delta \text{AIC}$ of 1.3 between Ecov-5 and Ecov-4). As expected, the AR1 process model estimated higher uncertainty in years with higher observation error (e.g. 1982–1992) and missing observations (2017, Fig. \ref{fig:devs-SNEMAYT-ecov}A). The CPI negatively influenced recruitment, i.e. $\hat{R}$ was higher following years with lower CPI (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C). Including the CPI-recruitment link changed the estimates of $R_y$ by up to 30%, but in most years the relative difference in $R_y$ was less than 10% (Figs. \ref{fig:devs-SNEMAYT-ecov}B–C and S3). The relative differences in SSB and *F* were small, less than 4% in most years, compared to the influence from adding random effects on all *NAA* or *M* (Figs. S1–S3).
+As in previous analyses [@miller2016Statespace; @xu2018Evaluating], including an effect of the CPI on recruitment for SNEMA yellowtail flounder was clearly supported by AIC ($\Delta \text{AIC}$ of 20.3-33.0 between Ecov-1 and Ecov-2 through Ecov-5, Fig. \ref{fig:daic}). The AR(1)-linear model (Ecov-4) had the lowest AIC—fitting the CPI using an AR(1) model was preferred over the random walk ($\Delta \text{AIC}$ of 12.7 between Ecov-2 and Ecov-4), and the quadratic term, $\beta_2$, was deemed unnecessary ($\Delta \text{AIC}$ of 1.3 between Ecov-5 and Ecov-4). As expected, the AR(1) process model estimated higher uncertainty in years with higher observation error (e.g. 1982–1992) and missing observations (2017, Fig. \ref{fig:devs-SNEMAYT-ecov}A). The CPI negatively influenced recruitment, i.e. $\hat{R}$ was higher following years with lower CPI (lower fall bottom temperature, Fig. \ref{fig:devs-SNEMAYT-ecov}C). Including the CPI-recruitment link changed the estimates of $R_y$ by up to 30%, but in most years the relative difference in $R_y$ was less than 10% (Figs. \ref{fig:devs-SNEMAYT-ecov}B–C and S3). The relative differences in SSB and *F* were small, less than 4% in most years, compared to the influence from adding random effects on all *NAA* or *M* (Figs. S1–S3).
 
 ## Simulation tests
 
@@ -315,17 +345,17 @@ As for the *NAA* models, $\sigma^2_R$ was estimated without bias in the *M* mode
 
 ### Selectivity
 
-Models with IID or 2D AR1 *s* random effects estimated SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$ with little to no bias across operating models (Fig. \ref{fig:rel-error-GBhaddock-sel}). The model without *s* random effects, Sel-1, showed substantial bias when fit to data simulated from Sel-2 or Sel-3. For Georges Bank haddock, the variance and correlation parameters $\sigma^2_a$, $\sigma^2_{Sel}$, $\phi_{year}$, and $\phi_{par}$ were all estimated with slight negative bias in self-tests of models with *s* random effects (Fig. S19).
+Models with IID or 2D AR(1) *s* random effects estimated SSB, $F$, $\frac{\text{B}}{\text{B}_{40\%}}$, $\frac{F}{F_{40\%}}$, and $R$ with little to no bias across operating models (Fig. \ref{fig:rel-error-GBhaddock-sel}). The model without *s* random effects, Sel-1, showed substantial bias when fit to data simulated from Sel-2 or Sel-3. For Georges Bank haddock, the variance and correlation parameters $\sigma^2_a$, $\sigma^2_{Sel}$, $\phi_{year}$, and $\phi_{par}$ were all estimated with slight negative bias in self-tests of models with *s* random effects (Fig. S19).
 
 ### Ecov-Recruitment
 
-The random walk CPI models estimated $\sigma^2_X$ with less bias than the AR1 CPI models (Fig. S20). $\beta_0$ was biased high in all models, although this was not significant for the model with lowest AIC (Ecov-4, AR1-linear). All models estimated the parameters $\phi_X$, $\alpha$, $\beta_1$, and $\beta_2$ without significant bias.
+The random walk CPI models estimated $\sigma^2_X$ with less bias than the AR(1) CPI models (Fig. S20). $\beta_0$ was biased high in all models, although this was not significant for the model with lowest AIC (Ecov-4, AR(1)-linear). All models estimated the parameters $\phi_X$, $\alpha$, $\beta_1$, and $\beta_2$ without significant bias.
 
 # Discussion
 
 ## Overview
 
-Our results suggest that the WHAM package can be a useful tool for stock assessment when environmental effects on recruitment, or stochastic changes in the numbers at age transitions, selectivity, or natural mortality are of interest. The simulation tests showed negligible or no bias in estimation of important assessment outputs (SSB, *F*, stock and harvest status) when the operating and estimation models matched. The less complex models, without random effects or autoregressive structure, exhibited some bias in cross-tests, while the more complex models did not. In these cases, bias in SSB and *F* were opposite such that predicted catch was unbiased. WHAM models with independent or 2D AR1 random effect deviations performed well across stocks and processes, which suggests that they warrant consideration in future stock-specific studies. The 2D AR1 covariance structure performed particularly well, generally having the lowest AIC and retrospective patterns (Figs. \ref{fig:daic}-\ref{fig:mohns}) and outperforming the model with independent random effects in cross-tests (Figs. \ref{fig:rel-error-GBhaddock-naa}-\ref{fig:aic-cross} and S11–S15).
+Our results suggest that the WHAM package can be a useful tool for stock assessment when environmental effects on recruitment, or stochastic changes in the numbers at age transitions, selectivity, or natural mortality are of interest. The simulation tests showed negligible or no bias in estimation of important assessment outputs (SSB, *F*, stock and harvest status) when the operating and estimation models matched. The less complex models, without random effects or autoregressive structure, exhibited some bias in cross-tests, while the more complex models did not. In these cases, bias in SSB and *F* were opposite such that predicted catch was unbiased. WHAM models with independent or 2D AR(1) random effect deviations performed well across stocks and processes, which suggests that they warrant consideration in future stock-specific studies. The 2D AR(1) covariance structure performed particularly well, generally having the lowest AIC and retrospective patterns (Figs. \ref{fig:daic}-\ref{fig:mohns}) and outperforming the model with independent random effects in cross-tests (Figs. \ref{fig:rel-error-GBhaddock-naa}-\ref{fig:aic-cross} and S11–S15).
 
 ## Limitations
 
@@ -333,11 +363,13 @@ For simplicity, we only demonstrated alternative models for a single random effe
 
 Due to the number of models and stocks we tested, we did not thoroughly examine diagnostics, such as residual patterns, for each model fit that would be checked in a full assessment. It is possible that doing so might lead to the rejection of some model configurations for some stocks.
 
-Finally, some of the 2D AR1 covariance parameters were estimated with negative bias, particularly $\sigma_a$ (Figs. S17-S20). This is the expected direction of bias using maximum likelihood, and using REML instead would likely reduce it [@miller2018Temporal]. This is relatively easy to do in WHAM, or more generally in TMB, by treating all parameters except the 2D AR1 covariance parameters as random effects. This directs TMB to use the Laplace approximation to integrate over the other fixed effect parameters (treated as random effects) with flat priors. We did not do this because it requires constructing and fitting the model in TMB a second time for each simulation.
+Further improvements could be made to the handling of age compositions in WHAM. The current Dirichlet, Dirichlet-multinomial, and logistic normal options are more flexible than the multinomial distribution used in ASAP [@francis2014Replacing]. Yet, extensions to the logistic normal are possible; most notably, additional correlation structures as in @francis2014Replacing and @martell2015Technical.
+
+Finally, some of the 2D AR(1) covariance parameters were estimated with negative bias, particularly $\sigma_a$ (Figs. S17-S20). This is the expected direction of bias using maximum likelihood, and using REML instead would likely reduce it [@miller2018Temporal]. This is relatively easy to do in WHAM, or more generally in TMB, by treating all parameters except the 2D AR(1) covariance parameters as random effects. This directs TMB to use the Laplace approximation to integrate over the other fixed effect parameters (treated as random effects) with flat priors. We did not do this because it requires constructing and fitting the model in TMB a second time for each simulation.
 
 ## Relationships to other existing assessment model frameworks
 
-WHAM assumes separability in $F_{a,y}$, i.e. $F_{a,y} = F_y s_a$, and estimates annual full $F_y$ as fixed effects and $s_a$ as constant or time-varying random effects with various autoregressive assumptions possible. Most other assessment frameworks in the U.S, e.g. ASAP, Stock Synthesis [@methot2013Stock], an Assessment Model for Alaska [AMAK; @anon.2015Assessment], and the Beaufort Assessment Model [BAM; @williams2015Technical], make this same separability assumption which is useful for specifying a fully-selected $F$ in projections to calculate reference points or generating catch advice. Estimating selectivity in time blocks is common practice in these frameworks. In contrast, SAM estimates $F_{a,y}$ directly as a multivariate random walk process [@nielsen2014Estimation]. The autoregressive models for selectivity parameters under certain configurations of WHAM should allow for similar $F$ at age patterns as in SAM. Stock Synthesis allows 2D AR1 random effects on $s_{a,y}$ instead of the parameters, and then the variance parameter is estimated by an iterative tuning algorithm [@xu2019New]. It is unclear whether estimating time-varying selectivity as random effects produces better results than assuming time blocks, or if there are advantages to using any of the three approaches for estimating time-varying selectivity used by WHAM, SAM, or Stock Synthesis.
+WHAM assumes separability in $F_{a,y}$, i.e. $F_{a,y} = F_y s_a$, and estimates annual full $F_y$ as fixed effects and $s_a$ as constant or time-varying random effects with various autoregressive assumptions possible. Most other assessment frameworks in the U.S, e.g. ASAP, Stock Synthesis [@methot2013Stock], an Assessment Model for Alaska [AMAK; @anon.2015Assessment], and the Beaufort Assessment Model [BAM; @williams2015Technical], make this same separability assumption which is useful for specifying a fully-selected $F$ in projections to calculate reference points or generating catch advice. Estimating selectivity in time blocks is common practice in these frameworks. In contrast, SAM estimates $F_{a,y}$ directly as a multivariate random walk process [@nielsen2014Estimation]. The autoregressive models for selectivity parameters under certain configurations of WHAM should allow for similar $F$ at age patterns as in SAM. Stock Synthesis allows 2D AR(1) random effects on $s_{a,y}$ instead of the parameters, and then the variance parameter is estimated by an iterative tuning algorithm [@xu2019New]. It is unclear whether estimating time-varying selectivity as random effects produces better results than assuming time blocks, or if there are advantages to using any of the three approaches for estimating time-varying selectivity used by WHAM, SAM, or Stock Synthesis.
 
 Likewise, WHAM and the other U.S.-based assessment models treat catch, index, and composition observations differently than SAM. The U.S.-based assessment models treat aggregate and composition observations separately for fisheries and indices whereas SAM treats observations of catch and indices at age, $C_{a,y}$ and $I_{a,y}$, as multivariate log-normal.  Separate observation models for aggregate and composition observations is natural when sampling for total catch differs from that for length and age composition.
 
@@ -347,7 +379,7 @@ Like SAM, WHAM can estimate interannual transitions in NAA as a random walk proc
 
 The productivity of several groundfish stocks in the U.S. Northeast has declined in recent decades, and conducting assessments in WHAM with time-varying processes via random effects or environment-productivity links could account for these trends and potentially reduce retrospective bias [@perretti2017Regime; @tableau2018Decadal; @stock2021Implementing]. WHAM can be configured to fit SCAA models very similar to ASAP and therefore bridge between the two frameworks. Adding random effects or environmental covariates to an assessment model is a large structural change, and simulation self- and cross-tests such as we have demonstrated here should be conducted through the research track process [@lynch2018Implementing]. If comparisons against status quo SCAA models prove favorable, WHAM could transition to being used in operational assessments. However, because the details of how to include time-varying processes, as well as the effect on the assessment output, will vary by stock, this evaluation may need to be conducted on a stock-by-stock basis.
 
-Random effects allow for changing productivity and, if they are considered as an autoregressive process, can propagate the effect of these changes on assessment output in short-term projections [@stock2021Implementing]. However, the AR1 process demonstrated here trends to the mean in projections and will not predict values beyond extremes in observed time-series. This is an issue worth examining because many marine ecosystems are changing to such extent that recent conditions are time-series extremes, and conditions in the near future may continue to expand the range of observations [e.g. sea surface temperatures over the U.S. Northeast Shelf in the last decade; @chen2020Long]. More complex nonstationary time-series models such as autoregressive integrated moving average (ARIMA) that can forecast beyond observed values could be implemented. Nonlinear (e.g. splines) or double linear integration [@dilorenzo2013Doubleintegration] techniques could also be worth pursuing, as well as time-delay embedding methods [@munch2017Circumventing; @munch2018Nonlinear], which not only allow for nonstationary dynamics but also do not require a specified functional form. The best approach to making stochastic projections of productivity responses to environmental conditions that are rapidly changing and at time-series extremes merits further research.
+Random effects allow for changing productivity and, if they are considered as an autoregressive process, can propagate the effect of these changes on assessment output in short-term projections [@stock2021Implementing]. However, the AR(1) process demonstrated here trends to the mean in projections and will not predict values beyond extremes in observed time-series. This is an issue worth examining because many marine ecosystems are changing to such extent that recent conditions are time-series extremes, and conditions in the near future may continue to expand the range of observations [e.g. sea surface temperatures over the U.S. Northeast Shelf in the last decade; @chen2020Long]. More complex nonstationary time-series models such as autoregressive integrated moving average (ARIMA) that can forecast beyond observed values could be implemented. Nonlinear (e.g. splines) or double linear integration [@dilorenzo2013Doubleintegration] techniques could also be worth pursuing, as well as time-delay embedding methods [@munch2017Circumventing; @munch2018Nonlinear], which not only allow for nonstationary dynamics but also do not require a specified functional form. The best approach to making stochastic projections of productivity responses to environmental conditions that are rapidly changing and at time-series extremes merits further research.
 
 In addition to the empirical (i.e. random effects) approach, it is worth considering the mechanistic approach (i.e. explicitly modeled links to environmental covariates) for a given stock whose recruitment or *M* is suspected to have shifted due to a clear, plausible hypothesized external influence. Several factors may result in a higher likelihood that the mechanistic approach is useful in an assessment: a history of overfishing [@free2019Impacts; but high *F* can also swamp the signal of an environmental influence, @haltuch2011Promises], more rapid environmental change, stocks at the edge of species' range, opportunistic (short-lived) species [*sensu* @winemiller1992Patterns], lower trophic level species, longer time series, periodic signals in which more than once cycle has been recorded (e.g. Pacific Decadal Oscillation and sardine), and stronger signals (wider ranges of observed stock status and environmental conditions) [@free2019Impacts; @haltuch2011Promises; @haltuch2019Unraveling; @marshall2019Inclusion]. Although developing mature mechanistic hypotheses will take significant effort and collaboration with ecologists and oceanographers, these rules of thumb can guide researchers in prioritizing which stocks to investigate environment-productivity relationships. Our ability to forecast and understand oceanographic and climate variables continues to improve and increasingly will present opportunities for including well-founded mechanistic environmental effects in stock assessments [@tommasi2017Managing].
 
@@ -369,10 +401,61 @@ We appreciate the efforts of the organizers of the special issue and CAPAM works
 
 \pagebreak
 
+## Appendix {-}
+
+Below we list all of the available age composition likelihood equations currently implemented in WHAM. For each dataset *d* and year *y*, the predicted proportion at age vector is $\hat{\mathbf{p}}_{d,y}$ and the observed proportion at age vector is $\mathbf{p}^*_{d,y}$. The effective sample sizes, $\mathrm{Neff}_{d,y}$, are treated as fixed. The number of non-zero age classes, $n_{d,y}$, youngest non-zero age class, $a^{*}_{d,y}$, and oldest non-zero age class, $A^{*}_{d,y}$, also vary by *d* and *y*. In the equations below, all *d* and *y* have been dropped for simplicity, i.e. they represent the likelihood of a single observed $\mathbf{p}^*_{d,y}$ for a given dataset and year.
+
+The predicted proportion vector is
+
+$$\hat{p}_{d,y,a} = \frac{\hat{C}_{a,y,d}}{\sum_{a=1}^{A} \hat{C}_{a,y,d}}$$
+
+if the dataset is catch, and 
+
+$$\hat{p}_{d,y,a} = \frac{\hat{I}_{a,y,d}}{\sum_{a=1}^{A} \hat{I}_{a,y,d}}$$
+
+if the dataset is a survey, where $\hat{C}_{a,y,d}$ and $\hat{I}_{a,y,d}$ are defined in Eqns. \ref{eq:predcatch} and \ref{eq:predindex}.
+
+### Multinomial
+
+$$-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}}|\mathbf{p}^{*},\mathrm{Neff}) = \Gamma(\mathrm{Neff} + 1) - \sum_a \Gamma(p^*_a \mathrm{Neff} + 1) + \sum_a p^*_a \mathrm{Neff} \cdot \mathrm{log} \hat{p}_a$$
+
+### Dirichlet-Multinomial
+
+$$-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},\phi|\mathbf{p}^{*},\mathrm{Neff}) = \Gamma(\mathrm{Neff} + 1) + \Gamma(\phi) - \Gamma(\mathrm{Neff} + \phi) - \sum_a \left[ \Gamma(p^*_a \mathrm{Neff} + 1) - \Gamma(p^*_a \mathrm{Neff} + \phi \hat{p}_a) + \Gamma(\phi \hat{p}_a)\right]$$
+
+where $\phi$ > 0 is an estimated parameter.
+
+### Dirichlet
+
+$$-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},\phi|\mathbf{p}^{*}) = \Gamma(\phi) - \sum_a \left[ \Gamma (\phi \hat{p}_a ) + (\phi \hat{p}_a-1)\mathrm{log}p^*_a \right]$$
+
+where $\phi$ > 0 is an estimated parameter.
+  
+### Logistic normal (as in main text)
+
+\begin{equation*}
+  \begin{array}{cc}
+    v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff_{d,y}}} \\
+    -\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},v|\mathbf{p}^{*}) = \frac{n-1}{2}\mathrm{log}v + \frac{1}{2v} \mathlarger{\sum}_{a=a^{*}}^{n} \left(\mathrm{log} \frac{p^{*}_{a}}{p^{*}_{A^{*}}} - \mathrm{log} \frac{\hat{p}_{a}}{\hat{p}_{A^{*}}}\right)^2
+  \end{array}
+\end{equation*}
+
+where $\tau$ > 0 is an estimated parameter. The effective sample size for dataset *d* and year *y*, $\mathrm{Neff}_{d,y}$, can scale the estimated observation error, $\tau_d$, for dataset *d* based on changes in sampling effort in time.
+
+### Zero-inflated logistic normal, inspired by zero-one inflated beta in @ospina2012General
+
+
+
+### Zero-inflated logistic normal where $p_0$ is a function of binomial sample size
+
+
+
+\pagebreak
+
 \begin{landscape}
 ```{r model-descriptions, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
-dat <- data.frame(Model = c("Base","NAA-1: Indep. $R_y$","NAA-2: AR1 $R_y$","NAA-3: Indep. $N_{a,y}$","NAA-4: 2D AR1 $N_{a,y}$","M-1: None","M-2: Indep.","M-3: 2D AR1","Sel-1: None","Sel-2: Indep.","Sel-3: 2D AR1","Ecov-1: RW-none","Ecov-2: RW-linear","Ecov-3: RW-poly","Ecov-4: AR1-linear","Ecov-5: AR1-poly"),
-                  Description = c("Recruitment deviations are fixed effects","Recruitment deviations are independent random effects","Recruitment deviations are autocorrelated (AR1) random effects","All NAA deviations are independent random effects","All NAA deviations are random effects with correlation by year and age (2D AR1)","No random effects on $M$","$M$ deviations are independent random effects","$M$ deviations are random effects with correlation by year and age","No random effects on selectivity","Selectivity deviations are independent random effects","Selectivity deviations are random effects with correlation by year and parameter","Ecov: random walk (RW), effect on $\\beta$: none","Ecov: random walk (RW), effect on $\\beta$: linear","Ecov: random walk (RW), effect on $\\beta$: 2nd order polynomial (poly)","Ecov: autocorrelated (AR1), effect on $\\beta$: linear","Ecov: autocorrelated (AR1), effect on $\\beta$: 2nd order polynomial (poly)"),
+dat <- data.frame(Model = c("Base","NAA-1: Indep. $R_y$","NAA-2: AR(1) $R_y$","NAA-3: Indep. $N_{a,y}$","NAA-4: 2D AR(1) $N_{a,y}$","M-1: None","M-2: Indep.","M-3: 2D AR(1)","Sel-1: None","Sel-2: Indep.","Sel-3: 2D AR(1)","Ecov-1: RW-none","Ecov-2: RW-linear","Ecov-3: RW-poly","Ecov-4: AR(1)-linear","Ecov-5: AR(1)-poly"),
+                  Description = c("Recruitment deviations are fixed effects","Recruitment deviations are independent random effects","Recruitment deviations are autocorrelated, AR(1), random effects","All NAA deviations are independent random effects","All NAA deviations are random effects with correlation by year and age, 2D AR(1)","No random effects on $M$","$M$ deviations are independent random effects","$M$ deviations are random effects with correlation by year and age, 2D AR(1)","No random effects on selectivity","Selectivity deviations are independent random effects","Selectivity deviations are random effects with correlation by year and parameter","Ecov: random walk (RW), effect on $\\beta$: none","Ecov: random walk (RW), effect on $\\beta$: linear","Ecov: random walk (RW), effect on $\\beta$: 2nd order polynomial (poly)","Ecov: autocorrelated, AR(1), effect on $\\beta$: linear","Ecov: autocorrelated, AR(1), effect on $\\beta$: 2nd order polynomial (poly)"),
                   Pars = c("$R_y$ for $y > 1$","$\\sigma_R$","$\\sigma_R$, $\\rho_{year}$","$\\sigma_R$, $\\sigma_a$","$\\sigma_R$, $\\sigma_a$, $\\rho_{year}$, $\\rho_{age}$",
                                              "$\\sigma_R$","$\\sigma_R$, $\\sigma_M$","$\\sigma_R$, $\\sigma_M$, $\\varphi_{year}$, $\\varphi_{age}$",
                                              "$\\sigma_R$, $\\sigma_a$","$\\sigma_R$, $\\sigma_a$, $\\sigma_{Sel}$","$\\sigma_R$, $\\sigma_a$, $\\sigma_{Sel}$, $\\phi_{year}$, $\\phi_{par}$",
@@ -475,7 +558,7 @@ knitr::include_graphics(file.path(getwd(),"plots","v2","rel_cv_naa_boxplot.png")
 
 \pagebreak
 
-```{r devs-GBhaddock-naa, echo=FALSE, message=FALSE, warnings=FALSE, out.width='6.5in', fig.cap="Abundance-at-age deviations estimated for Georges Bank haddock using alternative models of numbers-at-age (NAA) random effects. Base = a traditional statistical catch-at-age (SCAA) model. NAA-1 = only recruitment deviations are independent random effects (most similar to Base). NAA-2 = as NAA-1, but with autocorrelated recruitment deviations (AR1). NAA-3 = all NAA deviations are independent random effects. NAA-4 = as NAA-3, but deviations are correlated by age ($\\rho_{age} = -0.12$, 95\\% CI: -0.32-0.08) and year ($\\rho_{year} = 0.73$, 95\\% CI: 0.58-0.87). The vertical dashed line indicates the terminal year in the assessment."}
+```{r devs-GBhaddock-naa, echo=FALSE, message=FALSE, warnings=FALSE, out.width='6.5in', fig.cap="Abundance-at-age deviations estimated for Georges Bank haddock using alternative models of numbers-at-age (NAA) random effects. Base = a traditional statistical catch-at-age (SCAA) model. NAA-1 = only recruitment deviations are independent random effects (most similar to Base). NAA-2 = as NAA-1, but with autocorrelated recruitment deviations, AR(1). NAA-3 = all NAA deviations are independent random effects. NAA-4 = as NAA-3, but deviations are correlated by age ($\\rho_{age} = -0.12$, 95\\% CI: -0.32-0.08) and year ($\\rho_{year} = 0.73$, 95\\% CI: 0.58-0.87). The vertical dashed line indicates the terminal year in the assessment."}
 knitr::include_graphics(file.path(getwd(),"plots","v2","NAAdevs_GBhaddock.png"))
 ```
 
@@ -493,7 +576,7 @@ knitr::include_graphics(file.path(getwd(),"plots","v2","Sel_GBhaddock.png"))
 
 \pagebreak
 
-```{r devs-SNEMAYT-ecov, echo=FALSE, message=FALSE, warnings=FALSE, out.width='6.5in',fig.height=6.5, fig.width=6.5, fig.cap="Beverton-Holt stock-recruit relationships fit for Southern New England-Mid Atlantic yellowtail flounder, with and without effects of the Cold Pool Index (CPI). A) CPI estimated from the model with lowest AIC (Ecov-4, AR1-linear). Points are observations with 95\\% CI, and the line with shading is the model-estimated CPI with 95\\% CI. Note the increased uncertainty surrounding the CPI estimate in 2017 (no observation). B) Estimates of spawning stock biomass (SSB), recruitment, and the stock-recruit function from the model without a CPI effect, Ecov-1. C) Estimates of SSB and recruitment from Ecov-4, with an effect of the CPI on $\\beta$. Lines depict the expected stock-recruit relationship in each year $y$, given the CPI in year $y-1$ (color)."}
+```{r devs-SNEMAYT-ecov, echo=FALSE, message=FALSE, warnings=FALSE, out.width='6.5in',fig.height=6.5, fig.width=6.5, fig.cap="Beverton-Holt stock-recruit relationships fit for Southern New England-Mid Atlantic yellowtail flounder, with and without effects of the Cold Pool Index (CPI). A) CPI estimated from the model with lowest AIC (Ecov-4, AR(1)-linear). Points are observations with 95\\% CI, and the line with shading is the model-estimated CPI with 95\\% CI. Note the increased uncertainty surrounding the CPI estimate in 2017 (no observation). B) Estimates of spawning stock biomass (SSB), recruitment, and the stock-recruit function from the model without a CPI effect, Ecov-1. C) Estimates of SSB and recruitment from Ecov-4, with an effect of the CPI on $\\beta$. Lines depict the expected stock-recruit relationship in each year $y$, given the CPI in year $y-1$ (color)."}
 knitr::include_graphics(file.path(getwd(),"plots","v2","CPI_Recruit_SNEMAYT.png"))
 ```
 

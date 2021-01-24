@@ -43,18 +43,38 @@ for(j in 1:length(ids)){
 	em.less.complex <- c(em.less.complex, df$rel_err_mean)
 }
 
+# 3-panel plot
+df <- data.frame(bias=c(self,em.more.complex,em.less.complex), 
+	emcat=c(rep("EM matches OM",length(self)),rep("EM more complex",length(em.more.complex)),rep("EM less complex",length(em.less.complex))))
+df$high <- factor(abs(df$bias) > .02)
+
+png("/home/bstock/Documents/ms/wham-sim/plots/v2/bias_hist.png", res=300, units='in', height=2.3, width=8)
+print(ggplot(df, aes(x=bias, fill=high)) +
+	geom_histogram(breaks=seq(-.50,.50,by=.02)) +
+	xlim(c(-.42,.42)) +
+	scale_fill_manual(values = c("grey40", "black"), guide=F) +
+	# geom_vline(aes(xintercept = 0.02), linetype=2, size=.6) +
+	# geom_vline(aes(xintercept = -0.02), linetype=2, size=.6) +
+	xlab("Mean relative error (bias)") +
+	ylab("Count") +
+	facet_wrap(vars(emcat), scales = "free_y") +
+	theme_bw())
+dev.off()
+
 hist(self, col='grey', breaks=20)
 abline(v=.02, lty=2, lwd=2)
 abline(v=-.02, lty=2, lwd=2)
-sum(abs(self) > .02)/length(self)
+1-sum(abs(self) > .02)/length(self)
+# 0.73
 
 hist(em.more.complex, col='grey', breaks=20)
 abline(v=.02, lty=2, lwd=2)
 abline(v=-.02, lty=2, lwd=2)
-sum(abs(em.more.complex) > .02)/length(em.more.complex)
+1-sum(abs(em.more.complex) > .02)/length(em.more.complex)
+# 0.82
 
 hist(em.less.complex, col='grey', breaks=20)
 abline(v=.02, lty=2, lwd=2)
 abline(v=-.02, lty=2, lwd=2)
-sum(abs(em.less.complex) > .02)/length(em.less.complex)
-
+1-sum(abs(em.less.complex) > .02)/length(em.less.complex)
+# 0.29
