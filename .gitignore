@@ -4,3 +4,7 @@ data/simdata
 reviews
 # paper/wham-sim-paper.pdf
 *.log
+paper/wham-sim-paper-v1.pdf
+paper/wham-sim-paper-v1.Rmd
+paper/wham-sim-supp-v1.pdf
+paper/wham-sim-supp-v1.odt

@@ -179,9 +179,9 @@ Tommasi et al. 2017).
 One approach to account for changing productivity is to explicitly link
 population processes to environmental covariates in single-species stock
 assessments, i.e.~the mechanistic approach \emph{sensu} Punt et al.
-(2014). Traditional single-species assessments are based on internal
-population dynamics and the effect of fishing mortality (\(F\)), even
-though fisheries scientists have long known about important drivers of
+(2014). Traditional single-species assessments assume that most
+population dynamics processes are constant in time, even though
+fisheries scientists have long known about important drivers of
 time-varying population processes, e.g.~recruitment, mortality, growth,
 and movement (Garstang 1900; Hjort 1914). Effects of the environment or
 interactions with other species can be considered contextually, rather
@@ -196,7 +196,7 @@ near-term sustainable harvest levels---not to explain ecological
 relationships. Even if an environmental covariate directly affects fish
 productivity, including the effect in an assessment may not improve
 management advice if the effect is weak (De Oliveira and Butterworth
-2005). Worse, including environmental effects in an assessment or
+2005). Moreover, including environmental effects in an assessment or
 management system has been shown to actually provide worse management in
 some cases (Walters and Collie 1988; De Oliveira and Butterworth 2005;
 Punt et al. 2014). This can be true even in cases of relatively
@@ -212,14 +212,14 @@ An alternative approach is to allow biological parameters to vary
 stochastically over time, i.e.~the empirical approach \emph{sensu} Punt
 et al. (2014). In this case, the variation is caused by a range of
 sources that are not explicitly modeled. Statistical catch-at-age (SCAA)
-models typically only estimate year-specific recruitment (\(R_t\)) and
-\(F_t\), often as deviations from a mean, \(R_0\), that may or may not
-be a function of spawning biomass, e.g.
-\(\text{log}R_t = \text{log}R_0 + \epsilon_t\). The main reason that
+models typically only estimate year-specific fishing mortality (\(F_y\))
+and recruitment (\(R_y\)), often as deviations from a mean, \(R_0\),
+that may or may not be a function of spawning biomass, e.g.
+\(\text{log}R_y = \text{log}R_0 + \epsilon_y\). The main reason that
 other parameters are assumed constant is simply that there are not
 enough degrees of freedom to estimate many time-varying parameters. A
 common solution is to penalize the deviations, e.g.
-\(\epsilon_t \sim \mathcal{N}(0,\sigma^2_\epsilon)\), although the
+\(\epsilon_y \sim \mathcal{N}(0,\sigma^2_\epsilon)\), although the
 penalty terms, \(\sigma^2_\epsilon\), must be fixed or iteratively tuned
 and are therefore somewhat subjective (Methot and Taylor 2011; Methot
 and Wetzel 2013; Aeberhard et al. 2018; Xu et al. 2020). State-space
@@ -317,8 +317,8 @@ effects on three processes: inter-annual transitions in numbers at age
 (\emph{NAA}), natural mortality (\emph{M}), and selectivity (\emph{s}),
 as well as allowing effects of environmental covariates (\emph{Ecov}) on
 recruitment and natural mortality (but see ASAP4; Miller and Legault
-2015). The environmental covariates and their observations are treated
-using state-space models with true, unobserved values treated as random
+2015). The environmental covariates and their observations are part of
+the state-space framework with true, unobserved values treated as random
 effects and observation on them having error. Other than environmental
 covariates, the processes are assumed to have a two dimensional (2D)
 first-order autoregressive, AR(1), covariance structure over age and
@@ -359,23 +359,21 @@ Berg (2014):
 
 where \(N_{a,y}\) are the numbers at age \emph{a} in year \emph{y},
 \emph{Z} is the total mortality rate (\(F + M\)), \(f\) is the
-stock-recruit function, and \emph{A} represents the plus-group. The
-\(\varepsilon_{a,y}\) deviations are akin to survival, which is clearly
-related to \(M_{a,y}\), but they can also be caused by deviations in
-\(F_{a,y}\), \(W_{a,y}\), or movement into or out of the stock (Schnute
-and Richards 1995; Gudmundsson and Gunnlaugsson 2012; Stock et al.
-2021). More precisely, they arise from inconsistencies between the data
-and the model predicted catch (i.e.~Eqn. \ref{eq:predcatch} below), and
-therefore are also related to misreported catch (Perretti et al. 2020).
-In this analysis we consider the SCAA model, ``Base'', and then examine
-four possible models that treat the \(\varepsilon_{a,y}\) deviations as
-random effects.
+stock-recruit function (for options see
+\protect\hyperlink{appendix-a}{Appendix A}), and \emph{A} represents the
+plus-group. The \(\varepsilon_{a,y}\) deviations are akin to survival,
+which is clearly related to \(M_{a,y}\), but they can also be caused by
+mis-specification of selectivity of the fishery or indices, movement
+into or out of the population, or misreported catch (Schnute and
+Richards 1995; Gudmundsson and Gunnlaugsson 2012; Perretti et al. 2020;
+Stock et al. 2021). In this analysis we consider the SCAA model,
+``Base'', and then examine four possible models that treat the
+\(\varepsilon_{a,y}\) deviations as random effects.
 
 Base is a SCAA model, which estimates recruitment deviations,
 \(\varepsilon_{1,y}\), in each year \(y > 1\) as unconstrained fixed
-effect parameters. The \emph{NAA} deviations for ages \(a > 1\) are not
-estimated (i.e., \(\varepsilon_{a,y} = 0\) for \(a > 1\) in Eqn
-\ref{eq:NAA}).
+effect parameters. The \emph{NAA} deviations for ages \(a > 1\) are
+fixed at zero so that transitions are deterministic.
 
 NAA-1 is most similar to Base, where only recruitment deviations,
 \(\varepsilon_{1,y}\), are estimated. However, in NAA-1 the recruitment
@@ -462,11 +460,10 @@ respectively.
 In this analysis, we demonstrate three alternative \emph{M} random
 effects models. For simplicity, all models treat \(\mu_{M_a}\) as known,
 as in most of the original assessments. M-1 is identical to the NAA-1
-model, with no random effects on \emph{M}
-(\(\sigma^2_M = \varphi_{age} = \varphi_{year} = 0\) and not estimated).
-M-2 allows IID \emph{M} deviations, estimating \(\sigma^2_M\) but fixing
-\(\varphi_{age} = \varphi_{year} = 0\). M-3 estimates the full 2D AR(1)
-structure for \emph{M} deviations.
+model, with no random effects on \emph{M} (\(\delta_{a,y} = 0\) and not
+estimated). M-2 allows IID \emph{M} deviations, estimating
+\(\sigma^2_M\) but fixing \(\varphi_{age} = \varphi_{year} = 0\). M-3
+estimates the full 2D AR(1) structure for \emph{M} deviations.
 
 \hypertarget{selectivity-sel}{%
 \paragraph{\texorpdfstring{Selectivity
@@ -516,11 +513,10 @@ year.
 Below, we demonstrate three models with random effect deviations on
 logistic selectivity, akin to those for \emph{M}. Sel-1 treats all
 numbers at age as independent random effects (i.e.~NAA-3) but with no
-random effects on \emph{s}
-(\(\sigma^2_s = \phi_{par} = \phi_{year} = 0\) and not estimated). Sel-2
-allows IID \emph{s} deviations, estimating \(\sigma^2_s\) but fixing
-\(\phi_{par} = \phi_{year} = 0\). Sel-3 estimates the full 2D AR(1)
-structure for \emph{s} deviations.
+random effects on \emph{s} (\(\zeta_{p,y} = 0\) and not estimated).
+Sel-2 allows IID \emph{s} random effects, estimating \(\sigma^2_s\) but
+fixing \(\phi_{par} = \phi_{year} = 0\). Sel-3 estimates the full 2D
+AR(1) structure for \emph{s} random effects.
 
 \hypertarget{environmental-covariates-ecov}{%
 \paragraph{\texorpdfstring{Environmental covariates
@@ -529,13 +525,14 @@ structure for \emph{s} deviations.
 WHAM models environmental covariate data using state-space models with
 process and observation components. The true, unobserved values (or
 ``latent states'', \(X_y\)) are then linked to the population dynamics
-equations with user-specified lag. For example, recruitment in year
-\emph{y} may be influenced by \(X_{y-1}\) (lag 1), while natural
-mortality in year \emph{y} may be influenced by \(X_y\) (lag 0).
-Multiple environmental covariates may be included, but currently only as
-independent processes. The environmental and population model years do
-not need to match, and missing years are allowed. In particular,
-including environmental data in the projection period can be useful.
+equations with user-specified lag, \(\psi\). For example, recruitment in
+year \emph{y} may be influenced by \(X\) in the previous year,
+\(X_{y-1}\) (\(\psi = 1\)), while natural mortality in year \emph{y} may
+be influenced by \(X_y\) (\(\psi = 0\)). Multiple environmental
+covariates may be included, but currently only as independent processes.
+The environmental and population model years do not need to match, and
+missing years are allowed. In particular, including environmental data
+in the projection period can be useful.
 
 \hypertarget{ecov-process-model}{%
 \subparagraph{\texorpdfstring{\emph{Ecov} process
@@ -548,15 +545,14 @@ Miller et al. (2016):
 \[X_{y+1} | X_y \sim \mathcal{N}\left( X_y, \sigma^2_X\right)\]
 
 where \(\sigma^2_X\) is the process variance and \(X_1\) is estimated as
-a fixed effect parameter. One disadvantage of the random walk is that
-its variance is nonstationary. In short-term projections, \(\hat{X}_y\)
-will be equal to the last estimate with an observation and the
-uncertainty of \(\hat{X}_y\) will increase over time. If \(\hat{X}_y\)
-influences reference points, this leads to increasing uncertainty in
-stock status over time as well (Miller et al. 2016).
-
-For this reason, we generally prefer to model \(X_y\) as a stationary
-AR(1) process as in Miller et al. (2018):
+a fixed effect parameter. One disadvantage of the random walk is that it
+is nonstationary. In short-term projections, \(\hat{X}_y\) will be equal
+to the last estimate with an observation and the uncertainty of
+\(\hat{X}_y\) will increase over time. If \(\hat{X}_y\) influences the
+dynamices of the population and reference points, this leads to
+increasing uncertainty in projections of the stock and status over time
+as well (Miller et al. 2016). For this reason, we generally prefer to
+model \(X_y\) as a stationary AR(1) process as in Miller et al. (2018):
 
 \begin{equation}
   \begin{array}{cc}
@@ -566,9 +562,9 @@ AR(1) process as in Miller et al. (2018):
 \end{equation}
 
 where \(\mu_X\), \(\sigma^2_X\), and \(|\phi_X| < 1\) are the marginal
-mean, variance, and autocorrelation parameters. In addition to having
-stationary variance, another important difference between the random
-walk and AR(1) in short-term projections is that the AR(1) will
+mean, conditional variance, and autocorrelation parameters. In addition
+to stationarity, another important difference between the random walk
+and AR(1) in short-term population projections is that the AR(1) will
 gradually revert to the mean over time, unless environmental covariate
 observations are included in the projection period.
 
@@ -605,14 +601,21 @@ In the case of recruitment, the options follow the framework laid out by
 Fry (1971) and Iles and Beverton (1998): ``controlling''
 (density-independent mortality), ``limiting'' (carrying capacity effect,
 e.g. \(X_y\) determines the amount of suitable habitat), ``lethal''
-(threshold effect, i.e. \(R_t\) goes to 0 at some \(X_y\) value),
+(threshold effect, i.e. \(R_y\) goes to 0 at some \(X_y\) value),
 ``masking'' (\(X_y\) decreases \(\text{d}R/\text{d}SSB\), as expected if
 \(X_y\) affects metabolism or growth), and ``directive''
 (e.g.~behavioral). Of these, WHAM currently allows controlling,
 limiting, or masking effects in the Beverton-Holt stock-recruit
-function, and controlling or masking effects in the Ricker function. For
-natural mortality, environmental effects are placed on \(\mu_M\), shared
-across ages by default.
+function, and controlling or masking effects in the Ricker function (see
+\protect\hyperlink{appendix-a}{Appendix A} for all equations).
+
+For natural mortality, environmental effects are placed on \(\mu_M\),
+shared across ages by default. This is the simplest assumption; linking
+an environmental covariate to \(M\) affects \(M\) at all ages
+identically, i.e. \(M_{a,y} = \mu_{M_a} e^{\beta X_{y-\psi}}\). This
+could be modified in the future to estimate different effects on
+different ages by changing \(\beta\) from a scalar to a vector of
+\(\beta_a\).
 
 Regardless of where the environment-population link is, the effect can
 be either linear or polynomial. Nonlinear effects of environmental
@@ -628,13 +631,20 @@ includes \(X\).
 In this analysis, we compare five models with limiting effects on
 Beverton-Holt recruitment:
 
-\[\hat{R}_{y+1} = \frac{\alpha \text{SSB}_{y}}{1 + e^{\beta_0 + \beta_1 X_{y} + \beta_2 X^2_{y}} \text{SSB}_y}\]
+\begin{equation}
+\label{eq:predR}
+  \begin{array}{ccc}
+    \hat{R}_{y+1} = \frac{\alpha \text{SSB}_{y}}{1 + e^{\beta_0 + \beta_1 X_{y} + \beta_2 X^2_{y}} \text{SSB}_y}
+  \end{array}
+\end{equation}
 
 where \(\text{SSB}_y\) is spawning stock biomass in year \emph{y},
 \(\alpha\) and \(\beta_0\) are the standard parameters of the
 Beverton-Holt function, and \(\beta_1\) and \(\beta_2\) are polynomial
 effect terms that modify \(\beta_0\) based on the value of the estimated
-environmental covariate, \(X_y\).
+environmental covariate, \(X_y\). Eqn. \ref{eq:predR} is one of several
+stock-recruit functions with environmental links implemented in WHAM
+(see \protect\hyperlink{appendix-a}{Appendix A} for complete list).
 
 Ecov-1 treats \(X_y\) as a random walk (\(\phi_X = 1\)) but does not
 include an effect on recruitment (\(\beta_1 = \beta_2 = 0\)). We include
@@ -650,27 +660,28 @@ estimates both \(\beta_1\) and \(\beta_2\). Ecov-4 and Ecov-5 estimate
 \subsubsection{Population observation
 model}\label{population-observation-model}}
 
-Like ASAP, there are observation likelihood components for aggregate
-catch and abundance index for each fleet and index, and age composition
-for each fleet and index.
+Like ASAP, there are likelihood components for annual aggregate catch
+and relative abundance observations for each fleet and index, and annual
+age compositions for each fleet and index.
 
 \hypertarget{aggregate-catch-and-indices}{%
 \paragraph{Aggregate catch and
 indices}\label{aggregate-catch-and-indices}}
 
 The predicted catch at age for fleet \(i\), \(\hat{C}_{a,y,i}\), is a
-function of \(N_{a,y}\), \(M_{a,y}\), \(F_{y,i}\), \(s_{a,y,i}\), and
-empirical weight at age, \(W_{a,y,i}\):
+function of \(N_{a,y}\), \(M_{a,y}\), \(F_{y,i}\), and \(s_{a,y,i}\):
 
 \begin{equation}
 \label{eq:predcatch}
   \begin{array}{ccc}
-    \hat{C}_{a,y,i} = N_{a,y} W_{a,y,i}\left(1- e^{-Z_{a,y}}\right)\frac{F_{a,y,i}}{Z_{a,y}}.
+    \hat{C}_{a,y,i} = N_{a,y} \left(1- e^{-Z_{a,y}}\right)\frac{F_{a,y,i}}{Z_{a,y}}.
   \end{array}
 \end{equation}
 
-The log-aggregate catch \(\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}\)
-observation is assumed to have a normal distribution \begin{equation}
+The log-aggregate catch
+\(\hat{C}_{y,i} = \sum_a \hat{C}_{a,y,i}W_{a,y,i}\) observation, where
+\(W_{a,y,i}\) is the empirical weight at age, is assumed to have a
+normal distribution \begin{equation}
 \label{eq:catch}
   \begin{array}{ccc}
     \text{log}(C_{y,i}) \sim \mathcal{N}\left( \text{log}(\hat{C}_{y,i}) - \frac{\sigma^2_{C_{y,i}}}{2}, \sigma^2_{C_{y,i}}\right)
@@ -703,38 +714,16 @@ for indices to be in terms of abundance (numbers) or biomass and
 \paragraph{Catch and index age
 composition}\label{catch-and-index-age-composition}}
 
-WHAM includes several options for the catch and index age compositions
-including multinomial (the default, as in ASAP), Dirichlet,
-Dirichlet-multinomial (Thorson 2019), logistic normal (Aitchison and
-Shen 1980; Schnute and Haigh 2007) and zero-inflated logistic normal
-distributions (\protect\hyperlink{appendix}{Appendix}). Although the
-multinomial has been commonly used in stock assessment, it is generally
-inferior to more flexible options that are self-weighting and allow for
+WHAM includes several options for the catch and index age compositions,
+including the multinomial (the default to match ASAP), Dirichlet,
+Dirichlet-multinomial (Thorson 2019), and logistic normal (Aitchison and
+Shen 1980; Schnute and Haigh 2007) distributions
+(\protect\hyperlink{appendix-b}{Appendix B}). Although the multinomial
+has been commonly used in stock assessment, it is generally inferior to
+more flexible options that are self-weighting and allow for
 correlations, such as the Dirichlet and logistic normal (Francis 2014).
-Thus, we assumed a logistic normal distribution for age composition
+We therefore assumed a logistic normal distribution for age composition
 observations in all of the applications and simulation studies here.
-
-WHAM implements the logistic normal as in Miller et al. (2016). In a
-given year \emph{y} and dataset (fishery or survey) \emph{d}, the
-negative log-likelihood of the predicted proportion at age vector,
-\(\hat{\mathbf{p}}_{d,y}\), and observation error variance,
-\(\tau^2_d\), given the observed proportion at age vector,
-\(\mathbf{p}^*_{d,y}\), is
-
-\begin{equation}
-  \begin{array}{ccc}
-    \hat{p}_{d,y,a} = \frac{\hat{C}_{a,y,d}}{\sum_{a=1}^{A} \hat{C}_{a,y,d}}\\
-    v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff}_{d,y}} \\
-    -\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},v|\mathbf{p}^{*}) = \frac{n-1}{2}\mathrm{log}v + \frac{1}{2v} \mathlarger{\sum}_{a=a^{*}}^{n} \left(\mathrm{log} \frac{p^{*}_{a}}{p^{*}_{A^{*}}} - \mathrm{log} \frac{\hat{p}_{a}}{\hat{p}_{A^{*}}}\right)^2
-  \end{array}
-\end{equation} where \(n\), \(a^{*}\), and \(A^{*}\) are the number of
-non-zero age classes, and the youngest and oldest non-zero age classes
-in dataset \emph{d} and year \emph{y} (subscripts \emph{d} and \emph{y}
-dropped for simplicity). \(\mathrm{Neff}_{d,y}\) is an effective sample
-size that can scale the estimated observation error, \(\tau_d\), for
-dataset \emph{d} based on changes in sampling effort in time. Zero
-observations can either be pooled with adjacent non-zero age classes or
-treated as missing.
 
 \hypertarget{projections}{%
 \subsubsection{Projections}\label{projections}}
@@ -748,7 +737,7 @@ specifying \(F_y\) in the projection years: terminal year \(F_y\),
 average \(F\) over specified years, \(F_{X\%}\) (\(F\) at X\% SPR, where
 X is specified and 40 by default), user-specified \(F_y\), or \(F\)
 derived from user-specified catch. For all options except user-specified
-\(F_y\), the uncertainty in projected F is propagated into the
+\(F_y\), the uncertainty in projected \(F\) is propagated into the
 uncertainty of projected population attributes. For models with random
 effects on \emph{NAA}, \emph{M}, or \emph{Ecov}, the default is to
 continue the stochastic process into the projection years. WHAM does not
@@ -801,20 +790,21 @@ these represent core WHAM functionality. We chose to highlight one stock
 each for the \emph{M}, \emph{Sel}, and \emph{Ecov} processes because all
 models did not converge for all stocks and processes: SNEMA yellowtail
 flounder (\emph{M} and \emph{Ecov}) and GB haddock (\emph{Sel}). We
-fixed \(\mu_{M_a}\) at the values used, or estimated as the case for
-butterfish, in the original assessments. Except for the GB haddock
-\emph{Sel} models, we used the same selectivity parameterization and
-time blocks as in the original assessments. We used the NAA-3 model (all
-\emph{NAA} deviations are random effects) in the \emph{Sel} and
-\emph{Ecov} demonstrations, but the NAA-1 model (only recruitment
-deviations are random effects) for the \emph{M} demonstrations, because
-deviations in the \emph{NAA} transitions can be caused by unmodeled
-deviations in \emph{M}. For the SNEMA yellowtail flounder \emph{Ecov}
-models, we used the Cold Pool Index (CPI) as calculated in Miller et al.
-(2016). We updated the CPI through 2018, except that the 2017
-observation was missing because the NEFSC fall bottom trawl survey was
-not completed in the SNEMA region. Within each process, we compared the
-performance of the different random effects models using AIC.
+fixed \(\mu_{M_a}\) at the values used in the original assessments,
+except for butterfish where it estimated in the assessment. Aside from
+the GB haddock \emph{Sel} models, we used the same selectivity
+parameterization and time blocks as in the original assessments. We used
+the NAA-3 model (all \emph{NAA} deviations are random effects) in the
+\emph{Sel} and \emph{Ecov} demonstrations, but the NAA-1 model (only
+recruitment deviations are random effects) for the \emph{M}
+demonstrations, because deviations in the \emph{NAA} transitions can be
+caused by unmodeled deviations in \emph{M}. For the SNEMA yellowtail
+flounder \emph{Ecov} models, we used the Cold Pool Index (CPI) as
+calculated in Miller et al. (2016). We updated the CPI through 2018,
+except that the 2017 observation was missing because the NEFSC fall
+bottom trawl survey was not completed in the SNEMA region. Within each
+process, we compared the performance of the different random effects
+models using AIC.
 
 We fit all models using the open-source statistical software R (R Core
 Team 2020) and TMB (Kristensen et al. 2016), as implemented in the R
@@ -865,8 +855,8 @@ effects on \emph{NAA}, \emph{M} or selectivity did not have consistently
 positive or negative effects on key assessment model output (SSB,
 \emph{F}, or recruitment); these effects differed by stock and process
 (Figs. S1--S10). One pair of 2D AR(1) covariance parameters, \(\sigma\)
-and \(\rho_{year}\), had consistent negative correlation across all
-stocks and processes, -0.43 on average.
+and \(\rho_{year}\), was consistently estimated with negative
+correlation across all stocks and processes, -0.43 on average.
 
 \hypertarget{numbers-at-age-naa-1}{%
 \subsubsection{\texorpdfstring{Numbers-at-age
@@ -884,10 +874,10 @@ reduced retrospective pattern and increased uncertainty in SSB,
 Including 2D AR(1) autocorrelation on \emph{NAA} deviations further
 reduced retrospective patterns and increased uncertainty on average.
 
-The estimated AR and IID random effects were similar, with the AR random
-effects slightly smoothed compared to the IID random effects when the
-estimated correlations were positive (e.g. \(\rho_{year} = 0.73\), 95\%
-CI: 0.58-0.87, for Georges Bank haddock in Fig.
+The estimated AR(1) and IID random effects were similar, with the AR(1)
+random effects slightly smoothed compared to the IID random effects when
+the estimated correlations were positive (e.g. \(\rho_{year} = 0.73\),
+95\% CI: 0.58-0.87, for Georges Bank haddock in Fig.
 \ref{fig:devs-GBhaddock-naa}).
 
 \hypertarget{natural-mortality-m-1}{%
@@ -957,8 +947,8 @@ intervals (Figs.
 \ref{fig:rel-error-GBhaddock-naa}--\ref{fig:rel-error-GBhaddock-sel} and
 S11--S16). Bias was also generally less than 2\% when more complex
 models were fitted to less complicated operating model simulations. In
-contrast, the bias was typically greater than 5\% when the estimation
-model was less complex than the operating model, especially when models
+contrast, the bias was often greater than 5\% when the estimation model
+was less complex than the operating model, especially when models
 without random effects were fit to data simulated from models with
 random effects. Bias in SSB and \(F\) were always opposite, i.e.~when
 SSB was biased high, \(F\) was biased low, and vice versa. Predicted
@@ -1097,9 +1087,9 @@ instead would likely reduce it (Miller et al. 2018). This is relatively
 easy to do in WHAM, or more generally in TMB, by treating all parameters
 except the 2D AR(1) covariance parameters as random effects. This
 directs TMB to use the Laplace approximation to integrate over the other
-fixed effect parameters (treated as random effects) with flat priors. We
-did not do this because it requires constructing and fitting the model
-in TMB a second time for each simulation.
+fixed effect parameters (treated as random effects) with flat priors
+(Harville 1974). We did not do this because it requires constructing and
+fitting the model in TMB a second time for each simulation.
 
 \hypertarget{relationships-to-other-existing-assessment-model-frameworks}{%
 \subsection{Relationships to other existing assessment model
@@ -1418,6 +1408,11 @@ Science Center, Woods Hole, MA. Available from
 \url{https://repository.library.noaa.gov/view/noaa/13138} {[}accessed 17
 September 2019{]}.
 
+\leavevmode\hypertarget{ref-harville1974Bayesian}{}%
+Harville, D.A. 1974. Bayesian inference for variance components using
+only error contrasts. Biometrika \textbf{61}(2): 383--385.
+doi:\href{https://doi.org/10.1093/biomet/61.2.383}{10.1093/biomet/61.2.383}.
+
 \leavevmode\hypertarget{ref-hill2018Assessment}{}%
 Hill, K.T., Crone, P.R., and Zwolinski, J.P. 2018. Assessment of the
 Pacific sardine resource in 2018 for U.S. Management in 2018-2019. US
@@ -1561,7 +1556,7 @@ Diekmann, R., Flinkman, J., Müller-Karulis, B., Neuenfeldt, S., Schmidt,
 J.O., Tomczak, M., Voss, R., and Gårdmark, A. 2014. Implementing
 ecosystem-based fisheries management: From single-species to integrated
 ecosystem assessment and advice for Baltic Sea fish stocks. ICES J Mar
-Sci \textbf{71}(5): 1187--1197. Oxford Academic.
+Sci \textbf{71}(5): 1187--1197.
 doi:\href{https://doi.org/10.1093/icesjms/fst123}{10.1093/icesjms/fst123}.
 
 \leavevmode\hypertarget{ref-munch2018Nonlinear}{}%
@@ -1599,17 +1594,11 @@ doi:\href{https://doi.org/10.1016/j.fishres.2014.01.014}{10.1016/j.fishres.2014.
 
 \leavevmode\hypertarget{ref-oleary2019Understanding}{}%
 O'Leary, C.A., Miller, T.J., Thorson, J.T., and Nye, J.A. 2019.
-Understanding historical summer flounder ( \emph{Paralichthys}
-\emph{Dentatus} ) abundance patterns through the incorporation of
+Understanding historical summer flounder (\emph{Paralichthys}
+\emph{Dentatus}) abundance patterns through the incorporation of
 oceanography-dependent vital rates in Bayesian hierarchical models. Can.
 J. Fish. Aquat. Sci. \textbf{76}(8): 1275--1294.
 doi:\href{https://doi.org/10.1139/cjfas-2018-0092}{10.1139/cjfas-2018-0092}.
-
-\leavevmode\hypertarget{ref-ospina2012General}{}%
-Ospina, R., and Ferrari, S.L.P. 2012. A general class of zero-or-one
-inflated beta regression models. Computational Statistics \& Data
-Analysis \textbf{56}(6): 1609--1623.
-doi:\href{https://doi.org/10.1016/j.csda.2011.10.005}{10.1016/j.csda.2011.10.005}.
 
 \leavevmode\hypertarget{ref-patrick2015Myths}{}%
 Patrick, W.S., and Link, J.S. 2015. Myths that Continue to Impede
@@ -1626,8 +1615,7 @@ doi:\href{https://doi.org/10.1139/cjfas-2019-0129}{10.1139/cjfas-2019-0129}.
 \leavevmode\hypertarget{ref-perretti2020Simulation}{}%
 Perretti, C.T., Deroba, J.J., and Legault, C.M. 2020. Simulation testing
 methods for estimating misreported catch in a state-space stock
-assessment model. ICES J Mar Sci \textbf{77}(3): 911--920. Oxford
-Academic.
+assessment model. ICES J Mar Sci \textbf{77}(3): 911--920.
 doi:\href{https://doi.org/10.1093/icesjms/fsaa034}{10.1093/icesjms/fsaa034}.
 
 \leavevmode\hypertarget{ref-perretti2017Regime}{}%
@@ -1679,8 +1667,8 @@ doi:\href{https://doi.org/10.1139/f95-800}{10.1139/f95-800}.
 \leavevmode\hypertarget{ref-shelton2006Fishing}{}%
 Shelton, P.A., Sinclair, A.F., Chouinard, G.A., Mohn, R., and Duplisea,
 D.E. 2006. Fishing under low productivity conditions is further delaying
-recovery of Northwest Atlantic cod (Gadus morhua). Can. J. Fish. Aquat.
-Sci. \textbf{63}(2): 235--238.
+recovery of Northwest Atlantic cod (\emph{Gadus} \emph{Morhua}). Can. J.
+Fish. Aquat. Sci. \textbf{63}(2): 235--238.
 doi:\href{https://doi.org/10.1139/f05-253}{10.1139/f05-253}.
 
 \leavevmode\hypertarget{ref-shotwell2014Biophysical}{}%
@@ -1719,8 +1707,8 @@ Fish. Aquat. Sci. \textbf{76}(9): 1528--1540.
 doi:\href{https://doi.org/10.1139/cjfas-2018-0255}{10.1139/cjfas-2018-0255}.
 
 \leavevmode\hypertarget{ref-thompson1936Confidence}{}%
-Thompson, W.R. 1936. On Confidence Ranges for the Median and Other
-Expectation Distributions for Populations of Unknown Distribution Form.
+Thompson, W.R. 1936. On confidence ranges for the median and other
+expectation distributions for populations of unknown distribution form.
 Ann. Math. Statist. \textbf{7}(3): 122--128.
 doi:\href{https://doi.org/10.1214/aoms/1177732502}{10.1214/aoms/1177732502}.
 
@@ -1744,8 +1732,8 @@ in Oceanography \textbf{152}: 15--49.
 doi:\href{https://doi.org/10.1016/j.pocean.2016.12.011}{10.1016/j.pocean.2016.12.011}.
 
 \leavevmode\hypertarget{ref-walters1988Research}{}%
-Walters, C.J., and Collie, J.S. 1988. Is Research on Environmental
-Factors Useful to Fisheries Management? Can. J. Fish. Aquat. Sci.
+Walters, C.J., and Collie, J.S. 1988. Is research on environmental
+factors useful to fisheries management? Can. J. Fish. Aquat. Sci.
 \textbf{45}(10): 1848--1854.
 doi:\href{https://doi.org/10.1139/f88-217}{10.1139/f88-217}.
 
@@ -1756,9 +1744,9 @@ Technical Memorandum NMFS-SEFSC-671. Available from
 \url{http://dx.doi.org/10.7289/V57M05W6} {[}accessed 21 January 2021{]}.
 
 \leavevmode\hypertarget{ref-winemiller1992Patterns}{}%
-Winemiller, K.O., and Rose, K.A. 1992. Patterns of Life-History
-Diversification in North American Fishes: Implications for Population
-Regulation. Canadian Journal of Fisheries and Aquatic Sciences
+Winemiller, K.O., and Rose, K.A. 1992. Patterns of life-history
+diversification in North American fishes: Implications for population
+regulation. Canadian Journal of Fisheries and Aquatic Sciences
 \textbf{49}(10): 2196--2218.
 doi:\href{https://doi.org/10.1139/f92-242}{10.1139/f92-242}.
 
@@ -1791,11 +1779,78 @@ doi:\href{https://doi.org/10.1073/pnas.1113806109}{10.1073/pnas.1113806109}.
 
 \pagebreak
 
-\hypertarget{appendix}{%
-\subsection*{Appendix}\label{appendix}}
-\addcontentsline{toc}{subsection}{Appendix}
+\hypertarget{appendix-a}{%
+\subsection*{Appendix A}\label{appendix-a}}
+\addcontentsline{toc}{subsection}{Appendix A}
 
-Below we list all of the available age composition likelihood equations
+Table \ref{tab:SRmodels} lists the stock-recruit functions, \(f\),
+available in WHAM, along with possible effects of a modeled
+environmental covariate, \(X_y\). Note that the user must specify the
+lag, i.e.~number of time steps, \(\psi\), at which \(X_y\) affects
+recruitment (where \(\psi=1\) is common and indicates that \(X_y\)
+affects recruitment the following year). Then
+\[\text{log}R_y \sim \mathcal{N} \left( \text{log} \left[ f(SSB_{y-1}, X_{y-\psi}) \right] - \frac{\sigma^2_R}{2}, \sigma^2_R \right)\]
+where \(SSB_{y-1}\) is the spawning stock biomass in year \(y-1\). In
+Table \ref{tab:SRmodels}, we have abbreviated \(SSB_{y-1}\) to \(S\) and
+\(X_{y-\psi}\) to \(X\). Each of the environmental effect terms,
+\(e^{\gamma X}\), can be extended to include polynomials as in Eqn.
+\ref{eq:predR}, i.e. \(e^{\gamma_1 X + \gamma_2 X^2 + \dots}\).
+
+\bigskip
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\renewcommand{\arraystretch}{1.5}
+
+\begin{table}[!h]
+
+\caption{\label{tab:SRmodels}Stock-recruit functions available in WHAM with possible environmental effects.}
+\centering
+\begin{tabular}[t]{lllll}
+\toprule
+\multicolumn{1}{l}{ } & \multicolumn{4}{l}{Environmental link} \\
+\cmidrule(l{3pt}r{3pt}){2-5}
+Recruit model & None & Controlling & Limiting & Masking\\
+\midrule
+Random walk & $R_{y-1}$ &  &  & \\
+Random about mean & $R_0$ & $e^{\gamma X} R_0$ &  & \\
+Beverton-Holt & $\frac{\alpha S}{1 + \beta S}$ & $\frac{\alpha S e^{\gamma X}}{1 + \beta S}$ & $\frac{\alpha S}{1 + \beta S e^{\gamma X}}$ & $\frac{\alpha S}{e^{\gamma X} + \beta S}$\\
+Ricker & $\alpha S e^{-\beta S}$ & $\alpha S e^{-\beta S + \gamma X}$ &  & $\alpha S e^{-\beta S (1 + \gamma X)}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\arraystretch}{1}
+
+The environment-recruitment link terminology follows Fry (1971) and Iles
+and Beverton (1998):
+
+\begin{itemize}
+\tightlist
+\item
+  ``controlling'': density-independent mortality,
+\item
+  ``limiting'': carrying capacity effect, e.g. \(X_y\) determines the
+  amount of suitable habitat,
+\item
+  ``lethal'': threshold effect, i.e. \(R_y\) goes to 0 at some \(X_y\)
+  value,
+\item
+  ``masking'': \(X_y\) decreases \(\text{d}R/\text{d}SSB\), as expected
+  if \(X_y\) affects metabolism or growth, and
+\item
+  ``directive'': e.g.~behavioral.
+\end{itemize}
+
+\pagebreak
+
+\hypertarget{appendix-b}{%
+\subsection*{Appendix B}\label{appendix-b}}
+\addcontentsline{toc}{subsection}{Appendix B}
+
+Below we list the available age composition likelihood equations
 currently implemented in WHAM. For each dataset \emph{d} and year
 \emph{y}, the predicted proportion at age vector is
 \(\hat{\mathbf{p}}_{d,y}\) and the observed proportion at age vector is
@@ -1820,50 +1875,56 @@ if the dataset is a survey, where \(\hat{C}_{a,y,d}\) and
 \ref{eq:predindex}.
 
 \hypertarget{multinomial}{%
-\subsubsection{Multinomial}\label{multinomial}}
+\subsubsection*{Multinomial}\label{multinomial}}
+\addcontentsline{toc}{subsubsection}{Multinomial}
 
 \[-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}}|\mathbf{p}^{*},\mathrm{Neff}) = \Gamma(\mathrm{Neff} + 1) - \sum_a \Gamma(p^*_a \mathrm{Neff} + 1) + \sum_a p^*_a \mathrm{Neff} \cdot \mathrm{log} \hat{p}_a\]
 
+with no estimated parameters (\texttt{age\_comp\ =\ "multinomial"}).
+
 \hypertarget{dirichlet-multinomial}{%
-\subsubsection{Dirichlet-Multinomial}\label{dirichlet-multinomial}}
+\subsubsection*{Dirichlet-Multinomial}\label{dirichlet-multinomial}}
+\addcontentsline{toc}{subsubsection}{Dirichlet-Multinomial}
 
 \[-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},\phi|\mathbf{p}^{*},\mathrm{Neff}) = \Gamma(\mathrm{Neff} + 1) + \Gamma(\phi) - \Gamma(\mathrm{Neff} + \phi) - \sum_a \left[ \Gamma(p^*_a \mathrm{Neff} + 1) - \Gamma(p^*_a \mathrm{Neff} + \phi \hat{p}_a) + \Gamma(\phi \hat{p}_a)\right]\]
 
-where \(\phi\) \textgreater{} 0 is an estimated parameter.
+where \(\phi\) \textgreater{} 0 is an estimated parameter
+(\texttt{age\_comp\ =\ "dir-mult"}).
 
 \hypertarget{dirichlet}{%
-\subsubsection{Dirichlet}\label{dirichlet}}
+\subsubsection*{Dirichlet}\label{dirichlet}}
+\addcontentsline{toc}{subsubsection}{Dirichlet}
 
 \[-\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},\phi|\mathbf{p}^{*}) = \Gamma(\phi) - \sum_a \left[ \Gamma (\phi \hat{p}_a ) + (\phi \hat{p}_a-1)\mathrm{log}p^*_a \right]\]
 
-where \(\phi\) \textgreater{} 0 is an estimated parameter.
+where \(\phi\) \textgreater{} 0 is an estimated parameter
+(\texttt{age\_comp\ =\ "dirichlet"}).
 
-\hypertarget{logistic-normal-as-in-main-text}{%
-\subsubsection{Logistic normal (as in main
-text)}\label{logistic-normal-as-in-main-text}}
+\hypertarget{logistic-normal}{%
+\subsubsection*{Logistic normal}\label{logistic-normal}}
+\addcontentsline{toc}{subsubsection}{Logistic normal}
+
+WHAM implements the logistic normal as in Miller et al. (2016). In a
+given year \emph{y} and dataset (fishery or survey) \emph{d}, the
+negative log-likelihood of the predicted proportion at age vector,
+\(\hat{\mathbf{p}}_{d,y}\), and observation error variance,
+\(\tau^2_d\), given the observed proportion at age vector,
+\(\mathbf{p}^*_{d,y}\), is
 
 \begin{equation*}
-  \begin{array}{cc}
-    v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff_{d,y}}} \\
-    -\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},v|\mathbf{p}^{*}) = \frac{n-1}{2}\mathrm{log}v + \frac{1}{2v} \mathlarger{\sum}_{a=a^{*}}^{n} \left(\mathrm{log} \frac{p^{*}_{a}}{p^{*}_{A^{*}}} - \mathrm{log} \frac{\hat{p}_{a}}{\hat{p}_{A^{*}}}\right)^2
+  \begin{array}{ccc}
+    v_{d,y} = \frac{\tau^2_d}{\mathrm{Neff}_{d,y}} \\
+    -\mathrm{log}\mathcal{L}(\hat{\mathbf{p}},v|\mathbf{p}^{*}) = \frac{n-1}{2}\mathrm{log}\left(2\pi v\right) + \frac{1}{2v} \mathlarger{\sum}_{a=a^{*}}^{n-1} \left(\mathrm{log} \frac{p^{*}_{a}}{p^{*}_{A^{*}}} - \mathrm{log} \frac{\hat{p}_{a}}{\hat{p}_{A^{*}}}\right)^2
   \end{array}
-\end{equation*}
-
-where \(\tau\) \textgreater{} 0 is an estimated parameter. The effective
-sample size for dataset \emph{d} and year \emph{y},
-\(\mathrm{Neff}_{d,y}\), can scale the estimated observation error,
-\(\tau_d\), for dataset \emph{d} based on changes in sampling effort in
-time.
-
-\hypertarget{zero-inflated-logistic-normal-inspired-by-zero-one-inflated-beta-in-ospina2012general}{%
-\subsubsection{Zero-inflated logistic normal, inspired by zero-one
-inflated beta in Ospina and Ferrari
-(2012)}\label{zero-inflated-logistic-normal-inspired-by-zero-one-inflated-beta-in-ospina2012general}}
-
-\hypertarget{zero-inflated-logistic-normal-where-p_0-is-a-function-of-binomial-sample-size}{%
-\subsubsection{\texorpdfstring{Zero-inflated logistic normal where
-\(p_0\) is a function of binomial sample
-size}{Zero-inflated logistic normal where p\_0 is a function of binomial sample size}}\label{zero-inflated-logistic-normal-where-p_0-is-a-function-of-binomial-sample-size}}
+\end{equation*} where \(n\), \(a^{*}\), and \(A^{*}\) are the number of
+non-zero age classes, and the youngest and oldest non-zero age classes
+in dataset \emph{d} and year \emph{y} (subscripts \emph{d} and \emph{y}
+dropped for simplicity). \(\mathrm{Neff}_{d,y}\) is an effective sample
+size that can scale the estimated observation error variance,
+\(\tau^2_d\), for dataset \emph{d} based on changes in sampling effort
+in time. Zero observations can either be pooled with adjacent non-zero
+age classes (\texttt{age\_comp\ =\ "logistic-normal-pool0"}) or treated
+as missing (\texttt{age\_comp\ =\ "logistic-normal-miss0"}).
 
 \pagebreak
 
