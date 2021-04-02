@@ -45,14 +45,14 @@ for(j in 1:length(ids)){
 
 # 3-panel plot
 df <- data.frame(bias=c(self,em.more.complex,em.less.complex), 
-	emcat=c(rep("EM matches OM",length(self)),rep("EM more complex",length(em.more.complex)),rep("EM less complex",length(em.less.complex))))
+	emcat=c(rep("EM matches OM",length(self)),rep("EM more complex than OM",length(em.more.complex)),rep("EM less complex than OM",length(em.less.complex))))
 df$high <- factor(abs(df$bias) > .02)
 
 png("/home/bstock/Documents/ms/wham-sim/plots/v2/bias_hist.png", res=300, units='in', height=2.3, width=8)
 print(ggplot(df, aes(x=bias, fill=high)) +
 	geom_histogram(breaks=seq(-.50,.50,by=.02)) +
 	xlim(c(-.42,.42)) +
-	scale_fill_manual(values = c("grey40", "black"), guide=F) +
+	scale_fill_manual(values = c("grey70", "grey20"), guide=F) +
 	# geom_vline(aes(xintercept = 0.02), linetype=2, size=.6) +
 	# geom_vline(aes(xintercept = -0.02), linetype=2, size=.6) +
 	xlab("Mean relative error (bias)") +

@@ -3,7 +3,8 @@
 
 library(wham)
 library(tidyverse)
-plots_dir = file.path(getwd(),"plots","v2") 
+# plots_dir = file.path(getwd(),"plots","v2") 
+plots_dir = file.path(getwd(),"plots","v3") 
 res_dir=file.path(getwd(),"results","v2_fits")
 
   # NAA only 
@@ -20,7 +21,8 @@ res_dir=file.path(getwd(),"results","v2_fits")
   mods <- lapply(mod.files, function(x) lapply(x, readRDS))
 
   get_retro <- function(mods){
-    x <- as.data.frame(compare_wham_models(mods, sort=FALSE, do.print=F)$tab)
+    # x <- as.data.frame(compare_wham_models(mods, sort=FALSE, do.print=F)$tab)
+    x <- as.data.frame(compare_wham_models(mods, do.plot=F, table.opts=list(sort=F, print=F, save.csv=F))$tab)
     rho <- round(x[,3:5],2)
     return(rho)
     # minAIC <- min(x$AIC, na.rm=T)
@@ -29,15 +31,21 @@ res_dir=file.path(getwd(),"results","v2_fits")
   }
   mrho <- list()
   for(i in 1:length(mods)){
+    for(j in 1:length(mods[[i]])) mods[[i]][[j]]$wham_version = "v1.0.0"
+    names(mods[[i]]) <- sapply(mods[[i]], function(x) x$model_name)
     mrho[[i]] <- get_retro(mods[[i]])
     mrho[[i]]$model = rownames(mrho[[i]])
     # mrho[[i]]$stock = ids[i]
   }
   names(mrho) = ids
+  # df <- bind_rows(mrho, .id = "stock") %>% tidyr::pivot_longer(-c(stock,model), names_to = "rho_type", values_to = "rho_val")
+  # df.plot <- df %>% group_by(stock, rho_type) %>% mutate(rho_diff = abs(rho_val) - abs(rho_val[model == "m1"])) %>% filter(model %in% c("m3","m4"))
+  # df.plot$var <- factor(df.plot$rho_type, levels=c("rho_R","rho_SSB","rho_Fbar"), labels=c("`Mohn's`~rho[R]","`Mohn's`~rho[SSB]","`Mohn's`~rho[F]"))
+  # df.plot$mod <- factor(df.plot$model, levels=c("m3","m4"), labels=c("NAA-3","NAA-4"))
   df <- bind_rows(mrho, .id = "stock") %>% tidyr::pivot_longer(-c(stock,model), names_to = "rho_type", values_to = "rho_val")
-  df.plot <- df %>% group_by(stock, rho_type) %>% mutate(rho_diff = abs(rho_val) - abs(rho_val[model == "m1"])) %>% filter(model %in% c("m3","m4"))
+  df.plot <- df %>% group_by(stock, rho_type) %>% mutate(rho_diff = abs(rho_val) - abs(rho_val[model == "Base"])) %>% filter(model %in% c("NAA-3","NAA-4"))
   df.plot$var <- factor(df.plot$rho_type, levels=c("rho_R","rho_SSB","rho_Fbar"), labels=c("`Mohn's`~rho[R]","`Mohn's`~rho[SSB]","`Mohn's`~rho[F]"))
-  df.plot$mod <- factor(df.plot$model, levels=c("m3","m4"), labels=c("NAA-3","NAA-4"))
+  # df.plot$mod <- factor(df.plot$model, levels=c("m3","m4"), labels=c("NAA-3","NAA-4"))
 
   library(RColorBrewer)
   cols <- brewer.pal(5,"Greys")
@@ -48,10 +56,10 @@ res_dir=file.path(getwd(),"results","v2_fits")
     r
   }
   png(file.path(plots_dir, "mohns_rho_reduction_boxplot.png"), width=4.5, height=3, res=300, units='in')
-  print(ggplot(df.plot, aes(x=mod, y=rho_diff)) +
+  print(ggplot(df.plot, aes(x=model, y=rho_diff)) +
           geom_hline(yintercept=0, linetype="dashed") +
           # geom_boxplot(fill='grey') +        
-          stat_summary(aes(fill=mod), fun.data = f, geom="boxplot", width=.6) +
+          stat_summary(aes(fill=model), fun.data = f, geom="boxplot", width=.6) +
           scale_fill_manual(values = cols[3:4]) +
           ylab(expression(Change~"in"~"|"*"Mohn's"~rho*"|")) +
           coord_cartesian(ylim=c(-1.1, .1)) +
@@ -62,64 +70,68 @@ res_dir=file.path(getwd(),"results","v2_fits")
             strip.text.x = element_text(size = 10), axis.text.x = element_text(size = 8)))
   dev.off()
 
-  df.plot$rho_diff[df.plot$rho_diff < -1.1] = -1.1
-  png(file.path(plots_dir, "mohns_rho_reduction.png"), width=4.5, height=3, res=300, units='in')
-  print(ggplot(df.plot, aes(x=mod, y=rho_diff, shape=stock)) +
-          geom_point(size=2.5, position=position_dodge(width=0.3)) +
-          geom_hline(yintercept=0, linetype="dashed") +
-          ylab(expression(Change~"in"~"|"*"Mohn's"~rho*"|")) +
-          ylim(-1.1, .1) +
-          xlab("Model") +
-          # scale_x_discrete(labels=function(l) parse(text=l)) +
-          facet_wrap(vars(var), nrow=1, strip.position = "top", labeller = label_parsed) +
-          theme_bw() +
-          theme(legend.position = "none", 
-            strip.text.x = element_text(size = 10), axis.text.x = element_text(size = 8)))
-  dev.off()
+res_dir=file.path(getwd(),"results","v2_fits")
+saveRDS(mrho, file.path(res_dir,"mrho_naa.rds"))
+
+  # df.plot$rho_diff[df.plot$rho_diff < -1.1] = -1.1
+  # png(file.path(plots_dir, "mohns_rho_reduction.png"), width=4.5, height=3, res=300, units='in')
+  # print(ggplot(df.plot, aes(x=mod, y=rho_diff, shape=stock)) +
+  #         geom_point(size=2.5, position=position_dodge(width=0.3)) +
+  #         geom_hline(yintercept=0, linetype="dashed") +
+  #         ylab(expression(Change~"in"~"|"*"Mohn's"~rho*"|")) +
+  #         ylim(-1.1, .1) +
+  #         xlab("Model") +
+  #         # scale_x_discrete(labels=function(l) parse(text=l)) +
+  #         facet_wrap(vars(var), nrow=1, strip.position = "top", labeller = label_parsed) +
+  #         theme_bw() +
+  #         theme(legend.position = "none", 
+  #           strip.text.x = element_text(size = 10), axis.text.x = element_text(size = 8)))
+  # dev.off()
 
 
 
 
-# mrho
-# $SNEMAYT_NAA
-#    rho_R rho_SSB rho_Fbar
-# m1  5.57    0.85    -0.32
-# m2  6.42    1.02    -0.43
-# m3  4.56    0.90    -0.38
-# m4  0.81    0.17    -0.10
-# m5  0.51    0.06     0.00
+# > mrho
+# $SNEMAYT
+#       rho_R rho_SSB rho_Fbar model
+# Base   5.57    0.85    -0.32  Base
+# NAA-1  6.42    1.02    -0.43 NAA-1
+# NAA-2  4.56    0.90    -0.38 NAA-2
+# NAA-3  0.81    0.17    -0.10 NAA-3
+# NAA-4  0.51    0.06     0.00 NAA-4
 
-# $butterfish_NAA
-#    rho_R rho_SSB rho_Fbar
-# m1  0.18    0.25    -0.16
-# m2  0.05    0.10    -0.07
-# m3  0.07    0.11    -0.08
-# m4  0.05    0.05     0.02
-# m5  0.11    0.16    -0.12
+# $butterfish
+#       rho_R rho_SSB rho_Fbar model
+# Base   0.18    0.25    -0.16  Base
+# NAA-1  0.05    0.10    -0.07 NAA-1
+# NAA-2  0.07    0.11    -0.08 NAA-2
+# NAA-3  0.05    0.05     0.02 NAA-3
+# NAA-4  0.11    0.16    -0.12 NAA-4
 
-# $NScod_NAA
-#    rho_R rho_SSB rho_Fbar
-# m1 -0.09    0.17    -0.15
-# m2 -0.04    0.22    -0.19
-# m3 -0.05    0.19    -0.16
-# m4  0.02    0.10    -0.11
-# m5  0.00    0.05    -0.05
+# $NScod
+#       rho_R rho_SSB rho_Fbar model
+# Base  -0.09    0.17    -0.15  Base
+# NAA-1 -0.04    0.22    -0.19 NAA-1
+# NAA-2 -0.05    0.19    -0.16 NAA-2
+# NAA-3  0.02    0.10    -0.11 NAA-3
+# NAA-4  0.00    0.05    -0.05 NAA-4
 
-# $GBhaddock_NAA
-#    rho_R rho_SSB rho_Fbar
-# m1  0.94    0.36    -0.31
-# m2  0.89    0.38    -0.33
-# m3  0.88    0.36    -0.31
-# m4  0.61    0.11    -0.11
-# m5  0.31    0.06    -0.07
+# $GBhaddock
+#       rho_R rho_SSB rho_Fbar model
+# Base   0.94    0.36    -0.31  Base
+# NAA-1  0.89    0.38    -0.33 NAA-1
+# NAA-2  0.88    0.36    -0.31 NAA-2
+# NAA-3  0.61    0.11    -0.11 NAA-3
+# NAA-4  0.31    0.06    -0.07 NAA-4
 
-# $ICEherring_NAA
-#    rho_R rho_SSB rho_Fbar
-# m1  0.51    0.63    -0.36
-# m2 -0.01    0.02    -0.03
-# m3  0.01    0.03    -0.04
-# m4 -0.07   -0.05     0.06
-# m5 -0.05   -0.03     0.03
+# $ICEherring
+#       rho_R rho_SSB rho_Fbar model
+# Base   0.51    0.63    -0.36  Base
+# NAA-1 -0.01    0.02    -0.03 NAA-1
+# NAA-2  0.01    0.03    -0.04 NAA-2
+# NAA-3 -0.07   -0.05     0.06 NAA-3
+# NAA-4 -0.05   -0.03     0.03 NAA-4
+
 
 # $SNEMAYT_M
 #    rho_R rho_SSB rho_Fbar

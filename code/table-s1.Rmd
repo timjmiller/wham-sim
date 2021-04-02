@@ -1,0 +1,42 @@
+---
+title: "Table S1"
+output:
+  html_document
+date: ''
+---
+  
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=FALSE, tidy.opts=list(width.cutoff=60), warning = FALSE, message = FALSE, fig.align = "center")
+knitr::opts_knit$set(root.dir = '../' )
+library(knitr)
+library(tidyverse)
+# library(cowplot)
+# library(ggsidekick)
+library(pander)
+library(kableExtra)
+library(png)
+library(forcats)
+library(wham)
+# library(ggplotFL)
+# library(ggsci)
+```
+
+
+```{r rho-table, echo=FALSE, message=FALSE, warnings=FALSE, results='asis'}
+dat <- readRDS(file.path("results","v2_fits","mrho_naa.rds"))
+df <- dplyr::bind_rows(dat, .id = 'stock')
+rownames(df) = NULL
+# df$stock = factor(df$stock, levels=c("SNEMAYT","butterfish","NScod","ICEherring","GBhaddock"), labels=dat1$Stock)
+df <- df %>% select(model, everything(), -stock)
+
+# df %>% dplyr::rename("Model"="model")
+
+df %>% dplyr::rename("Model"="model") %>% dplyr::rename("Mohn's $\\rho_R$"="rho_R") %>% dplyr::rename("Mohn's $\\rho_{SSB}$"="rho_SSB") %>% dplyr::rename("Mohn's $\\rho_F$"="rho_Fbar") %>%
+  kable("html", booktabs = T, escape=F) %>%
+  # kable_styling(latex_options=c("basic")) %>%
+  group_rows("SNEMA yellowtail flounder", 1, 5) %>%
+  group_rows("Butterfish", 6, 10, escape=F) %>%
+  group_rows("North Sea cod", 11, 15) %>%
+  group_rows("Georges Bank haddock", 16, 20) %>%
+  group_rows("Icelandic herring", 21, 25)
+```
