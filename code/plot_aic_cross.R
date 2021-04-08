@@ -110,18 +110,20 @@ plot_aic_cross <- function(df.aic, plots_dir = file.path(getwd(),"plots","bias_c
                 theme_bw() +
                 theme(axis.text = element_text(size=10), axis.title = element_text(size=14),
                       legend.position='none')
-        png(file.path(plots_dir, paste0("aic_cross_",re.labs[re],"_",types[ty],".png")), res=300, units='in', height=7, width=7)
-        print(plots[[re]])
-        dev.off()             
+        # png(file.path(plots_dir, paste0("aic_cross_",re.labs[re],"_",types[ty],".png")), res=300, units='in', height=7, width=7)
+        # print(plots[[re]])
+        # dev.off()             
       }
     # }
   }
   # multipanel aggregated across stocks
   if(!bystock){
     plots_m[[1]] <- plots_m[[1]] + theme(axis.text = element_text(size=8))
-    png(file.path(plots_dir,"aic_cross_multipanel.png"), width=4, height=10, units='in', res=300)
-    print(plot_grid(plotlist=plots_m, labels = LETTERS[1:n.re], label_size = 18, label_fontface = 'plain', ncol = 1))
-    dev.off()
+    # png(file.path(plots_dir,"aic_cross_multipanel.png"), width=4, height=10, units='in', res=300)
+    # print(plot_grid(plotlist=plots_m, labels = LETTERS[1:n.re], label_size = 18, label_fontface = 'plain', ncol = 1))
+    p <- plot_grid(plotlist=plots_m, labels = LETTERS[1:n.re], label_size = 18, label_fontface = 'plain', ncol = 1)
+    return(p)
+    # dev.off()
   }
 }
   
